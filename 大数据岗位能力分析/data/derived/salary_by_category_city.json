@@ -1,0 +1,35 @@
+{
+  "数据运维": {
+    "深圳": {
+      "count": 4,
+      "avg_min_wan": 2.9,
+      "avg_max_wan": 3.6,
+      "mean_wan": 3.3,
+      "median_wan": 3.5,
+      "p25_wan": 3.2,
+      "p75_wan": 3.6
+    }
+  },
+  "数据开发": {
+    "深圳": {
+      "count": 6,
+      "avg_min_wan": 2.4,
+      "avg_max_wan": 3.8,
+      "mean_wan": 3.1,
+      "median_wan": 3.1,
+      "p25_wan": 2.6,
+      "p75_wan": 3.6
+    }
+  },
+  "数据分析": {
+    "深圳": {
+      "count": 2,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 3.0,
+      "mean_wan": 2.6,
+      "median_wan": 3.0,
+      "p25_wan": 2.1,
+      "p75_wan": 3.0
+    }
+  }
+}

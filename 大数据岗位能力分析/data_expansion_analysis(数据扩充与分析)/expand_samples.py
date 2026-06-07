@@ -1,0 +1,1042 @@
+#!/usr/bin/env python3
+"""
+数据扩充模块 - 生成多样化、高覆盖度的招聘样本数据
+基于真实招聘市场行情，覆盖9大岗位类别、多城市/行业/薪资范围
+"""
+import json
+import os
+
+def generate_expanded_samples():
+    """
+    生成扩展的样本数据，覆盖所有岗位类别
+    每条数据包含薪资信息（用于回归训练）
+    参考2025-2026年真实招聘市场行情
+    """
+    samples = []
+
+    # ================================================================
+    # 1. 数据开发 (目标: 30+条) - 当前已有~8条样本 + 42条腾讯
+    # ================================================================
+    samples.extend([
+        # 中级数据开发
+        {
+            "title": "大数据开发工程师",
+            "company": "携程", "location": "上海-长宁区", "salary": "20-35K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-20",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据平台日常开发和数据仓库建设\n"
+                "2. 编写Hive/HQL脚本进行数据处理\n3. 参与ETL流程开发和数据质量监控\n"
+                "4. 协助完成数据报表开发\n\n任职要求：\n"
+                "1. 2年以上大数据开发经验，精通SQL和Java/Python\n"
+                "2. 熟悉Hadoop/Spark/Hive等大数据技术栈\n"
+                "3. 有数据仓库建模经验优先\n4. 有旅游行业数据开发经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,年终奖,旅游基金,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "大数据开发工程师",
+            "company": "招商银行", "location": "深圳-福田区", "salary": "22-40K·14薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-18",
+            "job_desc": (
+                "岗位职责：\n1. 负责金融数据仓库的设计和开发\n"
+                "2. 数据模型设计和ETL流程优化\n3. 参与数据治理和数据标准化\n"
+                "4. 配合业务部门完成数据需求\n\n任职要求：\n"
+                "1. 3年以上数据开发经验，精通SQL\n2. 熟悉Hadoop生态和Hive\n"
+                "3. 有金融行业数据开发经验\n4. 了解数据治理方法论"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险二金,企业年金,住房补贴,食堂", "source": "样本数据",
+        },
+        {
+            "title": "大数据开发工程师（实时方向）",
+            "company": "京东物流", "location": "北京-大兴区", "salary": "25-45K·14薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-15",
+            "job_desc": (
+                "岗位职责：\n1. 负责物流实时数据平台建设\n"
+                "2. 基于Flink/Kafka开发实时数据处理链路\n"
+                "3. 实时数据仓库建设和指标计算\n4. 数据质量监控和异常告警\n\n"
+                "任职要求：\n1. 精通Java,3年以上Flink开发经验\n"
+                "2. 深入理解Flink状态管理和容错机制\n"
+                "3. 熟悉Kafka等消息中间件\n4. 有电商/物流实时数据处理经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "物流",
+            "welfare": "五险一金,餐补,班车,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "ETL开发工程师",
+            "company": "华泰证券", "location": "南京-建邺区", "salary": "15-30K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-12",
+            "job_desc": (
+                "岗位职责：\n1. 负责证券数据仓库ETL流程开发\n"
+                "2. 数据抽取、清洗、转换和加载全流程管理\n"
+                "3. 编写存储过程和调度任务\n4. 数据质量监控\n\n任职要求：\n"
+                "1. 精通SQL和存储过程开发\n2. 了解Hadoop生态\n"
+                "3. 有金融行业数据开发经验优先\n4. 熟悉DataX/DataStage等ETL工具"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险二金,企业年金,带薪年假", "source": "样本数据",
+        },
+        {
+            "title": "数据开发工程师（数据仓库方向）",
+            "company": "小红书", "location": "上海-黄浦区", "salary": "22-42K·14薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-10",
+            "job_desc": (
+                "岗位职责：\n1. 负责社区数据仓库的建设和优化\n"
+                "2. 设计数据模型和指标体系\n3. ETL流程开发和调度\n"
+                "4. 数据质量保障和元数据管理\n\n任职要求：\n"
+                "1. 精通SQL和Java/Python\n2. 熟悉Hive/Spark/Hadoop\n"
+                "3. 掌握维度建模方法论\n4. 有内容平台数据开发经验优先"
+            ),
+            "company_type": "未上市", "company_size": "1000-5000人", "industry": "互联网",
+            "welfare": "六险一金,股票期权,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "数据平台开发工程师",
+            "company": "深信服", "location": "深圳-南山区", "salary": "20-38K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-08",
+            "job_desc": (
+                "岗位职责：\n1. 负责安全大数据平台建设和开发\n"
+                "2. 海量安全日志数据处理和分析\n3. 数据管道开发和性能优化\n"
+                "4. 数据接口和API服务开发\n\n任职要求：\n"
+                "1. 精通Java/Python\n2. 熟悉Spark/Flink/HBase\n"
+                "3. 有时序数据处理经验优先\n4. 了解网络安全领域优先"
+            ),
+            "company_type": "上市公司", "company_size": "5000-10000人", "industry": "互联网",
+            "welfare": "五险一金,股票期权,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "Hadoop开发工程师",
+            "company": "中兴通讯", "location": "南京-雨花台区", "salary": "15-28K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-05",
+            "job_desc": (
+                "岗位职责：\n1. 负责Hadoop集群的日常运维和开发\n"
+                "2. 数据处理脚本开发和优化\n3. Hive数据仓库建设\n"
+                "4. 参与数据平台性能调优\n\n任职要求：\n"
+                "1. 精通Java，熟悉Hadoop/Hive/HBase\n2. 有Linux系统管理经验\n"
+                "3. 了解Spark和Flink\n4. 有通讯行业经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "通信",
+            "welfare": "五险一金,企业年金,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "大数据开发工程师",
+            "company": "微众银行", "location": "深圳-南山区", "salary": "25-48K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-03",
+            "job_desc": (
+                "岗位职责：\n1. 负责银行大数据平台的开发和数据仓库建设\n"
+                "2. 金融数据模型设计和ETL开发\n3. 数据治理和数据安全管控\n"
+                "4. 实时数据链路建设\n\n任职要求：\n"
+                "1. 3年以上大数据开发经验\n2. 精通Java/Scala和Spark/Flink\n"
+                "3. 有金融数据开发经验\n4. 了解数据安全和合规要求"
+            ),
+            "company_type": "未上市", "company_size": "1000-5000人", "industry": "金融",
+            "welfare": "六险二金,股票期权,年终奖", "source": "样本数据",
+        },
+        # 初级数据开发
+        {
+            "title": "大数据开发工程师（校招）",
+            "company": "字节跳动", "location": "北京-海淀区", "salary": "20-35K·15薪",
+            "experience": "在校/应届", "education": "本科",
+            "publish_date": "2026-05-01",
+            "job_desc": (
+                "岗位职责：\n1. 参与大数据平台的开发和维护\n"
+                "2. 编写数据处理脚本和SQL查询\n3. 参与ETL流程建设\n"
+                "4. 数据质量监控和报表开发\n\n任职要求：\n"
+                "1. 计算机相关专业，本科及以上\n2. 熟悉SQL和至少一门编程语言\n"
+                "3. 了解Hadoop/Spark等大数据技术\n4. 有相关实习经验优先"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "数据开发实习生",
+            "company": "阿里云", "location": "杭州-余杭区", "salary": "8-12K",
+            "experience": "在校/应届", "education": "硕士",
+            "publish_date": "2026-04-28",
+            "job_desc": (
+                "岗位职责：\n1. 协助数据平台的日常开发和维护\n"
+                "2. 参与数据仓库ETL流程建设\n3. 编写SQL脚本和数据处理程序\n"
+                "4. 参与数据质量校验\n\n任职要求：\n"
+                "1. 计算机/统计学相关专业硕士在读\n2. 熟悉SQL和Python\n"
+                "3. 了解Hadoop/Spark/Hive\n4. 实习期3个月以上"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "实习补贴,餐补,技术培训", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 2. 数据分析 (目标: 30+条) - 当前已有~20条样本 + 74条腾讯
+    # ================================================================
+    samples.extend([
+        {
+            "title": "数据分析师",
+            "company": "字节跳动", "location": "北京-海淀区", "salary": "22-40K·15薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-19",
+            "job_desc": (
+                "岗位职责：\n1. 负责抖音/头条等核心业务的数据分析\n"
+                "2. 搭建业务监控指标体系\n3. 深度分析用户行为数据\n"
+                "4. 与产品运营团队协作推动数据化运营\n\n任职要求：\n"
+                "1. 2年以上数据分析经验，精通SQL/Python\n"
+                "2. 熟悉AB实验设计和效果评估\n3. 有内容平台分析经验优先\n"
+                "4. 极强的数据敏感度和逻辑思维能力"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "BI数据分析师",
+            "company": "顺丰科技", "location": "深圳-南山区", "salary": "15-28K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-17",
+            "job_desc": (
+                "岗位职责：\n1. 负责物流业务BI报表和分析看板建设\n"
+                "2. 搭建经营管理分析体系\n3. 数据提取和Ad-hoc分析\n"
+                "4. 推动数据可视化在业务中的应用\n\n任职要求：\n"
+                "1. 精通SQL，熟练FineBI/Tableau\n2. 有物流/供应链分析经验优先\n"
+                "3. 了解数据仓库和ETL流程\n4. 沟通能力强"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "物流",
+            "welfare": "五险一金,餐补,员工宿舍", "source": "样本数据",
+        },
+        {
+            "title": "商业分析师",
+            "company": "美团", "location": "北京-朝阳区", "salary": "20-35K·15薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-16",
+            "job_desc": (
+                "岗位职责：\n1. 负责外卖/到店等业务线的商业分析\n"
+                "2. 市场趋势分析、竞品研究和用户研究\n3. 搭建经营分析模型\n"
+                "4. 支撑业务战略决策\n\n任职要求：\n"
+                "1. 2年以上商业分析/管理咨询经验\n2. 精通SQL和Excel建模\n"
+                "3. 有O2O/本地生活行业经验优先\n4. 出色的战略思维和呈现能力"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,餐补,健身房,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "数据分析师（用户增长方向）",
+            "company": "拼多多", "location": "上海-长宁区", "salary": "22-42K·16薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-14",
+            "job_desc": (
+                "岗位职责：\n1. 负责用户增长全链路数据分析\n"
+                "2. 用户获取、激活、留存、变现分析\n3. 增长实验设计和效果评估\n"
+                "4. 用户分群和增长策略制定\n\n任职要求：\n"
+                "1. 精通SQL和Python\n2. 熟悉AB实验设计和统计分析\n"
+                "3. 有电商增长分析经验优先\n4. 极强的数据驱动思维"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,股票期权,免费三餐", "source": "样本数据",
+        },
+        {
+            "title": "风控数据分析师",
+            "company": "蚂蚁集团", "location": "杭州-西湖区", "salary": "22-40K·16薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-13",
+            "job_desc": (
+                "岗位职责：\n1. 负责支付风控数据分析\n"
+                "2. 风险指标监控和异常识别\n3. 风控策略效果评估\n"
+                "4. 反欺诈模型效果分析和优化\n\n任职要求：\n"
+                "1. 精通SQL和Python\n2. 了解互联网风控业务\n"
+                "3. 有金融/支付行业经验优先\n4. 有机器学习建模经验优先"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险一金,股票期权,免费食堂", "source": "样本数据",
+        },
+        {
+            "title": "数据分析师（游戏方向）",
+            "company": "网易游戏", "location": "广州-天河区", "salary": "18-35K·16薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-11",
+            "job_desc": (
+                "岗位职责：\n1. 负责游戏产品数据分析\n"
+                "2. 玩家行为分析、付费分析、流失预警\n3. 搭建游戏数据指标体系\n"
+                "4. AB测试设计和效果评估\n\n任职要求：\n"
+                "1. 2年以上游戏行业数据分析经验\n2. 精通SQL和Python\n"
+                "3. 熟悉Tableau等BI工具\n4. 热爱游戏，理解游戏业务逻辑"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "游戏",
+            "welfare": "五险一金,免费三餐,健身房", "source": "样本数据",
+        },
+        {
+            "title": "数据分析师（教育方向）",
+            "company": "猿辅导", "location": "北京-朝阳区", "salary": "18-32K·14薪",
+            "experience": "2-4年", "education": "本科",
+            "publish_date": "2026-05-09",
+            "job_desc": (
+                "岗位职责：\n1. 负责在线教育产品数据分析\n"
+                "2. 学生学习行为分析、课程效果评估\n3. 搭建教学质量监控体系\n"
+                "4. 支持产品和教研决策\n\n任职要求：\n"
+                "1. 精通SQL和Python\n2. 有教育行业数据分析经验优先\n"
+                "3. 掌握Tableau/FineBI等BI工具\n4. 有较强的业务理解能力"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "教育",
+            "welfare": "五险一金,带薪年假,子女教育优惠", "source": "样本数据",
+        },
+        {
+            "title": "数据分析师（金融方向）",
+            "company": "华夏基金", "location": "北京-西城区", "salary": "20-38K·14薪",
+            "experience": "2-5年", "education": "硕士",
+            "publish_date": "2026-05-07",
+            "job_desc": (
+                "岗位职责：\n1. 负责基金投资数据分析\n"
+                "2. 市场行情分析和投资策略研究\n3. 构建量化分析模型\n"
+                "4. 投资组合风险收益分析\n\n任职要求：\n"
+                "1. 精通Python/R和SQL\n2. 金融/统计/数学相关专业硕士\n"
+                "3. 有量化分析经验优先\n4. 了解基金/证券业务"
+            ),
+            "company_type": "国企", "company_size": "1000-5000人", "industry": "金融",
+            "welfare": "六险二金,企业年金,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "初级数据分析师",
+            "company": "滴滴", "location": "北京-海淀区", "salary": "12-20K·14薪",
+            "experience": "在校/应届", "education": "本科",
+            "publish_date": "2026-05-05",
+            "job_desc": (
+                "岗位职责：\n1. 参与出行/外卖业务的数据分析\n"
+                "2. 核心指标监控和日常报表维护\n3. 协助业务方完成数据提取需求\n"
+                "4. 参与AB实验分析\n\n任职要求：\n"
+                "1. 统计学/数学/计算机相关专业\n2. 熟练掌握SQL和Python\n"
+                "3. 有数据分析实习经验优先\n4. 逻辑清晰，沟通能力强"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,弹性工作,健身房", "source": "样本数据",
+        },
+        {
+            "title": "运营数据分析师",
+            "company": "快手", "location": "北京-海淀区", "salary": "18-33K·15薪",
+            "experience": "1-3年", "education": "本科",
+            "publish_date": "2026-05-03",
+            "job_desc": (
+                "岗位职责：\n1. 负责短视频运营数据分析\n"
+                "2. 用户运营、内容运营效果分析\n3. 搭建运营数据指标体系\n"
+                "4. 数据驱动运营策略优化\n\n任职要求：\n"
+                "1. 精通SQL和Excel\n2. 有互联网运营分析经验\n"
+                "3. 了解AB实验方法\n4. 有Python数据分析能力优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,股票期权,弹性工作", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 3. AI/机器学习 (目标: 25+条) - 当前已有~9条样本 + 31条腾讯 + 87条Kaggle
+    # ================================================================
+    samples.extend([
+        {
+            "title": "大模型算法工程师",
+            "company": "百度", "location": "北京-海淀区", "salary": "45-80K·16薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-20",
+            "job_desc": (
+                "岗位职责：\n1. 负责文心大模型的训练和优化\n"
+                "2. SFT/RLHF/DPO等对齐技术研发\n3. 大模型推理优化和部署\n"
+                "4. 多模态大模型研发\n\n任职要求：\n"
+                "1. 精通PyTorch和分布式训练\n2. 深入理解Transformer/GPT架构\n"
+                "3. 有大模型预训练或微调经验\n4. 在ACL/NeurIPS等顶会发表论文优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,股票期权,免费食堂", "source": "样本数据",
+        },
+        {
+            "title": "NLP算法工程师",
+            "company": "字节跳动", "location": "北京-海淀区", "salary": "35-65K·15薪",
+            "experience": "2-5年", "education": "硕士",
+            "publish_date": "2026-05-18",
+            "job_desc": (
+                "岗位职责：\n1. 负责内容理解/NLP相关算法研发\n"
+                "2. 文本分类、情感分析、信息抽取\n3. 大语言模型微调和应用\n"
+                "4. 跟踪NLP前沿技术\n\n任职要求：\n"
+                "1. 硕士及以上，NLP/深度学习方向\n2. 精通Python和PyTorch\n"
+                "3. 掌握BERT/GPT等预训练模型\n4. 有Llama/GLM等开源模型使用经验"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "机器学习平台工程师",
+            "company": "华为", "location": "杭州-滨江区", "salary": "30-55K·14薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-16",
+            "job_desc": (
+                "岗位职责：\n1. 负责AI训练平台的开发和优化\n"
+                "2. 大规模分布式训练系统建设\n3. GPU集群资源调度优化\n"
+                "4. 模型管理和在线推理服务\n\n任职要求：\n"
+                "1. 精通Python/Go和Kubernetes\n2. 了解PyTorch分布式训练\n"
+                "3. 有MLOps平台建设经验优先\n4. 有大规模GPU集群管理经验"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "通信",
+            "welfare": "五险一金,企业年金,股票分红", "source": "样本数据",
+        },
+        {
+            "title": "CV算法工程师",
+            "company": "旷视科技", "location": "北京-海淀区", "salary": "30-55K·15薪",
+            "experience": "2-5年", "education": "硕士",
+            "publish_date": "2026-05-15",
+            "job_desc": (
+                "岗位职责：\n1. 负责计算机视觉算法研发\n"
+                "2. 目标检测、语义分割、图像分类\n3. 模型压缩和端侧部署\n"
+                "4. 参与AIoT产品算法开发\n\n任职要求：\n"
+                "1. 精通Python/C++和PyTorch\n2. 深入理解CNN/Transformer/ViT\n"
+                "3. 有模型量化/剪枝经验优先\n4. 在CVPR/ICCV发表论文优先"
+            ),
+            "company_type": "未上市", "company_size": "1000-5000人", "industry": "互联网",
+            "welfare": "六险一金,股票期权,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "推荐算法工程师",
+            "company": "腾讯", "location": "深圳-南山区", "salary": "35-65K·16薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-12",
+            "job_desc": (
+                "岗位职责：\n1. 负责微信/QQ等产品的推荐算法优化\n"
+                "2. 召回、粗排、精排、重排全链路优化\n3. 多目标排序模型设计\n"
+                "4. 大规模特征工程和实时推荐\n\n任职要求：\n"
+                "1. 精通C++/Python和TensorFlow\n2. 深入理解DIN/DLRM/MMOE等模型\n"
+                "3. 有大规模推荐系统经验优先\n4. 有顶会论文发表经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,补充商业保险,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "搜索算法工程师",
+            "company": "小红书", "location": "上海-黄浦区", "salary": "30-60K·15薪",
+            "experience": "2-5年", "education": "硕士",
+            "publish_date": "2026-05-10",
+            "job_desc": (
+                "岗位职责：\n1. 负责小红书搜索算法优化\n"
+                "2. 查询理解、相关性排序、语义召回\n3. 多模态搜索技术研发\n"
+                "4. 搜索质量评估和持续优化\n\n任职要求：\n"
+                "1. 精通Python/C++\n2. 有搜索/NLP/推荐算法经验\n"
+                "3. 了解ElasticSearch等搜索引擎\n4. 有LLM+RAG经验优先"
+            ),
+            "company_type": "未上市", "company_size": "1000-5000人", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "AI平台研发工程师",
+            "company": "阿里云", "location": "杭州-余杭区", "salary": "28-50K·16薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-08",
+            "job_desc": (
+                "岗位职责：\n1. 负责AI平台（PAI）的产品开发\n"
+                "2. 模型训练/推理服务开发和优化\n3. AutoML和特征平台建设\n"
+                "4. 大规模分布式训练框架开发\n\n任职要求：\n"
+                "1. 精通Java/Python/Go\n2. 有分布式系统开发经验\n"
+                "3. 了解PyTorch/TensorFlow\n4. 有云原生开发经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,补充公积金,股票期权", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 4. 数据架构 (目标: 15+条) - 当前已有~5条
+    # ================================================================
+    samples.extend([
+        {
+            "title": "大数据架构师",
+            "company": "字节跳动", "location": "上海-徐汇区", "salary": "45-80K·15薪",
+            "experience": "5-10年", "education": "本科",
+            "publish_date": "2026-05-18",
+            "job_desc": (
+                "岗位职责：\n1. 负责公司级大数据平台架构设计\n"
+                "2. 制定数据中台建设方案和技术演进路线\n3. 主导数据治理体系建设\n"
+                "4. 攻克大数据领域关键技术难题\n\n任职要求：\n"
+                "1. 8年以上大数据经验，3年以上架构设计经验\n"
+                "2. 精通Hadoop/Spark/Flink等主流技术\n3. 有PB级数据平台架构设计经验\n"
+                "4. 了解数据治理框架\n5. 有云原生大数据平台建设经验优先"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,股票期权,免费三餐", "source": "样本数据",
+        },
+        {
+            "title": "数据中台架构师",
+            "company": "美团", "location": "北京-朝阳区", "salary": "40-70K·15薪",
+            "experience": "5-10年", "education": "本科",
+            "publish_date": "2026-05-16",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据中台整体架构设计\n"
+                "2. 数据资产、数据服务、数据治理三大体系规划\n"
+                "3. 制定技术规范和演进路线\n4. 跨团队技术协调\n\n任职要求：\n"
+                "1. 5年以上大数据架构经验\n2. 深刻理解数据中台理念\n"
+                "3. 有成功的数据中台落地经验\n4. 优秀的跨团队沟通能力"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,餐补,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "数据治理专家",
+            "company": "工商银行", "location": "北京-西城区", "salary": "30-55K·14薪",
+            "experience": "5-10年", "education": "本科",
+            "publish_date": "2026-05-14",
+            "job_desc": (
+                "岗位职责：\n1. 负责银行级数据治理体系建设\n"
+                "2. 制定数据标准、数据质量管理规范\n3. 元数据管理、数据血缘、数据资产目录\n"
+                "4. 配合监管合规要求\n\n任职要求：\n"
+                "1. 5年以上数据治理经验\n2. 熟悉DAMA/DGPC等框架\n"
+                "3. 了解Apache Atlas等工具\n4. 有金融机构数据治理经验优先"
+            ),
+            "company_type": "国企", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险二金,企业年金,住房补贴", "source": "样本数据",
+        },
+        {
+            "title": "数据架构师",
+            "company": "恒生电子", "location": "杭州-滨江区", "salary": "35-60K·14薪",
+            "experience": "5-10年", "education": "本科",
+            "publish_date": "2026-05-12",
+            "job_desc": (
+                "岗位职责：\n1. 负责金融数据产品架构设计\n"
+                "2. 数据仓库和数据湖技术方案\n3. 数据安全和隐私保护架构\n"
+                "4. 信创环境下的数据技术适配\n\n任职要求：\n"
+                "1. 5年以上数据架构经验\n2. 精通大数据技术栈\n"
+                "3. 有金融行业数据架构经验\n4. 了解数据安全法和等保要求"
+            ),
+            "company_type": "上市公司", "company_size": "5000-10000人", "industry": "金融",
+            "welfare": "五险一金,股票期权,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "技术总监（数据平台）",
+            "company": "快手", "location": "北京-海淀区", "salary": "60-100K·16薪",
+            "experience": "10年以上", "education": "本科",
+            "publish_date": "2026-05-10",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据平台团队管理（30+人）\n"
+                "2. 制定数据平台技术战略\n3. 推动数据中台和实时计算平台建设\n"
+                "4. 跨部门技术协调\n\n任职要求：\n"
+                "1. 10年以上大数据经验，5年以上管理经验\n"
+                "2. 有大规模数据平台建设经验\n3. 优秀的领导力和战略思维\n"
+                "4. 有互联网大厂经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,股票期权,免费三餐", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 5. 数据运维 (目标: 15+条) - 当前已有~6条
+    # ================================================================
+    samples.extend([
+        {
+            "title": "大数据运维工程师",
+            "company": "百度", "location": "北京-海淀区", "salary": "22-42K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-17",
+            "job_desc": (
+                "岗位职责：\n1. 负责Hadoop/Spark/Flink等大数据集群运维\n"
+                "2. 集群监控、告警和故障处理\n3. 集群性能调优和容量规划\n"
+                "4. 自动化运维平台建设\n\n任职要求：\n"
+                "1. 3年以上大数据运维经验\n2. 精通Linux和Shell/Python\n"
+                "3. 深入理解Hadoop/Spark架构\n4. 有Kubernetes运维经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,补充公积金,免费食堂", "source": "样本数据",
+        },
+        {
+            "title": "数据库管理员(DBA)",
+            "company": "微众银行", "location": "深圳-南山区", "salary": "25-48K·15薪",
+            "experience": "5-10年", "education": "本科",
+            "publish_date": "2026-05-15",
+            "job_desc": (
+                "岗位职责：\n1. 负责金融核心数据库运维管理\n"
+                "2. MySQL/TiDB/Redis高可用架构设计\n3. SQL审核和性能优化\n"
+                "4. 数据库自动化运维平台建设\n\n任职要求：\n"
+                "1. 5年以上DBA经验\n2. 精通MySQL和InnoDB\n"
+                "3. 有分布式数据库运维经验\n4. 熟悉金融行业数据合规要求"
+            ),
+            "company_type": "未上市", "company_size": "1000-5000人", "industry": "金融",
+            "welfare": "六险二金,股票期权,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "数据安全工程师",
+            "company": "奇安信", "location": "北京-朝阳区", "salary": "20-40K·14薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-13",
+            "job_desc": (
+                "岗位职责：\n1. 负责大数据平台数据安全方案设计和实施\n"
+                "2. 数据分类分级、脱敏、加密方案\n3. 数据访问审计和异常检测\n"
+                "4. 数据安全合规建设\n\n任职要求：\n"
+                "1. 3年以上数据安全经验\n2. 了解大数据平台安全架构\n"
+                "3. 熟悉数据脱敏/加密/水印技术\n4. 有CISSP/CISP认证优先"
+            ),
+            "company_type": "上市公司", "company_size": "5000-10000人", "industry": "互联网",
+            "welfare": "六险一金,股票期权,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "大数据运维开发工程师",
+            "company": "网易", "location": "杭州-滨江区", "salary": "20-38K·16薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-11",
+            "job_desc": (
+                "岗位职责：\n1. 负责大数据平台的运维开发\n"
+                "2. 自动化部署和运维工具开发\n3. 监控告警体系建设和优化\n"
+                "4. 大数据平台容器化改造\n\n任职要求：\n"
+                "1. 精通Linux和Shell/Python\n2. 熟悉Kubernetes/Docker\n"
+                "3. 有Hadoop/Spark集群运维经验\n4. 有Ansible/Terraform经验"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,免费三餐,健身房", "source": "样本数据",
+        },
+        {
+            "title": "SRE工程师（大数据方向）",
+            "company": "阿里云", "location": "杭州-余杭区", "salary": "28-50K·16薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-09",
+            "job_desc": (
+                "岗位职责：\n1. 负责大数据云产品的SRE保障\n"
+                "2. 建设可观测性体系（监控/日志/链路追踪）\n"
+                "3. 故障应急响应和根因分析\n4. 容量规划和成本优化\n\n"
+                "任职要求：\n1. 精通Linux和至少一门编程语言\n"
+                "2. 有大规模分布式系统运维经验\n3. 了解Hadoop/Spark/Flink\n"
+                "4. 有Prometheus/Grafana使用经验"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,补充公积金,股票期权", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 6. 数据挖掘 (目标: 15+条) - 当前已有~4条
+    # ================================================================
+    samples.extend([
+        {
+            "title": "数据挖掘工程师",
+            "company": "京东", "location": "北京-大兴区", "salary": "28-50K·14薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-16",
+            "job_desc": (
+                "岗位职责：\n1. 负责电商推荐/搜索场景的数据挖掘\n"
+                "2. 用户画像构建和特征工程\n3. 构建CTR/CVR预估模型\n"
+                "4. 数据分析和模型效果评估\n\n任职要求：\n"
+                "1. 3年以上数据挖掘经验\n2. 精通Python和SQL\n"
+                "3. 掌握Spark MLlib/XGBoost\n4. 有电商推荐经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,餐补,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "知识图谱工程师",
+            "company": "蚂蚁集团", "location": "杭州-西湖区", "salary": "30-60K·16薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-14",
+            "job_desc": (
+                "岗位职责：\n1. 负责金融知识图谱构建和应用\n"
+                "2. 实体识别、关系抽取、知识融合\n3. 图算法开发\n"
+                "4. 知识图谱在风控/营销场景落地\n\n任职要求：\n"
+                "1. 硕士及以上，NLP/KG方向\n2. 精通Python和图数据库\n"
+                "3. 了解图神经网络\n4. 有金融KG项目经验优先"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险一金,股票期权,免费食堂", "source": "样本数据",
+        },
+        {
+            "title": "数据挖掘工程师（风控方向）",
+            "company": "360数科", "location": "北京-朝阳区", "salary": "25-48K·15薪",
+            "experience": "2-5年", "education": "硕士",
+            "publish_date": "2026-05-11",
+            "job_desc": (
+                "岗位职责：\n1. 负责信贷风控模型开发\n"
+                "2. 反欺诈、信用评估、异常检测建模\n3. 特征工程和模型解释\n"
+                "4. 模型部署和在线推理\n\n任职要求：\n"
+                "1. 2年以上机器学习经验\n2. 精通Python和sklearn/XGBoost\n"
+                "3. 了解风控建模方法论\n4. 有金融科技经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "1000-5000人", "industry": "金融",
+            "welfare": "六险一金,股票期权,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "数据科学家",
+            "company": "快手", "location": "北京-海淀区", "salary": "30-55K·16薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-09",
+            "job_desc": (
+                "岗位职责：\n1. 负责短视频业务的数据科学分析\n"
+                "2. 用户行为建模和因果推断\n3. 构建预测模型和决策支持系统\n"
+                "4. 推动数据驱动决策文化\n\n任职要求：\n"
+                "1. 3年以上数据科学经验\n2. 精通Python/R和SQL\n"
+                "3. 掌握因果推断、实验设计\n4. 有顶会论文发表经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,股票期权,免费三餐", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 7. 数据产品 (目标: 12+条) - 当前已有~3条
+    # ================================================================
+    samples.extend([
+        {
+            "title": "数据产品经理",
+            "company": "滴滴", "location": "北京-海淀区", "salary": "25-48K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-15",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据产品的规划和设计\n"
+                "2. 推动数据开发平台、数据治理工具迭代\n"
+                "3. 深入理解数据工程师和分析师需求\n"
+                "4. 协调研发、设计、业务方推动产品落地\n\n任职要求：\n"
+                "1. 3年以上数据产品或B端产品经验\n2. 了解大数据技术栈\n"
+                "3. 有数据中台产品经验优先\n4. 有SQL基础"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,股票期权,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "数据产品经理（BI方向）",
+            "company": "神策数据", "location": "北京-海淀区", "salary": "22-42K·15薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-12",
+            "job_desc": (
+                "岗位职责：\n1. 负责用户行为分析/BI产品设计和迭代\n"
+                "2. 深入理解数据分析场景和用户画像需求\n"
+                "3. 产品功能规划和需求管理\n4. 与研发团队协作推动产品交付\n\n"
+                "任职要求：\n1. 有BI/Analytics产品经验\n"
+                "2. 了解埋点/用户行为分析/AB实验\n3. 有SQL基础\n"
+                "4. 有SaaS/PaaS产品经验优先"
+            ),
+            "company_type": "未上市", "company_size": "500-1000人", "industry": "互联网",
+            "welfare": "六险一金,股票期权,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "数据治理产品经理",
+            "company": "字节跳动", "location": "上海-徐汇区", "salary": "28-55K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-10",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据治理平台产品规划\n"
+                "2. 元数据管理、数据血缘、数据质量产品设计\n"
+                "3. 推动数据资产管理和数据合规\n"
+                "4. 跨部门协作推进产品落地\n\n任职要求：\n"
+                "1. 3年以上B端产品经验\n2. 了解数据治理方法论\n"
+                "3. 有数据中台/数据资产产品经验优先\n4. 优秀的逻辑和沟通能力"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,股票期权,免费三餐", "source": "样本数据",
+        },
+        {
+            "title": "数据平台产品经理",
+            "company": "美团", "location": "北京-朝阳区", "salary": "25-50K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-08",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据开发平台/调度系统产品设计\n"
+                "2. 深入理解数据开发者的痛点和需求\n"
+                "3. 产品规划和功能迭代\n4. 推动内部数据工具的产品化\n\n"
+                "任职要求：\n1. 3年以上B端产品经验\n2. 了解大数据开发流程\n"
+                "3. 有数据中台产品经验优先\n4. 有SQL和Python基础"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,餐补,健身房", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 8. 流计算 (目标: 15+条) - 当前只有~2条！急需扩充
+    # ================================================================
+    samples.extend([
+        {
+            "title": "Flink开发工程师",
+            "company": "字节跳动", "location": "北京-海淀区", "salary": "30-55K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-18",
+            "job_desc": (
+                "岗位职责：\n1. 负责Flink实时计算平台的开发和优化\n"
+                "2. 构建实时数据处理链路和实时数仓\n3. Flink SQL开发和优化\n"
+                "4. 实时计算性能调优\n\n任职要求：\n"
+                "1. 精通Java/Scala，3年以上Flink开发经验\n"
+                "2. 深入理解Flink运行原理、状态管理、Checkpoint\n"
+                "3. 熟悉Kafka/RocketMQ等消息队列\n4. 有实时数仓建设经验"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "实时数据开发工程师",
+            "company": "快手", "location": "北京-海淀区", "salary": "28-50K·16薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-16",
+            "job_desc": (
+                "岗位职责：\n1. 负责实时数据处理平台建设\n"
+                "2. 基于Flink构建实时数据管道\n3. 实时指标计算和实时大屏\n"
+                "4. 实时数据质量监控\n\n任职要求：\n"
+                "1. 精通Java，3年以上Flink开发经验\n"
+                "2. 深入理解Flink状态管理和容错机制\n"
+                "3. 熟悉Kafka/RocketMQ\n4. 有实时数仓（Flink+Hudi）经验"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,股票期权,免费三餐", "source": "样本数据",
+        },
+        {
+            "title": "流计算平台开发工程师",
+            "company": "阿里云", "location": "杭州-余杭区", "salary": "28-50K·16薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-14",
+            "job_desc": (
+                "岗位职责：\n1. 负责实时计算产品（Blink/Ververica）的开发\n"
+                "2. Flink内核优化和性能调优\n3. SQL流处理引擎开发\n"
+                "4. 参与开源社区贡献\n\n任职要求：\n"
+                "1. 精通Java/Scala\n2. 深入理解Flink源码和架构\n"
+                "3. 有流计算引擎内核开发经验优先\n4. 有开源项目贡献经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,补充公积金,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "Flink CDC数据集成工程师",
+            "company": "京东", "location": "北京-大兴区", "salary": "22-42K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-12",
+            "job_desc": (
+                "岗位职责：\n1. 负责基于Flink CDC的实时数据同步\n"
+                "2. 设计和优化CDC数据同步方案\n3. 多数据源实时接入和分发\n"
+                "4. 数据同步链路监控和保障\n\n任职要求：\n"
+                "1. 精通Java，2年以上Flink开发经验\n"
+                "2. 了解Flink CDC/Debezium/Canal\n"
+                "3. 有MySQL/Oracle/MongoDB等数据源同步经验\n4. 有数据集成经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,餐补,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "实时数仓开发工程师",
+            "company": "小红书", "location": "上海-黄浦区", "salary": "25-48K·15薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-10",
+            "job_desc": (
+                "岗位职责：\n1. 负责实时数据仓库建设和优化\n"
+                "2. Flink + Kafka + Hudi/Paimon实时链路\n3. 实时数据模型设计\n"
+                "4. 实时大屏和实时报表开发\n\n任职要求：\n"
+                "1. 精通Java/Scala和Flink\n2. 有实时数仓建设经验\n"
+                "3. 了解Hudi/Iceberg/Paimon等数据湖技术\n4. 有Kafka运维经验"
+            ),
+            "company_type": "未上市", "company_size": "1000-5000人", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "流计算开发工程师",
+            "company": "唯品会", "location": "广州-天河区", "salary": "18-35K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-08",
+            "job_desc": (
+                "岗位职责：\n1. 负责Flink流计算平台的开发和维护\n"
+                "2. 建设实时数据仓库\n3. 实时大屏、实时报表开发\n"
+                "4. 实时数据处理性能优化\n\n任职要求：\n"
+                "1. 2年以上Java开发经验，熟悉Flink\n"
+                "2. 熟悉Kafka和实时数据处理\n3. 有Hudi/Iceberg经验优先\n"
+                "4. 有电商实时数据处理经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "5000-10000人", "industry": "互联网",
+            "welfare": "五险一金,带薪年假,年终奖", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 9. 测试/质量 (目标: 12+条) - 当前只有~2条！急需扩充
+    # ================================================================
+    samples.extend([
+        {
+            "title": "大数据测试工程师",
+            "company": "同程旅行", "location": "苏州-工业园区", "salary": "15-28K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-15",
+            "job_desc": (
+                "岗位职责：\n1. 负责大数据平台和数据产品质量保障\n"
+                "2. 设计数据测试方案和测试用例\n3. 数据质量监控和自动化测试\n"
+                "4. 数据一致性校验和性能测试\n\n任职要求：\n"
+                "1. 2年以上数据测试经验\n2. 熟练SQL，能编写复杂查询\n"
+                "3. 了解大数据技术栈\n4. 有自动化测试框架开发经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "5000-10000人", "industry": "互联网",
+            "welfare": "五险一金,带薪年假,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "数据质量工程师",
+            "company": "建设银行", "location": "上海-浦东新区", "salary": "20-38K·14薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-13",
+            "job_desc": (
+                "岗位职责：\n1. 负责银行数据质量管理体系建设\n"
+                "2. 制定数据质量度量标准和规则\n3. 开发数据质量稽核和监控系统\n"
+                "4. 推动数据质量问题闭环处理\n\n任职要求：\n"
+                "1. 3年以上数据开发或数据质量经验\n2. 精通SQL\n"
+                "3. 了解金融数据标准和监管要求\n4. 有数据治理经验优先"
+            ),
+            "company_type": "国企", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险二金,企业年金,住房补贴", "source": "样本数据",
+        },
+        {
+            "title": "数据测试开发工程师",
+            "company": "字节跳动", "location": "北京-海淀区", "salary": "25-45K·15薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-11",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据产品质量保障体系建设\n"
+                "2. 开发数据自动化测试框架和工具\n3. 数据一致性、准确性、完整性测试\n"
+                "4. 数据管道端到端测试\n\n任职要求：\n"
+                "1. 精通Java/Python\n2. 有自动化测试框架开发经验\n"
+                "3. 了解大数据技术栈\n4. 有CI/CD和测试左移经验优先"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,免费三餐,股票期权", "source": "样本数据",
+        },
+        {
+            "title": "数据质量平台工程师",
+            "company": "蚂蚁集团", "location": "杭州-西湖区", "salary": "22-40K·16薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-09",
+            "job_desc": (
+                "岗位职责：\n1. 负责数据质量平台的开发和维护\n"
+                "2. 数据质量监控规则引擎开发\n3. 数据血缘分析和质量报告\n"
+                "4. 数据质量问题追踪和闭环\n\n任职要求：\n"
+                "1. 精通Java/Python\n2. 有数据质量相关经验\n"
+                "3. 了解大数据技术栈\n4. 了解数据治理方法论"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "金融",
+            "welfare": "六险一金,股票期权,免费食堂", "source": "样本数据",
+        },
+        {
+            "title": "算法测试工程师",
+            "company": "商汤科技", "location": "上海-浦东新区", "salary": "25-45K·15薪",
+            "experience": "2-5年", "education": "硕士",
+            "publish_date": "2026-05-07",
+            "job_desc": (
+                "岗位职责：\n1. 负责AI算法模型的测试和质量保障\n"
+                "2. 模型效果评估和A/B测试\n3. 构建模型测试数据集和评估标准\n"
+                "4. 模型性能Benchmark和回归测试\n\n任职要求：\n"
+                "1. 硕士及以上，AI/CS相关专业\n2. 精通Python\n"
+                "3. 了解机器学习模型评估方法\n4. 有CV/NLP模型测试经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "5000-10000人", "industry": "互联网",
+            "welfare": "六险一金,股票期权,年终奖", "source": "样本数据",
+        },
+    ])
+
+    # ================================================================
+    # 10. 更多公司/城市的多样性补充
+    # ================================================================
+    samples.extend([
+        # 二线城市
+        {
+            "title": "大数据开发工程师",
+            "company": "腾讯", "location": "成都-高新区", "salary": "18-35K·14薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-20",
+            "job_desc": (
+                "岗位职责：\n1. 负责成都团队大数据平台建设\n"
+                "2. 数据处理链路开发和优化\n3. 数据仓库建设和数据治理\n"
+                "4. 与深圳总部团队协作\n\n任职要求：\n"
+                "1. 2年以上大数据开发经验\n2. 熟悉Spark/Hive/Flink\n"
+                "3. 有Java/Python开发能力\n4. 有数据仓库建模经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,商业保险,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "数据分析师",
+            "company": "字节跳动", "location": "成都-高新区", "salary": "16-30K·15薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-18",
+            "job_desc": (
+                "岗位职责：\n1. 负责成都团队业务数据分析\n"
+                "2. 搭建业务监控指标和报表体系\n3. 用户行为分析和业务洞察\n"
+                "4. 数据驱动业务优化\n\n任职要求：\n"
+                "1. 2年以上数据分析经验\n2. 精通SQL和Python\n"
+                "3. 有互联网产品分析经验优先\n4. 逻辑清晰，沟通能力强"
+            ),
+            "company_type": "未上市", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,弹性工作", "source": "样本数据",
+        },
+        {
+            "title": "大数据开发工程师",
+            "company": "中软国际", "location": "武汉-东湖高新区", "salary": "12-22K·13薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-15",
+            "job_desc": (
+                "岗位职责：\n1. 负责外包项目大数据平台开发和维护\n"
+                "2. 数据处理脚本开发\n3. ETL流程优化和维护\n"
+                "4. 数据接口开发\n\n任职要求：\n"
+                "1. 2年以上数据开发经验\n2. 精通SQL和Java/Python\n"
+                "3. 了解Hadoop/Spark/Hive\n4. 有政府/企业项目经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "五险一金,年终奖,培训机会", "source": "样本数据",
+        },
+        {
+            "title": "数据分析师",
+            "company": "美团", "location": "成都-高新区", "salary": "14-28K·15薪",
+            "experience": "2-5年", "education": "本科",
+            "publish_date": "2026-05-13",
+            "job_desc": (
+                "岗位职责：\n1. 负责美团成都团队业务数据分析\n"
+                "2. 搭建业务监控指标和报表体系\n3. 品类分析、用户分析\n"
+                "4. 数据驱动业务优化\n\n任职要求：\n"
+                "1. 2年以上数据分析经验\n2. 精通SQL\n"
+                "3. 熟练Tableau/FineBI\n4. 有O2O/本地生活行业经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "互联网",
+            "welfare": "六险一金,餐补,弹性工作", "source": "样本数据",
+        },
+        # 制造/汽车行业
+        {
+            "title": "工业大数据工程师",
+            "company": "海尔智家", "location": "青岛-崂山区", "salary": "18-35K·14薪",
+            "experience": "3-5年", "education": "本科",
+            "publish_date": "2026-05-12",
+            "job_desc": (
+                "岗位职责：\n1. 负责工业IoT大数据平台建设\n"
+                "2. 生产线数据采集和分析\n3. 设备预测性维护模型开发\n"
+                "4. 工业数据可视化\n\n任职要求：\n"
+                "1. 3年以上大数据开发经验\n2. 精通Java/Python\n"
+                "3. 有时序数据库使用经验\n4. 了解工业IoT/智能制造"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "制造",
+            "welfare": "五险一金,带薪年假,年终奖", "source": "样本数据",
+        },
+        {
+            "title": "自动驾驶数据工程师",
+            "company": "蔚来", "location": "上海-嘉定区", "salary": "28-50K·14薪",
+            "experience": "3-5年", "education": "硕士",
+            "publish_date": "2026-05-10",
+            "job_desc": (
+                "岗位职责：\n1. 负责自动驾驶数据平台建设\n"
+                "2. 传感器数据（激光雷达/摄像头/毫米波）处理\n3. 数据标注平台和数据集管理\n"
+                "4. 自动驾驶场景数据挖掘\n\n任职要求：\n"
+                "1. 精通Python/C++\n2. 有大规模数据处理经验\n"
+                "3. 了解自动驾驶感知系统\n4. 有数据湖技术经验优先"
+            ),
+            "company_type": "上市公司", "company_size": "10000人以上", "industry": "汽车",
+            "welfare": "六险一金,股票期权,购车优惠", "source": "样本数据",
+        },
+    ])
+
+    return samples
+
+
+if __name__ == "__main__":
+    samples = generate_expanded_samples()
+    print(f"Generated {len(samples)} expanded samples")
+
+    # Category breakdown
+    from collections import Counter
+    titles = Counter(s['title'] for s in samples)
+    print(f"\nBy title:")
+    for t, c in titles.most_common(20):
+        print(f"  {t}: {c}")
+
+    # Save
+    os.makedirs("data", exist_ok=True)
+    with open("data/expanded_samples.json", "w", encoding="utf-8") as f:
+        json.dump(samples, f, ensure_ascii=False, indent=2)
+    print(f"\nSaved to data/expanded_samples.json")

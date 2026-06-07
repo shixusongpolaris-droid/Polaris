@@ -1,0 +1,222 @@
+[
+  {
+    "skill": "Python",
+    "frequency": 187,
+    "frequency_pct": 51.2,
+    "avg_salary_wan": 3.3,
+    "salary_premium_pct": 12.6,
+    "category_count": 10,
+    "categories": "AI/机器学习、数据产品、数据分析、数据开发、数据挖掘、数据架构、数据运维、流计算、测试/质量",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "SQL",
+    "frequency": 132,
+    "frequency_pct": 36.2,
+    "avg_salary_wan": 2.8,
+    "salary_premium_pct": -0.6,
+    "category_count": 10,
+    "categories": "AI/机器学习、数据产品、数据分析、数据开发、数据挖掘、数据架构、数据运维、流计算、测试/质量",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "Spark",
+    "frequency": 84,
+    "frequency_pct": 23.0,
+    "avg_salary_wan": 3.2,
+    "salary_premium_pct": 0.4,
+    "category_count": 9,
+    "categories": "AI/机器学习、数据产品、数据分析、数据开发、数据挖掘、数据架构、数据运维、流计算、测试/质量",
+    "growth_indicator": "中"
+  },
+  {
+    "skill": "Java",
+    "frequency": 72,
+    "frequency_pct": 19.7,
+    "avg_salary_wan": 3.3,
+    "salary_premium_pct": 11.6,
+    "category_count": 7,
+    "categories": "AI/机器学习、数据分析、数据开发、数据挖掘、数据运维、流计算、测试/质量",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "Flink",
+    "frequency": 64,
+    "frequency_pct": 17.5,
+    "avg_salary_wan": 3.6,
+    "salary_premium_pct": 9.7,
+    "category_count": 7,
+    "categories": "AI/机器学习、数据产品、数据开发、数据挖掘、数据架构、数据运维、流计算",
+    "growth_indicator": "中"
+  },
+  {
+    "skill": "Hadoop生态",
+    "frequency": 61,
+    "frequency_pct": 16.7,
+    "avg_salary_wan": 3.0,
+    "salary_premium_pct": 2.2,
+    "category_count": 8,
+    "categories": "AI/机器学习、数据产品、数据分析、数据开发、数据挖掘、数据架构、数据运维、测试/质量",
+    "growth_indicator": "中"
+  },
+  {
+    "skill": "ElasticSearch",
+    "frequency": 58,
+    "frequency_pct": 15.9,
+    "avg_salary_wan": 3.8,
+    "salary_premium_pct": 8.1,
+    "category_count": 8,
+    "categories": "AI/机器学习、数据分析、数据开发、数据挖掘、数据架构、数据运维、流计算",
+    "growth_indicator": "中"
+  },
+  {
+    "skill": "Shell",
+    "frequency": 47,
+    "frequency_pct": 12.9,
+    "avg_salary_wan": 3.1,
+    "salary_premium_pct": 10.3,
+    "category_count": 6,
+    "categories": "AI/机器学习、数据分析、数据开发、数据挖掘、数据架构、数据运维",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "Hive",
+    "frequency": 47,
+    "frequency_pct": 12.9,
+    "avg_salary_wan": 2.9,
+    "salary_premium_pct": -1.5,
+    "category_count": 7,
+    "categories": "AI/机器学习、数据分析、数据开发、数据挖掘、数据架构、流计算、测试/质量",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "Go",
+    "frequency": 44,
+    "frequency_pct": 12.1,
+    "avg_salary_wan": 3.9,
+    "salary_premium_pct": 18.2,
+    "category_count": 8,
+    "categories": "AI/机器学习、数据产品、数据开发、数据挖掘、数据架构、数据运维、流计算、测试/质量",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "ClickHouse",
+    "frequency": 30,
+    "frequency_pct": 8.2,
+    "avg_salary_wan": 3.8,
+    "salary_premium_pct": 18.9,
+    "category_count": 7,
+    "categories": "AI/机器学习、数据开发、数据挖掘、数据架构、数据运维、流计算",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "Kafka",
+    "frequency": 28,
+    "frequency_pct": 7.7,
+    "avg_salary_wan": 3.5,
+    "salary_premium_pct": 4.0,
+    "category_count": 4,
+    "categories": "数据开发、数据架构、数据运维、流计算",
+    "growth_indicator": "中"
+  },
+  {
+    "skill": "Kubernetes/Docker",
+    "frequency": 23,
+    "frequency_pct": 6.3,
+    "avg_salary_wan": 3.7,
+    "salary_premium_pct": 11.6,
+    "category_count": 4,
+    "categories": "AI/机器学习、数据开发、数据运维、流计算",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "Scala",
+    "frequency": 21,
+    "frequency_pct": 5.8,
+    "avg_salary_wan": 3.6,
+    "salary_premium_pct": 45.6,
+    "category_count": 5,
+    "categories": "数据分析、数据开发、数据挖掘、数据运维、流计算",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "MySQL",
+    "frequency": 13,
+    "frequency_pct": 3.6,
+    "avg_salary_wan": 3.4,
+    "salary_premium_pct": 15.6,
+    "category_count": 5,
+    "categories": "数据分析、数据开发、数据架构、数据运维、流计算",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "HBase",
+    "frequency": 10,
+    "frequency_pct": 2.7,
+    "avg_salary_wan": 3.4,
+    "salary_premium_pct": -2.7,
+    "category_count": 3,
+    "categories": "数据开发、数据架构、数据运维",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "Redis",
+    "frequency": 8,
+    "frequency_pct": 2.2,
+    "avg_salary_wan": 3.6,
+    "salary_premium_pct": 0,
+    "category_count": 3,
+    "categories": "数据开发、数据架构、数据运维",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "Doris/StarRocks",
+    "frequency": 8,
+    "frequency_pct": 2.2,
+    "avg_salary_wan": 4.1,
+    "salary_premium_pct": 0,
+    "category_count": 2,
+    "categories": "数据开发、数据挖掘",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "Flink CDC",
+    "frequency": 8,
+    "frequency_pct": 2.2,
+    "avg_salary_wan": 3.0,
+    "salary_premium_pct": 12.3,
+    "category_count": 3,
+    "categories": "数据分析、数据开发、流计算",
+    "growth_indicator": "高"
+  },
+  {
+    "skill": "MongoDB",
+    "frequency": 5,
+    "frequency_pct": 1.4,
+    "avg_salary_wan": 3.4,
+    "salary_premium_pct": 0,
+    "category_count": 4,
+    "categories": "数据开发、数据架构、数据运维、流计算",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "DolphinScheduler",
+    "frequency": 4,
+    "frequency_pct": 1.1,
+    "avg_salary_wan": 0,
+    "salary_premium_pct": 0,
+    "category_count": 2,
+    "categories": "数据开发、数据架构",
+    "growth_indicator": "低"
+  },
+  {
+    "skill": "R",
+    "frequency": 2,
+    "frequency_pct": 0.5,
+    "avg_salary_wan": 0,
+    "salary_premium_pct": 0,
+    "category_count": 1,
+    "categories": "数据分析",
+    "growth_indicator": "低"
+  }
+]

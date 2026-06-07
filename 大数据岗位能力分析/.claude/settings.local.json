@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(python3 analysis.py)",
+      "Bash(python3 export_detail.py)",
+      "Bash(python3 -m venv venv)",
+      "Bash(./venv/bin/pip install *)",
+      "Bash(./venv/bin/python main.py)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -L 'https://www.zhipin.com/web/geek/job?query=大数据&city=100010000' -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36')",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -L https://search.51job.com/list/000000,000000,0000,00,9,99,大数据,2,1.html -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36')",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -L 'https://www.lagou.com/wn/jobs?kd=大数据&city=北京' -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36')",
+      "Bash(curl -s https://search.51job.com/list/000000,000000,0000,00,9,99,大数据,2,1.html -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36')",
+      "Bash(curl -s 'https://www.zhipin.com/web/geek/job?query=大数据&city=100010000' -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36')",
+      "WebSearch",
+      "Bash(./venv/bin/python3)",
+      "Bash(./venv/bin/python expand_samples.py)",
+      "Bash(./venv/bin/python -c ' *)",
+      "Bash(./venv/bin/python3 -c ' *)",
+      "Bash(./venv/bin/python analysis.py)",
+      "Bash(./venv/bin/python export_detail.py)",
+      "Bash(./venv/bin/python scoring.py)",
+      "Bash(./venv/bin/python derived_analytics.py)",
+      "Bash(./venv/bin/python ml_pipeline.py)"
+    ]
+  }
+}

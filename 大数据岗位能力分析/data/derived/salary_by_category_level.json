@@ -1,0 +1,164 @@
+{
+  "数据开发": {
+    "中级": {
+      "count": 1,
+      "avg_min_wan": 3.0,
+      "avg_max_wan": 3.0,
+      "mean_wan": 3.0,
+      "median_wan": 3.0,
+      "p25_wan": 3.0,
+      "p75_wan": 3.0
+    },
+    "高级": {
+      "count": 40,
+      "avg_min_wan": 1.7,
+      "avg_max_wan": 6.0,
+      "mean_wan": 3.1,
+      "median_wan": 3.2,
+      "p25_wan": 2.6,
+      "p75_wan": 3.6
+    },
+    "初级": {
+      "count": 4,
+      "avg_min_wan": 1.0,
+      "avg_max_wan": 2.8,
+      "mean_wan": 1.9,
+      "median_wan": 2.4,
+      "p25_wan": 1.6,
+      "p75_wan": 2.8
+    },
+    "管理/负责人": {
+      "count": 1,
+      "avg_min_wan": 8.0,
+      "avg_max_wan": 8.0,
+      "mean_wan": 8.0,
+      "median_wan": 8.0,
+      "p25_wan": 8.0,
+      "p75_wan": 8.0
+    }
+  },
+  "数据产品": {
+    "管理/负责人": {
+      "count": 5,
+      "avg_min_wan": 3.2,
+      "avg_max_wan": 4.2,
+      "mean_wan": 3.8,
+      "median_wan": 3.8,
+      "p25_wan": 3.6,
+      "p75_wan": 4.2
+    }
+  },
+  "数据分析": {
+    "管理/负责人": {
+      "count": 1,
+      "avg_min_wan": 3.5,
+      "avg_max_wan": 3.5,
+      "mean_wan": 3.5,
+      "median_wan": 3.5,
+      "p25_wan": 3.5,
+      "p75_wan": 3.5
+    },
+    "高级": {
+      "count": 23,
+      "avg_min_wan": 1.7,
+      "avg_max_wan": 3.2,
+      "mean_wan": 2.6,
+      "median_wan": 2.6,
+      "p25_wan": 2.1,
+      "p75_wan": 3.0
+    },
+    "初级": {
+      "count": 2,
+      "avg_min_wan": 1.6,
+      "avg_max_wan": 2.0,
+      "mean_wan": 1.8,
+      "median_wan": 2.0,
+      "p25_wan": 1.6,
+      "p75_wan": 2.0
+    },
+    "中级": {
+      "count": 5,
+      "avg_min_wan": 1.7,
+      "avg_max_wan": 2.8,
+      "mean_wan": 2.4,
+      "median_wan": 2.5,
+      "p25_wan": 2.5,
+      "p75_wan": 2.6
+    }
+  },
+  "数据挖掘": {
+    "高级": {
+      "count": 11,
+      "avg_min_wan": 3.6,
+      "avg_max_wan": 5.2,
+      "mean_wan": 4.4,
+      "median_wan": 4.2,
+      "p25_wan": 3.9,
+      "p75_wan": 4.5
+    }
+  },
+  "测试/质量": {
+    "高级": {
+      "count": 7,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 3.5,
+      "mean_wan": 2.9,
+      "median_wan": 2.9,
+      "p25_wan": 2.9,
+      "p75_wan": 3.1
+    }
+  },
+  "数据架构": {
+    "管理/负责人": {
+      "count": 1,
+      "avg_min_wan": 6.5,
+      "avg_max_wan": 6.5,
+      "mean_wan": 6.5,
+      "median_wan": 6.5,
+      "p25_wan": 6.5,
+      "p75_wan": 6.5
+    },
+    "高级": {
+      "count": 8,
+      "avg_min_wan": 4.2,
+      "avg_max_wan": 6.2,
+      "mean_wan": 5.2,
+      "median_wan": 5.5,
+      "p25_wan": 4.8,
+      "p75_wan": 6.0
+    }
+  },
+  "数据运维": {
+    "高级": {
+      "count": 12,
+      "avg_min_wan": 2.8,
+      "avg_max_wan": 3.9,
+      "mean_wan": 3.2,
+      "median_wan": 3.2,
+      "p25_wan": 3.0,
+      "p75_wan": 3.6
+    }
+  },
+  "AI/机器学习": {
+    "高级": {
+      "count": 14,
+      "avg_min_wan": 3.0,
+      "avg_max_wan": 6.2,
+      "mean_wan": 4.6,
+      "median_wan": 4.5,
+      "p25_wan": 4.2,
+      "p75_wan": 5.0
+    }
+  },
+  "流计算": {
+    "高级": {
+      "count": 11,
+      "avg_min_wan": 2.6,
+      "avg_max_wan": 4.2,
+      "mean_wan": 3.6,
+      "median_wan": 3.5,
+      "p25_wan": 3.2,
+      "p75_wan": 4.2
+    }
+  }
+}

@@ -1,0 +1,142 @@
+# 大数据岗位招聘信息 - 评分规则配置
+# 修改此文件即可调整评分权重，无需改动代码
+# 模块3: scoring.py 读取此配置
+
+# ============================================================
+# 1. 技能需求分 (Skill Demand Score, 0-100)
+# ============================================================
+skill_demand_score:
+  frequency_weight: 0.40          # 岗位中出现频率权重
+  salary_correlation_weight: 0.35 # 与薪资的关联度权重
+  growth_trend_weight: 0.25       # 增长趋势权重
+
+  # 外部需求信号乘数 (基于行业趋势判断，>1.0 = 增长热点)
+  external_demand_signals:
+    大模型: 1.5
+    LLM: 1.5
+    AIGC: 1.4
+    Agent: 1.4
+    RAG: 1.3
+    Flink: 1.3
+    实时计算: 1.25
+    Kubernetes/Docker: 1.2
+    ClickHouse: 1.15
+    Iceberg: 1.2
+    Hudi: 1.2
+    Paimon: 1.2
+    数据湖: 1.15
+    深度学习: 1.3
+    PyTorch: 1.25
+    TensorFlow: 1.1
+    Go: 1.15
+    Rust: 1.2
+
+  # 增长趋势基准分 (行业大类对应)
+  category_growth_baseline:
+    AI/机器学习: 85
+    流计算: 80
+    数据开发: 60
+    数据挖掘: 65
+    数据分析: 55
+    数据架构: 50
+    数据运维: 45
+    数据产品: 55
+    测试/质量: 40
+
+# ============================================================
+# 2. 岗位质量分 (Job Quality Score, 0-100)
+# ============================================================
+job_quality_score:
+  salary_weight: 0.35
+  company_prestige_weight: 0.25
+  experience_level_weight: 0.15
+  skill_breadth_weight: 0.15
+  education_weight: 0.10
+
+  # 公司声望映射 (→ 0-100)
+  company_prestige_map:
+    上市公司: 100
+    国企: 80
+    未上市: 55
+    初创: 35
+
+  # 经验等级映射 (→ 0-100)
+  experience_score_map:
+    管理/负责人: 100
+    高级: 85
+    中级: 60
+    初级: 35
+    未标注: 45
+
+  # 学历要求映射 (→ 0-100)
+  education_score_map:
+    博士: 100
+    硕士: 85
+    本科: 70
+    大专: 40
+    不限: 45
+
+# ============================================================
+# 3. 技能溢价指数 (Skill Premium Index)
+# ============================================================
+skill_premium_index:
+  baseline_percentile: 30         # 基线取第30百分位薪资
+  min_sample_size: 5              # 最少需要多少个有薪资的样本
+
+# ============================================================
+# 4. 类别匹配分 (Category Match Score, 0-100)
+# ============================================================
+category_match_score:
+  title_weight: 0.40              # 标题关键词匹配权重
+  tech_stack_weight: 0.35         # 技术栈对齐权重
+  language_weight: 0.15           # 编程语言对齐权重
+  industry_weight: 0.10           # 行业对齐权重
+
+# ============================================================
+# 5. 各岗位类别的标准画像 (用于类别匹配分计算)
+# ============================================================
+canonical_profiles:
+  数据开发:
+    ideal_tech: ["Hadoop生态", "Spark", "Hive", "Flink", "Kafka", "ClickHouse", "DolphinScheduler"]
+    ideal_langs: ["Java", "SQL", "Python", "Scala"]
+    ideal_industries: ["互联网", "金融"]
+
+  数据分析:
+    ideal_tech: ["MySQL", "ClickHouse", "ElasticSearch"]
+    ideal_langs: ["SQL", "Python", "R"]
+    ideal_industries: ["互联网", "金融", "零售"]
+
+  数据挖掘:
+    ideal_tech: ["Spark", "Hive", "Hadoop生态"]
+    ideal_langs: ["Python", "SQL", "Java"]
+    ideal_industries: ["互联网", "金融"]
+
+  数据架构:
+    ideal_tech: ["Hadoop生态", "Spark", "Flink", "Kubernetes/Docker", "Kafka"]
+    ideal_langs: ["Java", "Python", "SQL"]
+    ideal_industries: ["互联网", "金融", "通信"]
+
+  数据运维:
+    ideal_tech: ["Hadoop生态", "Kubernetes/Docker", "MySQL", "Redis", "Kafka"]
+    ideal_langs: ["Shell", "Python", "Go"]
+    ideal_industries: ["互联网", "金融"]
+
+  AI/机器学习:
+    ideal_tech: ["Spark", "Flink", "Kubernetes/Docker", "ElasticSearch"]
+    ideal_langs: ["Python", "SQL", "Java", "C++"]
+    ideal_industries: ["互联网", "金融"]
+
+  数据产品:
+    ideal_tech: ["MySQL", "ClickHouse"]
+    ideal_langs: ["SQL", "Python"]
+    ideal_industries: ["互联网"]
+
+  流计算:
+    ideal_tech: ["Flink", "Kafka", "ClickHouse", "Hadoop生态"]
+    ideal_langs: ["Java", "Scala", "SQL"]
+    ideal_industries: ["互联网", "金融"]
+
+  测试/质量:
+    ideal_tech: ["Spark", "Hive", "MySQL"]
+    ideal_langs: ["Python", "Java", "SQL"]
+    ideal_industries: ["互联网", "金融"]

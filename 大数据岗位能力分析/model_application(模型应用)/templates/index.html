@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大数据岗位分析 Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body { background: #f5f7fa; font-size: 14px; }
+        .card { border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        .stat-card { text-align: center; padding: 20px; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #3b82f6; }
+        .stat-label { font-size: 0.85rem; color: #6b7280; margin-top: 4px; }
+        .nav-pills .nav-link.active { background: #3b82f6; }
+        .chart-container { position: relative; height: 350px; }
+        h5 { color: #1e293b; font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="container-fluid py-3">
+    <h4 class="mb-3 fw-bold">📊 大数据岗位招聘分析 Dashboard</h4>
+
+    <!-- Summary Cards -->
+    <div class="row mb-3" id="summary-cards">
+        <div class="col-md-3"><div class="card stat-card"><div class="stat-value" id="total-jobs">—</div><div class="stat-label">岗位总数</div></div></div>
+        <div class="col-md-3"><div class="card stat-card"><div class="stat-value" id="avg-salary">—</div><div class="stat-label">平均薪资 (万/月)</div></div></div>
+        <div class="col-md-3"><div class="card stat-card"><div class="stat-value" id="top-category">—</div><div class="stat-label">最多岗位类别</div></div>
+        <div class="col-md-3"><div class="card stat-card"><div class="stat-value" id="model-acc">—</div><div class="stat-label">最佳分类准确率</div></div></div>
+    </div>
+
+    <!-- Row 1: Category Pie + Salary Bar -->
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card p-3"><h5>岗位类别分布</h5><div class="chart-container"><canvas id="categoryPie"></canvas></div></div>
+        </div>
+        <div class="col-md-7">
+            <div class="card p-3"><h5>各类别薪资对比 (万/月)</h5><div class="chart-container"><canvas id="salaryBar"></canvas></div></div>
+        </div>
+    </div>
+
+    <!-- Row 2: Model Metrics -->
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card p-3"><h5>分类模型对比</h5>
+                <table class="table table-sm table-hover" id="class-table">
+                    <thead><tr><th>模型</th><th>Accuracy</th><th>Macro-F1</th><th>Weighted-F1</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3"><h5>回归模型对比</h5>
+                <table class="table table-sm table-hover" id="reg-table">
+                    <thead><tr><th>模型</th><th>MAE (万)</th><th>RMSE (万)</th><th>R²</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Embed confusion matrix + regression charts -->
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card p-3"><h5>混淆矩阵 - Random Forest</h5>
+                <img src="/charts/confusion_matrix_rf.png" class="img-fluid" alt="混淆矩阵">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3"><h5>预测 vs 实际薪资 - Gradient Boosting</h5>
+                <img src="/charts/actual_vs_predicted_gb.png" class="img-fluid" alt="预测vs实际">
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: Feature Importance + Skill Ranking -->
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card p-3"><h5>特征重要性 - Gradient Boosting</h5>
+                <img src="/charts/feature_importance_gb.png" class="img-fluid" alt="特征重要性">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3"><h5>技能需求分 Top 10</h5>
+                <div class="chart-container"><canvas id="skillBar"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Fetch all data
+async function init() {
+    const summary = await fetch('/api/summary').then(r => r.json());
+    const catDist = await fetch('/api/category_distribution').then(r => r.json());
+    const skills = await fetch('/api/skill_ranking').then(r => r.json());
+    const salaryByCat = await fetch('/api/salary_by_category').then(r => r.json());
+    const modelMetrics = await fetch('/api/model_metrics').then(r => r.json());
+
+    // Summary cards
+    document.getElementById('total-jobs').textContent = summary.total_jobs || '—';
+    const cats = summary.categories || {};
+    const topCat = Object.entries(cats).sort((a,b) => b[1]-a[1])[0];
+    document.getElementById('top-category').textContent = topCat ? topCat[0] : '—';
+
+    const avgSal = salaryByCat.reduce((s, c) => s + c.median_salary, 0) / (salaryByCat.length || 1);
+    document.getElementById('avg-salary').textContent = avgSal.toFixed(1) + '万';
+
+    const clf = modelMetrics.classification || {};
+    const acc = Math.max(clf.models?.LogisticRegression?.accuracy || 0,
+                         clf.models?.RandomForest?.accuracy || 0);
+    document.getElementById('model-acc').textContent = (acc * 100).toFixed(1) + '%';
+
+    // Category Pie
+    new Chart(document.getElementById('categoryPie'), {
+        type: 'pie',
+        data: { labels: catDist.map(c => c.name), datasets: [{ data: catDist.map(c => c.value),
+            backgroundColor: ['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#ec4899','#06b6d4','#f97316','#84cc16'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Salary Bar
+    new Chart(document.getElementById('salaryBar'), {
+        type: 'bar',
+        data: { labels: salaryByCat.map(c => c.category),
+            datasets: [{ label: '薪资中位 (万/月)', data: salaryByCat.map(c => c.median_salary),
+                backgroundColor: salaryByCat.map(c => c.growth === '高' ? '#10b981' : c.growth === '低' ? '#ef4444' : '#3b82f6') }] },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y' }
+    });
+
+    // Skill Bar
+    const topSkills = summary.top_skills || [];
+    new Chart(document.getElementById('skillBar'), {
+        type: 'bar',
+        data: { labels: topSkills.map(s => s[0]),
+            datasets: [{ label: '需求分', data: topSkills.map(s => s[1]),
+                backgroundColor: '#8b5cf6' }] },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y' }
+    });
+
+    // Model tables
+    const clfModels = clf.models || {};
+    let clfHtml = '';
+    for (const [name, m] of Object.entries(clfModels)) {
+        clfHtml += `<tr><td>${name}</td><td>${(m.accuracy*100).toFixed(1)}%</td><td>${(m.f1_macro*100).toFixed(1)}%</td><td>${(m.f1_weighted*100).toFixed(1)}%</td></tr>`;
+    }
+    document.getElementById('class-table').querySelector('tbody').innerHTML = clfHtml;
+
+    const reg = modelMetrics.regression || {};
+    const regModels = reg.models || {};
+    let regHtml = '';
+    for (const [name, m] of Object.entries(regModels)) {
+        regHtml += `<tr><td>${name}</td><td>${m.MAE_wan?.toFixed(2)||'—'}</td><td>${m.RMSE_wan?.toFixed(2)||'—'}</td><td>${m.R2?.toFixed(4)||'—'}</td></tr>`;
+    }
+    document.getElementById('reg-table').querySelector('tbody').innerHTML = regHtml;
+}
+
+init();
+</script>
+</body>
+</html>

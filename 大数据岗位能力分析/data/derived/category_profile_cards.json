@@ -1,0 +1,593 @@
+{
+  "数据开发": {
+    "category": "数据开发",
+    "job_count": 68,
+    "description": "负责大数据平台建设、ETL流程、数据仓库开发",
+    "salary_stats": {
+      "count": 46,
+      "avg_min_wan": 1.0,
+      "avg_max_wan": 8.0,
+      "mean_wan": 3.1,
+      "median_wan": 3.0,
+      "p25_wan": 2.6,
+      "p75_wan": 3.6
+    },
+    "top_5_skills": [
+      {
+        "skill": "Spark",
+        "count": 42,
+        "pct": 61.8
+      },
+      {
+        "skill": "Hive",
+        "count": 32,
+        "pct": 47.1
+      },
+      {
+        "skill": "Hadoop生态",
+        "count": 31,
+        "pct": 45.6
+      },
+      {
+        "skill": "Flink",
+        "count": 29,
+        "pct": 42.6
+      },
+      {
+        "skill": "Kafka",
+        "count": 15,
+        "pct": 22.1
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 22
+      },
+      {
+        "company": "字节跳动",
+        "count": 3
+      },
+      {
+        "company": "快手",
+        "count": 3
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "中级": 12,
+      "高级": 49,
+      "未标注": 2,
+      "初级": 4,
+      "管理/负责人": 1
+    },
+    "education_distribution": {
+      "本科": 64,
+      "硕士": 4
+    },
+    "growth_indicator": "中",
+    "pct_of_total": 18.6
+  },
+  "数据分析": {
+    "category": "数据分析",
+    "job_count": 83,
+    "description": "负责数据提取、分析报告、BI报表、业务决策支持",
+    "salary_stats": {
+      "count": 31,
+      "avg_min_wan": 1.6,
+      "avg_max_wan": 3.5,
+      "mean_wan": 2.5,
+      "median_wan": 2.6,
+      "p25_wan": 2.1,
+      "p75_wan": 2.9
+    },
+    "top_5_skills": [
+      {
+        "skill": "Hive",
+        "count": 7,
+        "pct": 8.4
+      },
+      {
+        "skill": "ElasticSearch",
+        "count": 5,
+        "pct": 6.0
+      },
+      {
+        "skill": "Spark",
+        "count": 4,
+        "pct": 4.8
+      },
+      {
+        "skill": "Hadoop生态",
+        "count": 1,
+        "pct": 1.2
+      },
+      {
+        "skill": "MySQL",
+        "count": 1,
+        "pct": 1.2
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 51
+      },
+      {
+        "company": "美团",
+        "count": 2
+      },
+      {
+        "company": "拼多多",
+        "count": 2
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "管理/负责人": 9,
+      "高级": 35,
+      "初级": 13,
+      "中级": 19,
+      "未标注": 7
+    },
+    "education_distribution": {
+      "本科": 81,
+      "硕士": 2
+    },
+    "growth_indicator": "中",
+    "pct_of_total": 22.7
+  },
+  "数据挖掘": {
+    "category": "数据挖掘",
+    "job_count": 21,
+    "description": "负责数据建模、算法开发、用户画像、推荐系统",
+    "salary_stats": {
+      "count": 11,
+      "avg_min_wan": 3.6,
+      "avg_max_wan": 5.2,
+      "mean_wan": 4.4,
+      "median_wan": 4.2,
+      "p25_wan": 3.9,
+      "p75_wan": 4.5
+    },
+    "top_5_skills": [
+      {
+        "skill": "Spark",
+        "count": 5,
+        "pct": 23.8
+      },
+      {
+        "skill": "ElasticSearch",
+        "count": 2,
+        "pct": 9.5
+      },
+      {
+        "skill": "Hive",
+        "count": 1,
+        "pct": 4.8
+      },
+      {
+        "skill": "ClickHouse",
+        "count": 1,
+        "pct": 4.8
+      },
+      {
+        "skill": "Doris/StarRocks",
+        "count": 1,
+        "pct": 4.8
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 6
+      },
+      {
+        "company": "SME (51-500)科技公司",
+        "count": 2
+      },
+      {
+        "company": "Big Tech (FAANG+)科技公司",
+        "count": 1
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "硕士",
+    "experience_distribution": {
+      "高级": 16,
+      "中级": 2,
+      "初级": 1,
+      "未标注": 2
+    },
+    "education_distribution": {
+      "本科": 8,
+      "硕士": 13
+    },
+    "growth_indicator": "中",
+    "pct_of_total": 5.8
+  },
+  "数据架构": {
+    "category": "数据架构",
+    "job_count": 16,
+    "description": "负责数据系统架构设计、技术选型、数据治理",
+    "salary_stats": {
+      "count": 9,
+      "avg_min_wan": 4.2,
+      "avg_max_wan": 6.5,
+      "mean_wan": 5.4,
+      "median_wan": 5.5,
+      "p25_wan": 4.8,
+      "p75_wan": 6.0
+    },
+    "top_5_skills": [
+      {
+        "skill": "Spark",
+        "count": 5,
+        "pct": 31.2
+      },
+      {
+        "skill": "Hadoop生态",
+        "count": 4,
+        "pct": 25.0
+      },
+      {
+        "skill": "Flink",
+        "count": 4,
+        "pct": 25.0
+      },
+      {
+        "skill": "Hive",
+        "count": 3,
+        "pct": 18.8
+      },
+      {
+        "skill": "ClickHouse",
+        "count": 2,
+        "pct": 12.5
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 7
+      },
+      {
+        "company": "字节跳动",
+        "count": 1
+      },
+      {
+        "company": "美团",
+        "count": 1
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "初级": 2,
+      "管理/负责人": 2,
+      "高级": 10,
+      "未标注": 2
+    },
+    "education_distribution": {
+      "本科": 16
+    },
+    "growth_indicator": "中",
+    "pct_of_total": 4.4
+  },
+  "数据运维": {
+    "category": "数据运维",
+    "job_count": 23,
+    "description": "负责大数据集群运维、数据库管理、监控告警",
+    "salary_stats": {
+      "count": 12,
+      "avg_min_wan": 2.8,
+      "avg_max_wan": 3.9,
+      "mean_wan": 3.2,
+      "median_wan": 3.2,
+      "p25_wan": 3.0,
+      "p75_wan": 3.6
+    },
+    "top_5_skills": [
+      {
+        "skill": "Hadoop生态",
+        "count": 14,
+        "pct": 60.9
+      },
+      {
+        "skill": "ElasticSearch",
+        "count": 10,
+        "pct": 43.5
+      },
+      {
+        "skill": "Flink",
+        "count": 9,
+        "pct": 39.1
+      },
+      {
+        "skill": "Spark",
+        "count": 9,
+        "pct": 39.1
+      },
+      {
+        "skill": "Kubernetes/Docker",
+        "count": 9,
+        "pct": 39.1
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 7
+      },
+      {
+        "company": "网易",
+        "count": 2
+      },
+      {
+        "company": "Big Tech (FAANG+)科技公司",
+        "count": 1
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "中级": 3,
+      "未标注": 5,
+      "高级": 15
+    },
+    "education_distribution": {
+      "本科": 20,
+      "硕士": 3
+    },
+    "growth_indicator": "低",
+    "pct_of_total": 6.3
+  },
+  "AI/机器学习": {
+    "category": "AI/机器学习",
+    "job_count": 96,
+    "description": "负责机器学习/深度学习模型开发、NLP/CV算法",
+    "salary_stats": {
+      "count": 14,
+      "avg_min_wan": 3.0,
+      "avg_max_wan": 6.2,
+      "mean_wan": 4.6,
+      "median_wan": 4.5,
+      "p25_wan": 4.2,
+      "p75_wan": 5.0
+    },
+    "top_5_skills": [
+      {
+        "skill": "ElasticSearch",
+        "count": 31,
+        "pct": 32.3
+      },
+      {
+        "skill": "Spark",
+        "count": 16,
+        "pct": 16.7
+      },
+      {
+        "skill": "Flink",
+        "count": 9,
+        "pct": 9.4
+      },
+      {
+        "skill": "Kubernetes/Docker",
+        "count": 9,
+        "pct": 9.4
+      },
+      {
+        "skill": "Hadoop生态",
+        "count": 8,
+        "pct": 8.3
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 31
+      },
+      {
+        "company": "SME (51-500)科技公司",
+        "count": 11
+      },
+      {
+        "company": "Mid-size (501-5000)科技公司",
+        "count": 11
+      }
+    ],
+    "typical_experience": "未标注",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "初级": 6,
+      "未标注": 54,
+      "中级": 11,
+      "管理/负责人": 2,
+      "高级": 23
+    },
+    "education_distribution": {
+      "本科": 69,
+      "硕士": 27
+    },
+    "growth_indicator": "高",
+    "pct_of_total": 26.3
+  },
+  "数据产品": {
+    "category": "数据产品",
+    "job_count": 15,
+    "description": "负责数据产品规划、需求设计、产品迭代",
+    "salary_stats": {
+      "count": 5,
+      "avg_min_wan": 3.2,
+      "avg_max_wan": 4.2,
+      "mean_wan": 3.8,
+      "median_wan": 3.8,
+      "p25_wan": 3.6,
+      "p75_wan": 4.2
+    },
+    "top_5_skills": [
+      {
+        "skill": "Hadoop生态",
+        "count": 1,
+        "pct": 6.7
+      },
+      {
+        "skill": "Spark",
+        "count": 1,
+        "pct": 6.7
+      },
+      {
+        "skill": "Flink",
+        "count": 1,
+        "pct": 6.7
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 10
+      },
+      {
+        "company": "字节跳动",
+        "count": 2
+      },
+      {
+        "company": "滴滴",
+        "count": 1
+      }
+    ],
+    "typical_experience": "管理/负责人",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "管理/负责人": 15
+    },
+    "education_distribution": {
+      "本科": 15
+    },
+    "growth_indicator": "中",
+    "pct_of_total": 4.1
+  },
+  "流计算": {
+    "category": "流计算",
+    "job_count": 12,
+    "description": "负责实时计算、流处理、实时数据管道",
+    "salary_stats": {
+      "count": 11,
+      "avg_min_wan": 2.6,
+      "avg_max_wan": 4.2,
+      "mean_wan": 3.6,
+      "median_wan": 3.5,
+      "p25_wan": 3.2,
+      "p75_wan": 4.2
+    },
+    "top_5_skills": [
+      {
+        "skill": "Flink",
+        "count": 11,
+        "pct": 91.7
+      },
+      {
+        "skill": "Kafka",
+        "count": 8,
+        "pct": 66.7
+      },
+      {
+        "skill": "ClickHouse",
+        "count": 3,
+        "pct": 25.0
+      },
+      {
+        "skill": "ElasticSearch",
+        "count": 2,
+        "pct": 16.7
+      },
+      {
+        "skill": "Flink CDC",
+        "count": 2,
+        "pct": 16.7
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "字节跳动",
+        "count": 2
+      },
+      {
+        "company": "唯品会",
+        "count": 2
+      },
+      {
+        "company": "腾讯",
+        "count": 1
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "中级": 1,
+      "高级": 11
+    },
+    "education_distribution": {
+      "本科": 12
+    },
+    "growth_indicator": "高",
+    "pct_of_total": 3.3
+  },
+  "测试/质量": {
+    "category": "测试/质量",
+    "job_count": 10,
+    "description": "负责数据质量测试、数据校验、自动化测试",
+    "salary_stats": {
+      "count": 7,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 3.5,
+      "mean_wan": 2.9,
+      "median_wan": 2.9,
+      "p25_wan": 2.9,
+      "p75_wan": 3.1
+    },
+    "top_5_skills": [
+      {
+        "skill": "Hadoop生态",
+        "count": 1,
+        "pct": 10.0
+      },
+      {
+        "skill": "Spark",
+        "count": 1,
+        "pct": 10.0
+      },
+      {
+        "skill": "Hive",
+        "count": 1,
+        "pct": 10.0
+      }
+    ],
+    "top_3_companies": [
+      {
+        "company": "腾讯",
+        "count": 3
+      },
+      {
+        "company": "同程旅行",
+        "count": 1
+      },
+      {
+        "company": "建设银行",
+        "count": 1
+      }
+    ],
+    "typical_experience": "高级",
+    "typical_education": "本科",
+    "experience_distribution": {
+      "高级": 10
+    },
+    "education_distribution": {
+      "本科": 10
+    },
+    "growth_indicator": "低",
+    "pct_of_total": 2.7
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "数据运维": {
+    "互联网": {
+      "count": 11,
+      "avg_min_wan": 2.8,
+      "avg_max_wan": 3.9,
+      "mean_wan": 3.2,
+      "median_wan": 3.2,
+      "p25_wan": 2.9,
+      "p75_wan": 3.6
+    },
+    "金融": {
+      "count": 3,
+      "avg_min_wan": 3.2,
+      "avg_max_wan": 3.6,
+      "mean_wan": 3.4,
+      "median_wan": 3.5,
+      "p25_wan": 3.2,
+      "p75_wan": 3.6
+    }
+  },
+  "数据开发": {
+    "互联网": {
+      "count": 41,
+      "avg_min_wan": 1.0,
+      "avg_max_wan": 8.0,
+      "mean_wan": 3.2,
+      "median_wan": 3.2,
+      "p25_wan": 2.6,
+      "p75_wan": 3.6
+    },
+    "金融": {
+      "count": 7,
+      "avg_min_wan": 2.2,
+      "avg_max_wan": 3.6,
+      "mean_wan": 2.9,
+      "median_wan": 2.8,
+      "p25_wan": 2.6,
+      "p75_wan": 3.5
+    },
+    "物流": {
+      "count": 4,
+      "avg_min_wan": 2.6,
+      "avg_max_wan": 3.5,
+      "mean_wan": 3.0,
+      "median_wan": 3.0,
+      "p25_wan": 3.0,
+      "p75_wan": 3.5
+    },
+    "通信": {
+      "count": 6,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 3.2,
+      "mean_wan": 2.4,
+      "median_wan": 2.2,
+      "p25_wan": 2.1,
+      "p75_wan": 2.4
+    },
+    "制造": {
+      "count": 4,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 3.2,
+      "mean_wan": 2.7,
+      "median_wan": 2.6,
+      "p25_wan": 2.6,
+      "p75_wan": 3.2
+    },
+    "汽车": {
+      "count": 3,
+      "avg_min_wan": 3.4,
+      "avg_max_wan": 3.9,
+      "mean_wan": 3.7,
+      "median_wan": 3.8,
+      "p25_wan": 3.4,
+      "p75_wan": 3.9
+    }
+  },
+  "数据产品": {
+    "互联网": {
+      "count": 5,
+      "avg_min_wan": 3.2,
+      "avg_max_wan": 4.2,
+      "mean_wan": 3.8,
+      "median_wan": 3.8,
+      "p25_wan": 3.6,
+      "p75_wan": 4.2
+    }
+  },
+  "数据分析": {
+    "金融": {
+      "count": 5,
+      "avg_min_wan": 1.7,
+      "avg_max_wan": 3.1,
+      "mean_wan": 2.7,
+      "median_wan": 2.9,
+      "p25_wan": 2.8,
+      "p75_wan": 3.1
+    },
+    "互联网": {
+      "count": 19,
+      "avg_min_wan": 1.6,
+      "avg_max_wan": 3.5,
+      "mean_wan": 2.6,
+      "median_wan": 2.6,
+      "p25_wan": 2.1,
+      "p75_wan": 3.1
+    },
+    "零售": {
+      "count": 5,
+      "avg_min_wan": 1.7,
+      "avg_max_wan": 3.5,
+      "mean_wan": 2.3,
+      "median_wan": 2.1,
+      "p25_wan": 2.0,
+      "p75_wan": 2.1
+    },
+    "游戏": {
+      "count": 3,
+      "avg_min_wan": 2.6,
+      "avg_max_wan": 2.6,
+      "mean_wan": 2.6,
+      "median_wan": 2.6,
+      "p25_wan": 2.6,
+      "p75_wan": 2.6
+    },
+    "物流": {
+      "count": 2,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 2.6,
+      "mean_wan": 2.4,
+      "median_wan": 2.6,
+      "p25_wan": 2.1,
+      "p75_wan": 2.6
+    },
+    "教育": {
+      "count": 4,
+      "avg_min_wan": 2.4,
+      "avg_max_wan": 2.6,
+      "mean_wan": 2.6,
+      "median_wan": 2.6,
+      "p25_wan": 2.5,
+      "p75_wan": 2.6
+    }
+  },
+  "AI/机器学习": {
+    "互联网": {
+      "count": 14,
+      "avg_min_wan": 3.0,
+      "avg_max_wan": 6.2,
+      "mean_wan": 4.6,
+      "median_wan": 4.5,
+      "p25_wan": 4.2,
+      "p75_wan": 5.0
+    },
+    "制造": {
+      "count": 2,
+      "avg_min_wan": 4.2,
+      "avg_max_wan": 4.2,
+      "mean_wan": 4.2,
+      "median_wan": 4.2,
+      "p25_wan": 4.2,
+      "p75_wan": 4.2
+    }
+  },
+  "数据架构": {
+    "金融": {
+      "count": 2,
+      "avg_min_wan": 4.2,
+      "avg_max_wan": 4.8,
+      "mean_wan": 4.5,
+      "median_wan": 4.8,
+      "p25_wan": 4.2,
+      "p75_wan": 4.8
+    },
+    "互联网": {
+      "count": 7,
+      "avg_min_wan": 4.2,
+      "avg_max_wan": 6.5,
+      "mean_wan": 5.6,
+      "median_wan": 5.5,
+      "p25_wan": 5.5,
+      "p75_wan": 6.2
+    },
+    "通信": {
+      "count": 2,
+      "avg_min_wan": 4.2,
+      "avg_max_wan": 6.0,
+      "mean_wan": 5.1,
+      "median_wan": 6.0,
+      "p25_wan": 4.2,
+      "p75_wan": 6.0
+    }
+  },
+  "数据挖掘": {
+    "互联网": {
+      "count": 9,
+      "avg_min_wan": 3.9,
+      "avg_max_wan": 5.2,
+      "mean_wan": 4.4,
+      "median_wan": 4.2,
+      "p25_wan": 4.2,
+      "p75_wan": 4.5
+    },
+    "金融": {
+      "count": 3,
+      "avg_min_wan": 3.6,
+      "avg_max_wan": 4.5,
+      "mean_wan": 4.0,
+      "median_wan": 3.9,
+      "p25_wan": 3.6,
+      "p75_wan": 4.5
+    }
+  },
+  "测试/质量": {
+    "互联网": {
+      "count": 6,
+      "avg_min_wan": 2.1,
+      "avg_max_wan": 3.5,
+      "mean_wan": 2.9,
+      "median_wan": 3.1,
+      "p25_wan": 2.9,
+      "p75_wan": 3.1
+    },
+    "金融": {
+      "count": 2,
+      "avg_min_wan": 2.9,
+      "avg_max_wan": 3.1,
+      "mean_wan": 3.0,
+      "median_wan": 3.1,
+      "p25_wan": 2.9,
+      "p75_wan": 3.1
+    }
+  },
+  "流计算": {
+    "互联网": {
+      "count": 11,
+      "avg_min_wan": 2.6,
+      "avg_max_wan": 4.2,
+      "mean_wan": 3.6,
+      "median_wan": 3.5,
+      "p25_wan": 3.2,
+      "p75_wan": 4.2
+    }
+  }
+}

@@ -1,0 +1,419 @@
+{
+  "metadata": {
+    "total_jobs": 363,
+    "scoring_date": "2026-06-04 17:22:34",
+    "config_version": "scoring_rules.yaml"
+  },
+  "skill_demand": {
+    "Python": 80.2,
+    "SQL": 60.3,
+    "Flink": 60.2,
+    "Go": 57.8,
+    "ElasticSearch": 57.0,
+    "Java": 55.7,
+    "Spark": 55.4,
+    "ClickHouse": 54.9,
+    "Kubernetes/Docker": 53.3,
+    "Hadoop生态": 48.9,
+    "Shell": 47.4,
+    "Kafka": 47.2,
+    "Scala": 46.0,
+    "Doris/StarRocks": 44.3,
+    "Hive": 43.6,
+    "MySQL": 41.9,
+    "MongoDB": 40.2,
+    "Redis": 38.2,
+    "HBase": 36.3,
+    "Flink CDC": 34.4,
+    "DolphinScheduler": 15.8,
+    "R": 14.2
+  },
+  "skill_premium": {
+    "Scala": {
+      "premium_pct": 45.6,
+      "avg_salary_wan": 3.6,
+      "baseline_salary_wan": 2.5,
+      "sample_size": 15
+    },
+    "ClickHouse": {
+      "premium_pct": 18.9,
+      "avg_salary_wan": 3.8,
+      "baseline_salary_wan": 3.2,
+      "sample_size": 12
+    },
+    "Go": {
+      "premium_pct": 18.2,
+      "avg_salary_wan": 3.9,
+      "baseline_salary_wan": 3.3,
+      "sample_size": 7
+    },
+    "MySQL": {
+      "premium_pct": 15.6,
+      "avg_salary_wan": 3.4,
+      "baseline_salary_wan": 3.0,
+      "sample_size": 5
+    },
+    "Python": {
+      "premium_pct": 12.6,
+      "avg_salary_wan": 3.3,
+      "baseline_salary_wan": 2.9,
+      "sample_size": 81
+    },
+    "Flink CDC": {
+      "premium_pct": 12.3,
+      "avg_salary_wan": 3.0,
+      "baseline_salary_wan": 2.7,
+      "sample_size": 8
+    },
+    "Java": {
+      "premium_pct": 11.6,
+      "avg_salary_wan": 3.3,
+      "baseline_salary_wan": 2.9,
+      "sample_size": 51
+    },
+    "Kubernetes/Docker": {
+      "premium_pct": 11.6,
+      "avg_salary_wan": 3.7,
+      "baseline_salary_wan": 3.3,
+      "sample_size": 8
+    },
+    "Shell": {
+      "premium_pct": 10.3,
+      "avg_salary_wan": 3.1,
+      "baseline_salary_wan": 2.8,
+      "sample_size": 10
+    },
+    "Flink": {
+      "premium_pct": 9.7,
+      "avg_salary_wan": 3.6,
+      "baseline_salary_wan": 3.2,
+      "sample_size": 41
+    },
+    "ElasticSearch": {
+      "premium_pct": 8.1,
+      "avg_salary_wan": 3.8,
+      "baseline_salary_wan": 3.5,
+      "sample_size": 10
+    },
+    "Kafka": {
+      "premium_pct": 4.0,
+      "avg_salary_wan": 3.5,
+      "baseline_salary_wan": 3.4,
+      "sample_size": 22
+    },
+    "Hadoop生态": {
+      "premium_pct": 2.2,
+      "avg_salary_wan": 3.0,
+      "baseline_salary_wan": 3.0,
+      "sample_size": 33
+    },
+    "Spark": {
+      "premium_pct": 0.4,
+      "avg_salary_wan": 3.2,
+      "baseline_salary_wan": 3.2,
+      "sample_size": 43
+    },
+    "SQL": {
+      "premium_pct": -0.6,
+      "avg_salary_wan": 2.8,
+      "baseline_salary_wan": 2.8,
+      "sample_size": 69
+    },
+    "Hive": {
+      "premium_pct": -1.5,
+      "avg_salary_wan": 2.9,
+      "baseline_salary_wan": 3.0,
+      "sample_size": 27
+    },
+    "HBase": {
+      "premium_pct": -2.7,
+      "avg_salary_wan": 3.4,
+      "baseline_salary_wan": 3.5,
+      "sample_size": 9
+    }
+  },
+  "top_jobs_by_quality": [
+    {
+      "title": "推荐算法工程师",
+      "company": "拼多多",
+      "main_category": "数据挖掘",
+      "quality_score": 82.9,
+      "category_match_score": 23.8
+    },
+    {
+      "title": "机器学习平台工程师",
+      "company": "商汤科技",
+      "main_category": "AI/机器学习",
+      "quality_score": 82.0,
+      "category_match_score": 27.2
+    },
+    {
+      "title": "大模型算法工程师",
+      "company": "百度",
+      "main_category": "AI/机器学习",
+      "quality_score": 81.8,
+      "category_match_score": 9.7
+    },
+    {
+      "title": "技术总监（数据平台）",
+      "company": "快手",
+      "main_category": "数据开发",
+      "quality_score": 81.8,
+      "category_match_score": 6.5
+    },
+    {
+      "title": "大数据开发工程师",
+      "company": "阿里巴巴",
+      "main_category": "数据开发",
+      "quality_score": 79.8,
+      "category_match_score": 40.6
+    },
+    {
+      "title": "推荐算法工程师",
+      "company": "腾讯",
+      "main_category": "数据挖掘",
+      "quality_score": 79.2,
+      "category_match_score": 12.1
+    },
+    {
+      "title": "LLM应用开发工程师",
+      "company": "百度",
+      "main_category": "AI/机器学习",
+      "quality_score": 79.2,
+      "category_match_score": 9.7
+    },
+    {
+      "title": "数据挖掘工程师",
+      "company": "百度",
+      "main_category": "数据挖掘",
+      "quality_score": 77.5,
+      "category_match_score": 12.1
+    },
+    {
+      "title": "机器学习工程师",
+      "company": "商汤科技",
+      "main_category": "AI/机器学习",
+      "quality_score": 77.5,
+      "category_match_score": 9.7
+    },
+    {
+      "title": "数据中台架构师",
+      "company": "美团",
+      "main_category": "数据架构",
+      "quality_score": 77.4,
+      "category_match_score": 6.4
+    },
+    {
+      "title": "数据中台架构师",
+      "company": "携程",
+      "main_category": "数据架构",
+      "quality_score": 77.4,
+      "category_match_score": 6.4
+    },
+    {
+      "title": "大数据架构师",
+      "company": "联想",
+      "main_category": "数据架构",
+      "quality_score": 77.4,
+      "category_match_score": 6.4
+    },
+    {
+      "title": "大数据平台Notebook后台架构师",
+      "company": "腾讯",
+      "main_category": "数据开发",
+      "quality_score": 77.2,
+      "category_match_score": 39.0
+    },
+    {
+      "title": "元宝高级数据仓库开发工程师",
+      "company": "腾讯",
+      "main_category": "数据开发",
+      "quality_score": 77.2,
+      "category_match_score": 42.8
+    },
+    {
+      "title": "大数据开发工程师（实时方向）",
+      "company": "快手",
+      "main_category": "数据开发",
+      "quality_score": 76.8,
+      "category_match_score": 30.6
+    },
+    {
+      "title": "大数据平台开发工程师",
+      "company": "字节跳动",
+      "main_category": "数据开发",
+      "quality_score": 76.7,
+      "category_match_score": 39.0
+    },
+    {
+      "title": "数据科学家",
+      "company": "快手",
+      "main_category": "数据挖掘",
+      "quality_score": 76.1,
+      "category_match_score": 15.0
+    },
+    {
+      "title": "数据架构师",
+      "company": "恒生电子",
+      "main_category": "数据架构",
+      "quality_score": 75.9,
+      "category_match_score": 6.4
+    },
+    {
+      "title": "AI金融数据工程师",
+      "company": "腾讯",
+      "main_category": "数据开发",
+      "quality_score": 75.8,
+      "category_match_score": 42.8
+    },
+    {
+      "title": "大数据架构师",
+      "company": "华为",
+      "main_category": "数据架构",
+      "quality_score": 75.8,
+      "category_match_score": 37.7
+    }
+  ],
+  "bottom_jobs_by_match": [
+    {
+      "title": "AI Compliance Manager",
+      "company": "Startup (1-50)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 48.0,
+      "category_match_score": 0.0
+    },
+    {
+      "title": "AI Product Manager",
+      "company": "Enterprise (5000+)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 46.5,
+      "category_match_score": 0.0
+    },
+    {
+      "title": "AI Ethics Officer",
+      "company": "SME (51-500)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 49.5,
+      "category_match_score": 0.0
+    },
+    {
+      "title": "AI Compliance Manager",
+      "company": "Big Tech (FAANG+)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 46.5,
+      "category_match_score": 0.0
+    },
+    {
+      "title": "AI Product Manager",
+      "company": "Startup (1-50)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 48.0,
+      "category_match_score": 0.0
+    },
+    {
+      "title": "LLM Engineer",
+      "company": "Big Tech (FAANG+)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 48.0,
+      "category_match_score": 1.0
+    },
+    {
+      "title": "RAG Engineer",
+      "company": "Enterprise (5000+)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 48.0,
+      "category_match_score": 1.0
+    },
+    {
+      "title": "LLM Engineer",
+      "company": "Mid-size (501-5000)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 45.0,
+      "category_match_score": 1.0
+    },
+    {
+      "title": "腾讯云-解决方案架构师-公有云",
+      "company": "腾讯",
+      "main_category": "数据架构",
+      "quality_score": 62.2,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "腾讯云-文化传媒行业销售",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 58.5,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "腾讯视频-动漫策略",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 58.5,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "《怪物猎人：旅人》-系统策划-新星引力计划",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 54.8,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "《怪物猎人：旅人》-系统策划",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 58.5,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "微信小店-产品策划-资金产品方向",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 56.2,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "微信小店-产品运营-平台客服方向",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 54.8,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "微信小程序-产品策划-用户产品方向",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 54.8,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "S2-常规业务审计经理-广告方向",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 64.5,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "微信小店-产品运营-商品策略",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 54.8,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "《洛克王国：世界》-高级游戏策划-PVP方向",
+      "company": "腾讯",
+      "main_category": "数据分析",
+      "quality_score": 62.2,
+      "category_match_score": 3.3
+    },
+    {
+      "title": "Senior ML Engineer",
+      "company": "Startup (1-50)科技公司",
+      "main_category": "AI/机器学习",
+      "quality_score": 52.5,
+      "category_match_score": 3.8
+    }
+  ]
+}

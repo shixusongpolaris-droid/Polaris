@@ -1,0 +1,37 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+venv/
+
+# ===== C/C++ =====
+cmake-build-debug/
+cmake-build-release/
+build/
+*.o
+*.obj
+*.out
+*.dSYM/
+
+# ===== IDE =====
+.idea/
+.vscode/
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ===== Archives =====
+*.zip
+*.tar.gz
+*.rar
+
+# ===== Temporary =====
+*.swp
+*.swo
+*~
