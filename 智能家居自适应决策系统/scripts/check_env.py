@@ -5,7 +5,7 @@ r"""
     在虚拟环境里运行本脚本，检查关键依赖是否都已正确安装。
 
 运行方式（命令行）：
-    cd /d D:\Dev\Projects\SmartHome
+    cd /d "D:\Dev\Projects\Polaris\智能家居自适应决策系统"
     .venv\Scripts\activate
     python scripts\check_env.py
 

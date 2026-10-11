@@ -21,7 +21,7 @@ r"""
     策略 C  状态相关随机  —— 动作依赖状态但带随机性（模拟训练后的策略）
 
 运行方式：
-    cd /d D:\Dev\Projects\SmartHome
+    cd /d "D:\Dev\Projects\Polaris\智能家居自适应决策系统"
     .venv\Scripts\activate
     python scripts\verify_markov.py
 """

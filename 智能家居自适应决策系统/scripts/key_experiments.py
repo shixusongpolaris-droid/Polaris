@@ -22,7 +22,7 @@ r"""
     组间差异与随机波动同量级，无法支撑结论。
 
 运行方式：
-    cd /d D:\Dev\Projects\SmartHome
+    cd /d "D:\Dev\Projects\Polaris\智能家居自适应决策系统"
     .venv\Scripts\activate
 
     # 快速试跑

@@ -7,7 +7,7 @@ r"""
     再和"纯随机动作"对比，确认训练确实学到了东西。
 
 运行方式：
-    cd /d D:\Dev\Projects\SmartHome
+    cd /d "D:\Dev\Projects\Polaris\智能家居自适应决策系统"
     .venv\Scripts\activate
     python scripts\test_rl_smoke.py
 

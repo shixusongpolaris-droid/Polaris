@@ -36,24 +36,6 @@ Python 数据分析项目，对大数据岗位招聘数据进行采集、清洗�
 
 ---
 
-### ⚙️ hello
-
-C++20 入门项目，CMake 构建。
-
----
-
-### 🔤 kmp
-
-KMP 字符串匹配算法的 C/C++ 实现。
-
----
-
-### 📄 untitled
-
-C11 基础项目，CMake 构建。
-
----
-
 ### 🤖 智能家居自适应决策系统
 
 基于强化学习与多目标优化的智能家居环境控制研究。将家庭环境控制问题形式化为
@@ -85,11 +67,9 @@ C11 基础项目，CMake 构建。
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
-![C++](https://img.shields.io/badge/C++-00599C?style=flat&logo=c%2B%2B&logoColor=white)
-![C](https://img.shields.io/badge/C-A8B9CC?style=flat&logo=c&logoColor=white)
-![CMake](https://img.shields.io/badge/CMake-064F8C?style=flat&logo=cmake&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
 ![pandas](https://img.shields.io/badge/pandas-150458?style=flat&logo=pandas&logoColor=white)
+![matplotlib](https://img.shields.io/badge/matplotlib-11557C?style=flat&logo=python&logoColor=white)
 
 ---
 
@@ -100,12 +80,21 @@ C11 基础项目，CMake 构建。
 git clone git@github.com:shixusongpolaris-droid/Polaris.git
 cd Polaris
 
-# Python 项目（以大数据岗位能力分析为例）
+# ---------- 大数据岗位能力分析 ----------
 cd 大数据岗位能力分析
-python3 -m venv venv
-source venv/bin/activate
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
 python main.py
+
+# ---------- 智能家居自适应决策系统 ----------
+cd 智能家居自适应决策系统
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+# 环境自检（6 项检查，确认环境可用）
+python scripts\test_env.py
 ```
 
 ---
@@ -113,8 +102,11 @@ python main.py
 ## 📝 开发说明
 
 - 使用 `git add -A && git commit -m "..." && git push` 提交更新
-- Python 项目请使用 `venv` 隔离依赖
-- `.gitignore` 已配置排除 `venv/`、`.idea/`、`__pycache__/` 等
+- Python 项目请使用虚拟环境隔离依赖（`venv` 或 `.venv`）
+- `.gitignore` 已配置排除 `__pycache__/`、`.idea/`、`*.zip` 等
+- 注意：`.gitignore` 中的目录规则若写成裸目录名（如 `env/`），
+  会匹配任意层级的同名目录。本项目需保留 `src/env/`，
+  因此相关规则已加前导斜杠（`/env/`）限定为仅匹配仓库根目录
 
 ---
 

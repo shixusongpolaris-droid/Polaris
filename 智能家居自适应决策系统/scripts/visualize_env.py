@@ -8,7 +8,7 @@ r"""
     4. 输出各策略的对比指标表
 
 运行方式：
-    cd /d D:\Dev\Projects\SmartHome
+    cd /d "D:\Dev\Projects\Polaris\智能家居自适应决策系统"
     .venv\Scripts\activate
     python scripts\visualize_env.py
 

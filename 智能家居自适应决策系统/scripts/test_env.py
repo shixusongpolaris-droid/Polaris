@@ -10,7 +10,7 @@ r"""
     6. 指标可算性：文档 5.3 节的三类指标能否正常产出
 
 运行方式：
-    cd /d D:\Dev\Projects\SmartHome
+    cd /d "D:\Dev\Projects\Polaris\智能家居自适应决策系统"
     .venv\Scripts\activate
     python scripts\test_env.py
 """
