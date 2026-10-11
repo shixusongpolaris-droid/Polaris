@@ -77,6 +77,12 @@ class EnvState:
     # 累计量
     energy_kwh: float = 0.0      # 累计能耗（kWh）
 
+    # 储能系统（v4 新增；未启用时保持默认值）
+    battery_soc_kwh: float = 0.0     # 电池当前电量（kWh）
+    battery_power_kw: float = 0.0    # 上一步充放电功率（正=充电，负=放电）
+    battery_charge_kwh: float = 0.0  # 本步从电网取入用于充电的电量（kWh）
+    battery_discharge_kwh: float = 0.0  # 本步放电抵扣的电量（kWh）
+
     @property
     def occupied(self) -> int:
         """任一区域有人即认为"有人"。"""
@@ -115,6 +121,8 @@ class HomeSimulator:
         "elec_price", "price_tier",
         # 前视电价（1）—— 未来一段时间平均电价，用于跨时段调度
         "elec_price_forward",
+        # 储能状态（2）—— v4 新增：使策略能感知储能水平并据此调度
+        "battery_soc", "battery_power",
     ]
     OBS_DIM = len(OBS_NAMES)
 
@@ -180,6 +188,110 @@ class HomeSimulator:
     def set_datetime(self, dt: datetime) -> None:
         """设置仿真起始时刻，用于指定星期几与小时。"""
         self.sim_time = dt
+
+    # ------------------------------------------------------------
+    # 储能系统（v4：实验性功能）
+    # ------------------------------------------------------------
+    def _battery_active(self) -> bool:
+        """储能是否启用。"""
+        return bool(getattr(self.rew_cfg, "battery_enabled", False))
+
+    def _battery_soc_ratio(self) -> float:
+        """电池电量比例（0~1）。未启用时返回 0。"""
+        if not self._battery_active():
+            return 0.0
+        cap = max(self.rew_cfg.battery_capacity_kwh, 1e-9)
+        return float(min(max(self.state.battery_soc_kwh / cap, 0.0), 1.0))
+
+    def _battery_power_norm(self) -> float:
+        """上一步充放电功率，归一化到 [-1, 1]（正=充电）。"""
+        if not self._battery_active():
+            return 0.0
+        pmax = max(self.rew_cfg.battery_max_power_kw, 1e-9)
+        return float(min(max(self.state.battery_power_kw / pmax, -1.0), 1.0))
+
+    def _reset_battery(self) -> None:
+        """初始化电池电量。"""
+        if not self._battery_active():
+            self.state.battery_soc_kwh = 0.0
+            self.state.battery_power_kw = 0.0
+            self.state.battery_charge_kwh = 0.0
+            self.state.battery_discharge_kwh = 0.0
+            return
+        cap = self.rew_cfg.battery_capacity_kwh
+        self.state.battery_soc_kwh = cap * self.rew_cfg.battery_init_soc
+        self.state.battery_power_kw = 0.0
+        self.state.battery_charge_kwh = 0.0
+        self.state.battery_discharge_kwh = 0.0
+
+    def _update_battery(self, ac_energy_kwh: float) -> None:
+        """按电价分档规则执行充放电，并更新状态中的充放电量。
+
+        规则（与人工电价响应策略同源，使储能本身不依赖学习）：
+            谷段充电；峰段优先放电，平段也可放电（若电量充足）。
+
+        设计说明：
+            初版实现仅在**峰段**放电，且放电量不超过**空调**本步耗电。
+            实测发现这样过于保守——峰段占比仅 3 小时（占全天 12.5%），
+            电池大部分时间闲置。改进为：
+              · 峰段放电抵扣**全部**负载（空调 + 照明 + 通风）
+              · 平段在电量高于阈值时也放电（电价仍高于谷段）
+            这更符合真实家庭储能的用法（电价高时用电池，低时充电）。
+
+        物理约束：
+            · 充/放电功率不超过 battery_max_power_kw
+            · 充电不超过剩余容量 / 充电效率
+            · 放电不超过当前可用电量 × 放电效率
+            · 放电不超过本步总负载（不能向电网倒送）
+        """
+        if not self._battery_active():
+            self.state.battery_charge_kwh = 0.0
+            self.state.battery_discharge_kwh = 0.0
+            self.state.battery_power_kw = 0.0
+            return
+
+        rcfg = self.rew_cfg
+        dt_h = self.sim_cfg.dt_minutes / 60.0
+        cap = rcfg.battery_capacity_kwh
+        pmax = rcfg.battery_max_power_kw
+        eta_c = max(rcfg.battery_charge_eff, 1e-6)
+        eta_d = max(rcfg.battery_discharge_eff, 1e-6)
+
+        tier = rcfg.get_tier_name(self.sim_time.hour)
+        soc = self.state.battery_soc_kwh
+
+        # 本步总负载（用于限制放电不超过实际需求）。
+        # 传进来的 ac_energy_kwh 已含照明与通风（见 step 中的调用），
+        # 因此这里直接用即可。
+        load_kwh = max(ac_energy_kwh, 0.0)
+
+        charge_kwh = 0.0
+        discharge_kwh = 0.0
+
+        if rcfg.battery_rule_based:
+            # 平段放电的电量阈值：低于此比例不再放电，保留电量给峰段
+            flat_reserve = getattr(rcfg, "battery_flat_reserve_ratio", 0.6)
+
+            if tier == "valley":
+                headroom = max(cap - soc, 0.0)          # 可再存入的电量
+                p_grid = min(pmax, headroom / (eta_c * dt_h) if dt_h > 0 else 0.0)
+                charge_kwh = max(p_grid * dt_h, 0.0)
+                soc += charge_kwh * eta_c
+                self.state.battery_power_kw = charge_kwh / dt_h
+            elif tier == "peak" or (tier == "flat"
+                                    and soc > flat_reserve * cap):
+                avail = max(soc - rcfg.battery_min_soc * cap, 0.0)
+                p_need = min(pmax, load_kwh / dt_h if dt_h > 0 else 0.0)
+                deliver = min(p_need * dt_h, avail * eta_d)
+                discharge_kwh = max(deliver, 0.0)
+                soc -= discharge_kwh / eta_d
+                self.state.battery_power_kw = -discharge_kwh / dt_h
+            else:
+                self.state.battery_power_kw = 0.0
+
+        self.state.battery_soc_kwh = float(min(max(soc, 0.0), cap))
+        self.state.battery_charge_kwh = float(charge_kwh)
+        self.state.battery_discharge_kwh = float(discharge_kwh)
 
     # ------------------------------------------------------------
     # 室外环境（简化的确定性模型）
@@ -368,6 +480,7 @@ class HomeSimulator:
         self._prev_ac_idx = 0
         self._empty_steps = 0
         self.metrics = self._new_metrics()
+        self._reset_battery()          # v4：初始化储能状态
 
         self._update_outdoor()
         self._update_occupancy(self._is_weekend())
@@ -437,13 +550,30 @@ class HomeSimulator:
 
         # ---------- 计算并累加能耗 ----------
         ac_started = (ac_idx > 0 and self.state.ac_idx == 0)
-        e = self._step_energy_kwh(ac_idx, light_idx, vent_idx,
-                                  max(cooling_delivered, 0.0),
-                                  ac_started=ac_started)
+        e_load_only = self._step_energy_kwh(ac_idx, light_idx, vent_idx,
+                                            max(cooling_delivered, 0.0),
+                                            ac_started=ac_started)
+
+        # ---------- 储能充放电（v4）----------
+        # 充电量从电网取电（计入本步能耗）；放电量抵扣本步负载。
+        # 传入的是"本步负载耗电"（空调 + 照明 + 通风，且不含电池），
+        # 用于限制放电不超过实际需求（不能向电网倒送）。
+        self._update_battery(e_load_only)
+        e = e_load_only + self.state.battery_charge_kwh \
+            - self.state.battery_discharge_kwh
+        e = max(e, 0.0)      # 电量不可能为负
+
         self.state.energy_kwh += e
         self.metrics["total_energy_kwh"] += e
         if ac_started:
             self.metrics["ac_start_count"] += 1
+        if self._battery_active():
+            self.metrics["battery_charge_kwh_total"] = \
+                self.metrics.get("battery_charge_kwh_total", 0.0) \
+                + self.state.battery_charge_kwh
+            self.metrics["battery_discharge_kwh_total"] = \
+                self.metrics.get("battery_discharge_kwh_total", 0.0) \
+                + self.state.battery_discharge_kwh
 
         # ---------- 时间推进 ----------
         self.step_count += 1
@@ -555,10 +685,26 @@ class HomeSimulator:
             # 前视电价：未来一段时间平均电价，为跨时段调度提供趋势信息
             "elec_price_forward": float(
                 self.rew_cfg.get_forward_price(self.sim_time.hour)),
+            # 储能状态（v4）：电量比例与上一步功率（归一化到 ±1）
+            "battery_soc": float(self._battery_soc_ratio()),
+            "battery_power": float(self._battery_power_norm()),
         }
 
     def to_vector(self, obs: Optional[Dict[str, Any]] = None) -> list:
-        """把观测字典转成固定顺序的列表，用于构造 Gymnasium 观测向量。"""
+        """把观测字典转成固定顺序的列表，用于构造 Gymnasium 观测向量。
+
+        注意：储能状态（battery_soc / battery_power）**仅在启用储能时**
+        才进入向量。这样未启用储能的实验仍保持 25 维观测，
+        与 v1~v3 已训练的模型兼容（否则旧模型无法加载）。
+        """
         if obs is None:
             obs = self.get_observation()
-        return [obs[name] for name in self.OBS_NAMES]
+        names = self.active_obs_names()
+        return [obs[name] for name in names]
+
+    def active_obs_names(self) -> list:
+        """当前生效的观测特征名列表（根据是否启用储能决定）。"""
+        if self._battery_active():
+            return list(self.OBS_NAMES)
+        skip = {"battery_soc", "battery_power"}
+        return [n for n in self.OBS_NAMES if n not in skip]

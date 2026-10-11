@@ -103,7 +103,7 @@ class SmartHomeEnv(gym.Env):
     # ------------------------------------------------------------
     def _obs_low(self) -> list:
         """观测下界。取值给出宽松但有限的边界，覆盖所有可能的策略行为。"""
-        return [
+        low = [
             -10.0,    # temp_in
             0.0,      # hum_in
             0.0,      # light_in
@@ -115,10 +115,14 @@ class SmartHomeEnv(gym.Env):
             0.0, 0.0, 0.0, 0.0,     # ev_enter, ev_leave, dur_occ, p_occ_slot
             0.0, 0.0, 0.0,          # elec_price, price_tier, elec_price_forward
         ]
+        # v4 储能状态：电量比例与归一化功率（未启用储能时恒为 0）
+        if self._storage_in_obs():
+            low += [0.0, -1.0]      # battery_soc, battery_power
+        return low
 
     def _obs_high(self) -> list:
         """观测上界。"""
-        return [
+        high = [
             60.0,     # temp_in（含安全上限余量）
             100.0,    # hum_in
             30000.0,  # light_in
@@ -130,6 +134,17 @@ class SmartHomeEnv(gym.Env):
             1.0, 1.0, 480.0, 1.0,   # ev_enter, ev_leave, dur_occ, p_occ_slot
             5.0, 2.0, 5.0,          # elec_price, price_tier, price_forward
         ]
+        if self._storage_in_obs():
+            high += [1.0, 1.0]
+        return high
+
+    def _storage_in_obs(self) -> bool:
+        """储能状态是否进入观测空间。
+
+        仅在启用储能时加入，以保证与旧实验（25 维观测）的兼容性：
+        未启用储能时观测维度仍为 25，已训练的模型仍可加载。
+        """
+        return bool(getattr(self.rew_cfg, "battery_enabled", False))
 
     # ------------------------------------------------------------
     # Gymnasium 接口
@@ -176,8 +191,17 @@ class SmartHomeEnv(gym.Env):
                    or vent_after != vent_before)
 
         # 计算奖励
+        # 储能明细是"动作结果"而非"可观测状态"，故不进入观测向量，
+        # 而是用浅拷贝附加到奖励计算的输入上（v4）。
+        reward_obs = obs_dict
+        if getattr(self.rew_cfg, "battery_enabled", False):
+            reward_obs = dict(obs_dict)
+            reward_obs["battery_charge_kwh"] = self.sim.state.battery_charge_kwh
+            reward_obs["battery_discharge_kwh"] = \
+                self.sim.state.battery_discharge_kwh
+
         reward, components = self.reward_calc.compute(
-            obs_dict,
+            reward_obs,
             energy_kwh_step=sim_info["energy_kwh_step"],
             rng=self.np_random,
             action_changed=changed,
@@ -317,4 +341,4 @@ class SmartHomeEnv(gym.Env):
     @property
     def obs_names(self):
         """观测特征名（顺序与观测向量一致）。"""
-        return list(self.sim.OBS_NAMES)
+        return list(self.sim.active_obs_names())

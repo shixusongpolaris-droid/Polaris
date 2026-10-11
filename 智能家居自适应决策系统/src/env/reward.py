@@ -199,4 +199,11 @@ class RewardCalculator:
             "occupied": 1.0 if occupied else 0.0,
         }
 
+        # 储能明细（v4）：仅启用储能时记录，便于核算"充放电对电费的影响"
+        if getattr(c, "battery_enabled", False):
+            components["battery_charge_kwh"] = float(
+                obs.get("battery_charge_kwh", 0.0))
+            components["battery_discharge_kwh"] = float(
+                obs.get("battery_discharge_kwh", 0.0))
+
         return reward, components
