@@ -49,10 +49,21 @@ def check_interface(env: SmartHomeEnv) -> bool:
     ok = True
 
     obs, info = env.reset(seed=42)
+    # 观测维度取决于是否启用储能（v4）：
+    #   未启用储能 -> 25 维（与 v1~v3 模型兼容）
+    #   启用储能   -> 27 维（额外含 battery_soc / battery_power）
+    # 因此这里用 active_obs_names() 的长度，而不是固定的 OBS_DIM。
+    n_obs_expected = len(env.sim.active_obs_names())
     print(f"  reset() 返回观测类型: {type(obs).__name__}, "
           f"形状: {obs.shape}, 数据类型: {obs.dtype}")
-    if obs.shape != (env.sim.OBS_DIM,):
-        print(f"  {FAIL} 观测维度应为 {env.sim.OBS_DIM}，实际 {obs.shape}")
+    print(f"  期望观测维度: {n_obs_expected}"
+          f"（储能{'已' if getattr(env.rew_cfg, 'battery_enabled', False) else '未'}启用）")
+    if obs.shape != (n_obs_expected,):
+        print(f"  {FAIL} 观测维度应为 {n_obs_expected}，实际 {obs.shape}")
+        ok = False
+    if obs.shape != env.observation_space.shape:
+        print(f"  {FAIL} 观测形状与 observation_space 不一致："
+              f"{obs.shape} vs {env.observation_space.shape}")
         ok = False
     if obs.dtype != np.float32:
         print(f"  {FAIL} 观测数据类型应为 float32，实际 {obs.dtype}")
@@ -84,10 +95,12 @@ def check_observation_bounds(env: SmartHomeEnv, n_steps: int = 2000) -> bool:
     env.reset(seed=1)
     low = env.observation_space.low
     high = env.observation_space.high
+    # 观测维度动态取决于是否启用储能（v4），这里以 observation_space 为准
+    n_obs = int(env.observation_space.shape[0])
 
     violations = []
-    obs_min = np.full(env.sim.OBS_DIM, np.inf)
-    obs_max = np.full(env.sim.OBS_DIM, -np.inf)
+    obs_min = np.full(n_obs, np.inf)
+    obs_max = np.full(n_obs, -np.inf)
 
     for _ in range(n_steps):
         a = env.action_space.sample()

@@ -12,7 +12,7 @@
 """
 
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional, Tuple
 
 
 # ============================================================
@@ -394,12 +394,43 @@ class RewardConfig:
     valley_hours: tuple = (22, 6)            # 谷段：22 时至次日 6 时
     # 其余时段为平段
 
+    # 扩展时段划分（v5，用于电价结构变化实验）
+    # 说明：原字段 peak_hours / valley_hours 各只支持单一时段
+    # （峰段固定两段、谷段仅一段），无法表达"清晨 + 深夜"两个谷段。
+    # 这两个新字段为"成对小时"的列表，若设置则优先于上面的旧字段，
+    # 从而在不破坏既有实验的前提下支持任意时段结构。
+    peak_periods: Optional[List[Tuple[int, int]]] = None
+    valley_periods: Optional[List[Tuple[int, int]]] = None
+
+    @staticmethod
+    def _hour_in_periods(hour: int, periods) -> bool:
+        """判断小时是否落在任一时段内（支持跨零点，如 (22, 6)）。"""
+        if not periods:
+            return False
+        for a, b in periods:
+            if a <= b:
+                if a <= hour < b:
+                    return True
+            else:                                # 跨零点
+                if hour >= a or hour < b:
+                    return True
+        return False
+
     def get_price(self, hour: int) -> float:
         """返回指定小时的电价（元/kWh）。"""
         if not self.tou_enabled:
             return 1.0                # 未启用时返回 1.0，使能耗项退化为纯 kWh
         h = int(hour)
-        # 峰段
+
+        # 优先使用扩展时段（若已显式设置）
+        if self.peak_periods is not None or self.valley_periods is not None:
+            if self._hour_in_periods(h, self.peak_periods):
+                return self.price_peak
+            if self._hour_in_periods(h, self.valley_periods):
+                return self.price_valley
+            return self.price_flat
+
+        # 峰段（旧格式：两个固定时段）
         ph0, ph1, ph2, ph3 = self.peak_hours
         if ph0 <= h < ph1 or ph2 <= h < ph3:
             return self.price_peak
