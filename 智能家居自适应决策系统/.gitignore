@@ -27,11 +27,18 @@ dist/
 .ipynb_checkpoints/
 
 # ---------- 数据 ----------
-# 数据单独备份，不入库（体积大，且可能含隐私信息）
+# 原始数据与派生结果都不入库（体积大，且可能含隐私信息）
+# 目录说明（data/README.txt）仍然提交，以便他人了解数据结构
 data/raw/
 data/processed/
 data/logs/
 data/external/
+
+# 标定产物（可由 calibrate_from_real.py 重新生成）
+data/calibrated_params.json
+data/occupancy_table.csv
+
+# 通用数据文件
 *.csv
 *.parquet
 
