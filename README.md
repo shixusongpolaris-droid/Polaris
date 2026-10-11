@@ -54,9 +54,37 @@ C11 基础项目，CMake 构建。
 
 ---
 
+### 🤖 智能家居自适应决策系统
+
+基于强化学习与多目标优化的智能家居环境控制研究。将家庭环境控制问题形式化为
+马尔可夫决策过程（MDP），用 PPO 训练自适应控制策略，并与规则控制、
+恒温控制等多种基线在"舒适度—能耗"双目标下对比。
+
+| 模块 | 说明 |
+|---|---|
+| `src/env/config.py` | 参数配置（25 维状态、36 动作、奖励、约束、分时电价） |
+| `src/env/simulator.py` | 状态转移（热模型、湿度、光照、人员占用、约束屏蔽） |
+| `src/env/reward.py` | 奖励函数（舒适度代价 + 场景化加权能耗 + 切换惩罚） |
+| `src/env/home_env.py` | Gymnasium 标准接口，可直接接 stable-baselines3 |
+| `scripts/` | 训练、统一评估、消融实验、参数敏感性、马尔可夫性检验等 13 个脚本 |
+| `docs/` | MDP 定义（含马尔可夫性论证）、实验结果报告、项目状态总结 |
+| `models/figures/` | 25 张实验图表 |
+
+**主要结论**：无分时电价场景下，PPO 相对规则控制在**舒适度与控制平稳性**上显著更优
+（不达标率 −45.6%、温度偏差 RMSE −92.5%、设备切换次数 −70%）；在舒适度基本持平的
+前提下相对理想恒温控制**节能约 16%**。研究同时得到明确的否定性结论：
+"奖励权重的时间场景化"机制在 75 样本/组的统计检验下**未带来可检测收益**。
+
+**硬件**：ESP32-S3 + SHT31（温湿度）+ BH1750（光照）+ PIR×2 + LD2410C（毫米波雷达）
+
+**技术栈**: Python · PyTorch · stable-baselines3 · Gymnasium · pandas · matplotlib · Arduino
+
+---
+
 ## 🛠 技术栈总览
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
 ![C++](https://img.shields.io/badge/C++-00599C?style=flat&logo=c%2B%2B&logoColor=white)
 ![C](https://img.shields.io/badge/C-A8B9CC?style=flat&logo=c&logoColor=white)
 ![CMake](https://img.shields.io/badge/CMake-064F8C?style=flat&logo=cmake&logoColor=white)
@@ -90,4 +118,4 @@ python main.py
 
 ---
 
-*最后更新: 2026-06*
+*最后更新: 2026-10*

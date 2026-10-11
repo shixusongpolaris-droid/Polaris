@@ -1,0 +1,38 @@
+# ============================================================
+#  大创项目：基于强化学习与多目标优化的智能家居自适应决策系统
+#  依赖包清单
+#
+#  用途：记录本项目需要哪些 Python 包。
+#  在新环境里一次性安装全部依赖：
+#      .venv\Scripts\activate
+#      python -m pip install -r requirements.txt
+#
+#  锁定当前实际版本（便于复现实验）：
+#      python -m pip freeze > requirements-lock.txt
+# ============================================================
+
+# ---------- 数据处理与绘图 ----------
+numpy               # 数值计算基础库（几乎所有库都依赖它）
+pandas              # 表格与时间序列处理，读 CSV 主力
+matplotlib          # 画图
+scikit-learn        # 数据预处理、指标计算
+
+# ---------- 数据分析与交互 ----------
+jupyter             # Notebook 环境，用于探索性分析
+
+# ---------- 设备通信 ----------
+paho-mqtt           # MQTT 客户端，接收 ESP32 上报的传感器数据
+pyserial            # 串口通信，直接读 ESP32 的串口输出
+
+# ---------- 强化学习 ----------
+gymnasium           # 强化学习环境的标准接口
+stable-baselines3   # 强化学习算法库（DQN / PPO / SAC 等）
+
+# ---------- 说明 ----------
+# 1. stable-baselines3 会自动安装 PyTorch（体积较大，约几百 MB），
+#    这是正常的，不用手动装 torch。
+# 2. PyTorch 默认装的是 CPU 版本，跑本项目的实验量足够；
+#    不要为了"加速"去装 CUDA 版本，配置复杂且本项目用不上。
+# 3. 后续如果要用仿真环境，再单独安装：
+#      pip install citylearn        # 住宅能源管理仿真（推荐先试）
+#      pip install sinergym         # 基于 EnergyPlus 的建筑仿真（安装较重）
