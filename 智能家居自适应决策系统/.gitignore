@@ -30,6 +30,7 @@ dist/
 # 原始数据与派生结果都不入库（体积大，且可能含隐私信息）
 # 目录说明（data/README.txt）仍然提交，以便他人了解数据结构
 data/raw/
+data/raw_synthetic/
 data/processed/
 data/logs/
 data/external/

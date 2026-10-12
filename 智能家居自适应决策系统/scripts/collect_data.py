@@ -162,7 +162,11 @@ CSV_FIELDS = ["pc_time", "raw",
 
 
 class Recorder:
-    """负责把数据实时写入 CSV。"""
+    """负责把数据实时写入 CSV。
+
+    按自然日自动分割文件：长时间连续采集（如 3 天）时，
+    跨零点会自动切换到当天的文件，避免全部堆在第一个文件里。
+    """
 
     def __init__(self, out_dir: Path, note: str = ""):
         self.out_dir = out_dir
@@ -170,16 +174,35 @@ class Recorder:
         self.note = note
         self.rows = 0
         self.started = time.time()
+        self._day = None
+        self._fh = None
+        self._efh = None
+        self._writer = None
+        self._ewriter = None
+        self._open_for_day(datetime.now().strftime("%Y-%m-%d"))
+        # 记录一次采集开始事件
+        self.mark(f"采集开始 {self.note}".strip())
 
-        day = datetime.now().strftime("%Y-%m-%d")
-        self.data_path = out_dir / f"{day}.csv"
-        self.event_path = out_dir / f"{day}_events.csv"
+    def _open_for_day(self, day: str):
+        """打开（或切换到）指定日期对应的数据/事件文件。"""
+        if self._day == day and self._fh is not None:
+            return
+        # 关闭上一个文件
+        if self._fh is not None:
+            self._fh.close()
+        if self._efh is not None:
+            self._efh.close()
+
+        self._day = day
+        self.data_path = self.out_dir / f"{day}.csv"
+        self.event_path = self.out_dir / f"{day}_events.csv"
 
         self._fh = open(self.data_path, "a", newline="", encoding="utf-8")
         self._writer = csv.DictWriter(self._fh, fieldnames=CSV_FIELDS,
                                       extrasaction="ignore")
         if self.data_path.stat().st_size == 0:
             self._writer.writeheader()
+            self._fh.flush()
 
         self._efh = open(self.event_path, "a", newline="", encoding="utf-8")
         self._ewriter = csv.writer(self._efh)
@@ -187,13 +210,19 @@ class Recorder:
             self._ewriter.writerow(["pc_time", "event"])
             self._efh.flush()
 
-        # 记录一次采集开始事件
-        self.mark(f"采集开始 {self.note}".strip())
-
     def write(self, line: str):
+        now = datetime.now()
+        day = now.strftime("%Y-%m-%d")
+        if day != self._day:
+            # 跨零点：切换文件，并在新文件里记录一次"跨日"事件
+            self._open_for_day(day)
+            self._ewriter.writerow([now.strftime("%Y-%m-%d %H:%M:%S"),
+                                    "跨日，文件切换"])
+            self._efh.flush()
+
         parsed = parse_line(line)
         row = {k: "" for k in CSV_FIELDS}
-        row["pc_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        row["pc_time"] = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         row["raw"] = line
         for k, v in parsed.items():
             if k in row:
@@ -203,14 +232,21 @@ class Recorder:
         self.rows += 1
 
     def mark(self, event: str):
-        self._ewriter.writerow(
-            [datetime.now().strftime("%Y-%m-%d %H:%M:%S"), event])
+        now = datetime.now()
+        day = now.strftime("%Y-%m-%d")
+        if day != self._day:
+            self._open_for_day(day)
+        self._ewriter.writerow([now.strftime("%Y-%m-%d %H:%M:%S"), event])
         self._efh.flush()
 
     def close(self):
         self.mark("采集结束")
-        self._fh.close()
-        self._efh.close()
+        if self._fh is not None:
+            self._fh.close()
+        if self._efh is not None:
+            self._efh.close()
+        self._fh = None
+        self._efh = None
 
 
 # ============================================================
@@ -224,6 +260,10 @@ def main():
     ap.add_argument("--out", type=str, default=None,
                     help="输出目录，默认 data/raw")
     ap.add_argument("--note", type=str, default="", help="本轮采集备注")
+    ap.add_argument("--no-keyboard", action="store_true",
+                    help="禁用键盘事件标记（后台运行、或无法交互时使用）")
+    ap.add_argument("--minutes", type=float, default=0,
+                    help="采集时长（分钟）；0 表示一直采到手动停止")
     args = ap.parse_args()
 
     out_dir = Path(args.out) if args.out else (PROJECT_ROOT / "data" / "raw")
@@ -255,8 +295,14 @@ def main():
     print(f"\n  使用串口 : {port}  波特率 {args.baud}")
     print()
     print("  操作说明：")
-    print("    · 按【回车】记录一个事件（用于标记开关空调）")
-    print("    · 按 Ctrl+C 停止采集")
+    if args.no_keyboard:
+        print("    · 已禁用键盘事件标记（--no-keyboard）")
+    else:
+        print("    · 按【回车】记录一个事件（用于标记开关空调）")
+    if args.minutes > 0:
+        print(f"    · 采集 {args.minutes:g} 分钟后自动停止")
+    else:
+        print("    · 按 Ctrl+C 停止采集")
     print()
 
     recorder = Recorder(out_dir, args.note)
@@ -264,27 +310,36 @@ def main():
     print(f"  事件文件 : {recorder.event_path}")
 
     # ---- 键盘监听线程：回车打标记 ----
+    # 注意：后台运行或无法交互时必须用 --no-keyboard 关闭，
+    # 否则 input() 在无标准输入的环境下会抛异常。
     stop_flag = threading.Event()
 
-    def key_listener():
-        while not stop_flag.is_set():
-            try:
-                input()
-                recorder.mark("用户标记事件")
-                print(f"    [{datetime.now():%H:%M:%S}] 已记录事件标记")
-            except (EOFError, KeyboardInterrupt):
-                break
+    if not args.no_keyboard:
+        def key_listener():
+            while not stop_flag.is_set():
+                try:
+                    input()
+                    recorder.mark("用户标记事件")
+                    print(f"    [{datetime.now():%H:%M:%S}] 已记录事件标记")
+                except (EOFError, KeyboardInterrupt, OSError):
+                    break
 
-    threading.Thread(target=key_listener, daemon=True).start()
+        threading.Thread(target=key_listener, daemon=True).start()
 
     # ---- 采集主循环（含断线重连）----
     last_print = 0.0
+    deadline = (time.time() + args.minutes * 60) if args.minutes > 0 else None
     try:
         while True:
+            if deadline is not None and time.time() >= deadline:
+                print(f"\n  已到设定时长（{args.minutes:g} 分钟），停止采集。")
+                break
             try:
                 with serial.Serial(port, args.baud, timeout=2) as ser:
                     print(f"\n  [{datetime.now():%H:%M:%S}] 串口已打开，开始接收数据…\n")
                     while True:
+                        if deadline is not None and time.time() >= deadline:
+                            break
                         raw = ser.readline()
                         if not raw:
                             continue
