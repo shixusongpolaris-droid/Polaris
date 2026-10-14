@@ -153,11 +153,57 @@ def parse_line(line: str) -> dict:
 
 
 # ============================================================
+# 室外天气（热模型标定的边界条件）
+# ============================================================
+class WeatherFetcher:
+    """后台线程定时抓取室外天气（Open-Meteo，免费无需密钥）。
+
+    采集数据里带上室外温度/湿度后，热模型标定就不必再去查历史天气，
+    而且能保证室内外数据时间对齐。
+    抓取失败不影响采集，只是对应字段留空。
+    """
+
+    def __init__(self, interval_s=900):
+        self.interval_s = interval_s
+        self.temp = ""
+        self.hum = ""
+        self.local_time = ""
+        self.last_ok = None
+        self._stop = threading.Event()
+        self._thread = None
+
+    def _loop(self):
+        # 延迟几秒再抓，避免与串口初始化抢资源
+        self._stop.wait(3)
+        while not self._stop.is_set():
+            try:
+                sys.path.insert(0, str(Path(__file__).resolve().parent))
+                from fetch_weather import fetch
+                w = fetch(timeout=12)
+                if w and "error" not in w and w.get("outdoor_temp_c") is not None:
+                    self.temp = w["outdoor_temp_c"]
+                    self.hum = w.get("outdoor_humidity_pct", "")
+                    self.local_time = w.get("local_time", "")
+                    self.last_ok = datetime.now()
+            except Exception:
+                pass          # 网络问题不影响采集
+            self._stop.wait(self.interval_s)
+
+    def start(self):
+        self._thread = threading.Thread(target=self._loop, daemon=True)
+        self._thread.start()
+
+    def stop(self):
+        self._stop.set()
+
+
+# ============================================================
 # 输出
 # ============================================================
 CSV_FIELDS = ["pc_time", "raw",
               "ts_device", "temp_c", "humidity_pct", "light_lux",
               "pir1", "pir2", "radar", "sht_ok", "uptime_s", "uptime_ms",
+              "outdoor_temp_c", "outdoor_humidity_pct",
               "sht_raw", "note"]
 
 
@@ -168,13 +214,16 @@ class Recorder:
     跨零点会自动切换到当天的文件，避免全部堆在第一个文件里。
     """
 
-    def __init__(self, out_dir: Path, note: str = "", prefix: str = ""):
+    def __init__(self, out_dir: Path, note: str = "", prefix: str = "",
+                 weather=None):
         self.out_dir = out_dir
         self.out_dir.mkdir(parents=True, exist_ok=True)
         self.note = note
         # prefix 用于区分不同批次的采集（例如每日定时任务用 "daily_"），
         # 避免同一天多次运行写进同一个文件而混在一起。
         self.prefix = prefix
+        # weather: WeatherFetcher 实例，用于给每行附加室外温度/湿度
+        self.weather = weather
         self.rows = 0
         self.started = time.time()
         self._day = None
@@ -244,6 +293,10 @@ class Recorder:
         for k, v in parsed.items():
             if k in row:
                 row[k] = v
+        # 附加室外天气（若抓取成功）
+        if self.weather is not None:
+            row["outdoor_temp_c"] = self.weather.temp
+            row["outdoor_humidity_pct"] = self.weather.hum
         self._writer.writerow(row)
         self._fh.flush()          # 实时落盘，断电也不丢
         self.rows += 1
@@ -283,6 +336,8 @@ def main():
                     help="采集时长（分钟）；0 表示一直采到手动停止")
     ap.add_argument("--prefix", type=str, default="",
                     help="输出文件名前缀（如 daily_），用于区分不同批次采集")
+    ap.add_argument("--no-weather", action="store_true",
+                    help="禁用室外天气抓取（默认开启，写进 outdoor_temp_c 列）")
     args = ap.parse_args()
 
     out_dir = Path(args.out) if args.out else (PROJECT_ROOT / "data" / "raw")
@@ -312,6 +367,16 @@ def main():
         return 1
 
     print(f"\n  使用串口 : {port}  波特率 {args.baud}")
+
+    # 启动室外天气抓取（后台线程，失败不影响采集）
+    weather = None
+    if not args.no_weather:
+        weather = WeatherFetcher(interval_s=900)
+        weather.start()
+        print("  室外天气 : 已启动（Open-Meteo，每 15 分钟更新一次）")
+    else:
+        print("  室外天气 : 已禁用（--no-weather）")
+
     print()
     print("  操作说明：")
     if args.no_keyboard:
@@ -324,7 +389,8 @@ def main():
         print("    · 按 Ctrl+C 停止采集")
     print()
 
-    recorder = Recorder(out_dir, args.note, prefix=args.prefix)
+    recorder = Recorder(out_dir, args.note, prefix=args.prefix,
+                        weather=weather)
     print(f"  数据文件 : {recorder.data_path}")
     print(f"  事件文件 : {recorder.event_path}")
 
@@ -391,9 +457,14 @@ def main():
 
     stop_flag.set()
     recorder.close()
+    if weather is not None:
+        weather.stop()
     print(f"\n  采集结束。共记录 {recorder.rows} 行数据。")
     print(f"  数据文件 : {recorder.data_path}")
     print(f"  事件文件 : {recorder.event_path}")
+    if weather is not None and weather.temp != "":
+        print(f"  室外天气 : {weather.temp} °C / {weather.hum} % "
+              f"（更新于 {weather.local_time}）")
     print("=" * 66)
     return 0
 
