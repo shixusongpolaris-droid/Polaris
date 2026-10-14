@@ -168,10 +168,13 @@ class Recorder:
     跨零点会自动切换到当天的文件，避免全部堆在第一个文件里。
     """
 
-    def __init__(self, out_dir: Path, note: str = ""):
+    def __init__(self, out_dir: Path, note: str = "", prefix: str = ""):
         self.out_dir = out_dir
         self.out_dir.mkdir(parents=True, exist_ok=True)
         self.note = note
+        # prefix 用于区分不同批次的采集（例如每日定时任务用 "daily_"），
+        # 避免同一天多次运行写进同一个文件而混在一起。
+        self.prefix = prefix
         self.rows = 0
         self.started = time.time()
         self._day = None
@@ -194,8 +197,9 @@ class Recorder:
             self._efh.close()
 
         self._day = day
-        self.data_path = self.out_dir / f"{day}.csv"
-        self.event_path = self.out_dir / f"{day}_events.csv"
+        base = f"{self.prefix}{day}" if self.prefix else day
+        self.data_path = self.out_dir / f"{base}.csv"
+        self.event_path = self.out_dir / f"{base}_events.csv"
 
         self._fh = open(self.data_path, "a", newline="", encoding="utf-8")
         self._writer = csv.DictWriter(self._fh, fieldnames=CSV_FIELDS,
@@ -221,6 +225,19 @@ class Recorder:
             self._efh.flush()
 
         parsed = parse_line(line)
+
+        # 跳过"设备提示/诊断"这类非数据行，避免污染数据 CSV。
+        # 判据：解析结果里除了 note 之外没有任何传感器字段。
+        DATA_KEYS = ("temp_c", "humidity_pct", "light_lux", "pir1", "pir2",
+                     "radar", "sht_raw", "uptime_ms")
+        if parsed and all(k not in parsed for k in DATA_KEYS):
+            txt = str(parsed.get("note", ""))[:120]
+            if txt:
+                self._ewriter.writerow([now.strftime("%Y-%m-%d %H:%M:%S"),
+                                        f"设备消息: {txt}"])
+                self._efh.flush()
+            return
+
         row = {k: "" for k in CSV_FIELDS}
         row["pc_time"] = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         row["raw"] = line
@@ -264,6 +281,8 @@ def main():
                     help="禁用键盘事件标记（后台运行、或无法交互时使用）")
     ap.add_argument("--minutes", type=float, default=0,
                     help="采集时长（分钟）；0 表示一直采到手动停止")
+    ap.add_argument("--prefix", type=str, default="",
+                    help="输出文件名前缀（如 daily_），用于区分不同批次采集")
     args = ap.parse_args()
 
     out_dir = Path(args.out) if args.out else (PROJECT_ROOT / "data" / "raw")
@@ -305,7 +324,7 @@ def main():
         print("    · 按 Ctrl+C 停止采集")
     print()
 
-    recorder = Recorder(out_dir, args.note)
+    recorder = Recorder(out_dir, args.note, prefix=args.prefix)
     print(f"  数据文件 : {recorder.data_path}")
     print(f"  事件文件 : {recorder.event_path}")
 
