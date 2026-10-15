@@ -16,13 +16,14 @@ param(
     [string]$At       = '08:00',    # 每天启动时间
     [int]   $Minutes  = 720,        # 每次采集时长（分钟）
     [string]$Port     = 'COM3',
+    [string]$StopAfter = '2026-10-16',
     [string]$TaskName = 'SmartHome_DailyCollect'
 )
 
 $ErrorActionPreference = 'Stop'
 
 $ProjectDir = 'D:\Dev\Projects\Polaris\智能家居自适应决策系统'
-$BatFile    = Join-Path $ProjectDir 'scripts\run_daily_collect.bat'
+$Runner     = Join-Path $ProjectDir 'scripts\run_daily_collect.py'
 $PyExe      = Join-Path $ProjectDir '.venv\Scripts\python.exe'
 
 Write-Output '=========================================='
@@ -30,19 +31,20 @@ Write-Output ' 注册每日采集计划任务'
 Write-Output '=========================================='
 
 # ---------- 前置检查 ----------
-if (-not (Test-Path $BatFile)) {
-    Write-Output ('[错误] 找不到采集脚本: ' + $BatFile)
-    exit 1
-}
 if (-not (Test-Path $PyExe)) {
     Write-Output ('[错误] 找不到 Python 环境: ' + $PyExe)
     exit 1
 }
-Write-Output ('  采集脚本 : ' + $BatFile)
+if (-not (Test-Path $Runner)) {
+    Write-Output ('[错误] 找不到调度脚本: ' + $Runner)
+    exit 1
+}
+Write-Output ('  调度脚本 : ' + $Runner)
 Write-Output ('  Python   : ' + $PyExe)
 Write-Output ('  启动时间 : 每天 ' + $At)
 Write-Output ('  采集时长 : ' + $Minutes + ' 分钟')
 Write-Output ('  串口     : ' + $Port)
+Write-Output ('  截止日期 : ' + $StopAfter)
 Write-Output ''
 
 # ---------- 删除同名旧任务 ----------
@@ -54,8 +56,8 @@ if ($existing) {
 
 # ---------- 动作：运行批处理 ----------
 # 参数用双引号包围路径，避免中文路径中的空格问题
-$argLine = '/c "' + $BatFile + '" ' + $Minutes + ' ' + $Port
-$action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument $argLine -WorkingDirectory $ProjectDir
+$argLine = '"' + $Runner + '" --minutes ' + $Minutes + ' --port ' + $Port + ' --stop-after ' + $StopAfter
+$action = New-ScheduledTaskAction -Execute $PyExe -Argument $argLine -WorkingDirectory $ProjectDir
 
 # ---------- 触发器：每天定时 ----------
 $trigger = New-ScheduledTaskTrigger -Daily -At $At
