@@ -412,18 +412,44 @@ class RewardConfig:
     #   引入分时电价后，"何时用电"成为可优化的时序决策问题，
     #   而这正是强化学习相对规则控制的优势所在。
     #
-    # 电价取值参考国内居民分时电价的典型水平（单位：元/kWh）：
-    #   峰段约为平段的 1.7 倍，谷段约为平段的 0.4 倍
+    # ---------- 电价（上海市居民用电价格表）----------
+    #
+    # 依据项目所有者提供的上海市居民用电价格表（以该表为准）：
+    #
+    #   一户一表居民用户（按户年用电量分档，单位：元/度）
+    #     档位      年用电量        未分时   分时·峰时   分时·谷时
+    #     第一档    0~3120(含)      0.617     0.617       0.307
+    #     第二档    3120~4800(含)    0.667     0.677       0.337
+    #     第三档    4800 以上        0.917     0.977       0.487
+    #
+    #   峰谷时段：峰 06:00-22:00，谷 22:00-次日 06:00
+    #   居民可自主选择是否执行分时；未选择的统一按"未分时"栏计费。
+    #   表中「执行居民价格的非居民用户」（0.641 / 0.636）非家庭场景，忽略。
+    #
+    # 建模说明：
+    #   单价随"户年用电量"累进，而仿真单回合仅 7 天，无法观测年度累计，
+    #   故采用**固定档位**口径 —— 一次实验内电价恒定，由 --tier 选择档位。
+    #   三个档位的峰谷比同为 2.01，差别只在绝对水平，
+    #   分别训练可作为"电价水平"的敏感性分析。
+    #
+    # 下方默认值取第一档分时电价。实际电价由 scripts/train.py 的
+    # --tariff / --tier 参数在运行时写入。
     tou_enabled: bool = False        # 是否启用分时电价
 
-    price_valley: float = 0.30       # 谷段电价
-    price_flat: float = 0.60         # 平段电价
-    price_peak: float = 1.00         # 峰段电价
+    price_valley: float = 0.307      # 谷段电价（第一档分时）
+    price_flat: float = 0.617        # 平段电价（见下方说明）
+    price_peak: float = 0.617        # 峰段电价（第一档分时）
 
     # 时段划分（小时）
-    peak_hours: tuple = (8, 10, 18, 21)      # 峰段：8-10 时、18-21 时
+    # 上海分时只有两段：峰 6-22、谷 22-6。此处用扩展字段精确表达，
+    # 下面同时把旧字段改为上海口径，避免未设置扩展字段时行为不一致。
+    peak_hours: tuple = (6, 22, 6, 22)       # 峰段：6-22 时（单段，沿用旧字段格式）
     valley_hours: tuple = (22, 6)            # 谷段：22 时至次日 6 时
-    # 其余时段为平段
+
+    # 旧（三段式）参考配置，仅供对照实验：
+    #   price_valley=0.30, price_flat=0.60, price_peak=1.00
+    #   peak_hours=(8,10,18,21), valley_hours=(22,6)
+    #
 
     # 扩展时段划分（v5，用于电价结构变化实验）
     # 说明：原字段 peak_hours / valley_hours 各只支持单一时段
@@ -432,6 +458,11 @@ class RewardConfig:
     # 从而在不破坏既有实验的前提下支持任意时段结构。
     peak_periods: Optional[List[Tuple[int, int]]] = None
     valley_periods: Optional[List[Tuple[int, int]]] = None
+
+    # 不分时（未选择分时电价）时全天统一适用的电价（元/kWh）。
+    # 默认 1.0 表示"能耗项按纯 kWh 计"，以保持既有实验口径不变；
+    # 建模上海"统一按平段计费"的居民用户时设为 0.617。
+    price_flat_tariff: float = 1.0
 
     @staticmethod
     def _hour_in_periods(hour: int, periods) -> bool:
@@ -448,9 +479,16 @@ class RewardConfig:
         return False
 
     def get_price(self, hour: int) -> float:
-        """返回指定小时的电价（元/kWh）。"""
+        """返回指定小时的电价（元/kWh）。
+
+        未启用分时电价时返回 price_flat_tariff（默认 1.0）：
+          · 默认值 1.0 使能耗项退化为纯 kWh，保持既有实验口径不变
+          · 需要建模"统一按平段计费"的居民用户时，把 price_flat_tariff
+            设为实际平段电价（上海取 0.617 元/kWh），即可让不分时场景
+            产出以"元"为单位的能耗代价，与分时场景口径一致、可直接比较
+        """
         if not self.tou_enabled:
-            return 1.0                # 未启用时返回 1.0，使能耗项退化为纯 kWh
+            return self.price_flat_tariff
         h = int(hour)
 
         # 优先使用扩展时段（若已显式设置）
@@ -502,10 +540,18 @@ class RewardConfig:
     def get_forward_price(self, hour: int) -> float:
         """返回用于奖励计算的前视电价。
 
-        未启用 TOU 时返回 1.0（退化为纯电量计价）。
+        未启用 TOU（居民未选择分时电价）时返回 price_flat_tariff：
+          · 默认值 1.0 -> 能耗项退化为纯电量计价，保持既有实验口径不变
+          · 建模"统一按平段计费"时设为实际平段单价，
+
+        修复说明：原实现在此分支硬编码 1.0，会忽略 price_flat_tariff，
+        导致"未分时"场景下设置的平段电价完全进不了奖励
+        （三档未分时实验会得到完全相同的结果）。
+        改为返回 price_flat_tariff 后，默认 1.0 的行为与原来一致，
+        向后兼容。
         """
         if not self.tou_enabled:
-            return 1.0
+            return self.price_flat_tariff
         p_now = self.get_price(hour)
         if self.lookahead_weight <= 0 or self.lookahead_hours <= 0:
             return p_now

@@ -201,6 +201,15 @@ def main():
                     help="能耗权重模式：scenario=本方法，fixed=固定权重基线，random=随机对照")
     ap.add_argument("--tou", action="store_true",
                     help="启用分时电价（TOU）")
+    ap.add_argument("--tariff", type=str, default="default",
+                    choices=["default", "shanghai_tou", "shanghai_flat"],
+                    help=("电价场景：default=保持 RewardConfig 默认（旧三段式口径）；"
+                          "shanghai_tou=上海市居民分时电价；"
+                          "shanghai_flat=上海未选择分时、全天按平段计价"))
+    ap.add_argument("--tier", type=int, default=1, choices=[1, 2, 3],
+                    help=("上海居民阶梯档位（1/2/3），决定具体电价。"
+                          "一户一表居民按户年用电量分档："
+                          "一档 0~3120 度、二档 3120~4800 度、三档 4800 度以上"))
     ap.add_argument("--energy-scale", type=float, default=None,
                     help="能耗项权重倍数（默认用 RewardConfig 的设定值）")
     ap.add_argument("--temp-scale", type=float, default=None,
@@ -220,6 +229,50 @@ def main():
     # ---------- 奖励配置 ----------
     rew_cfg = RewardConfig(weight_mode=args.weight_mode,
                            tou_enabled=args.tou)
+
+    # ---------- 电价场景 ----------
+    # 依据上海市居民用电价格表（项目所有者提供，以该表为准）：
+    #
+    #   一户一表居民用户（按户年用电量分档，单位：元/度）
+    #     档位      年用电量        未分时   分时·峰时   分时·谷时
+    #     第一档    0~3120(含)      0.617     0.617       0.307
+    #     第二档    3120~4800(含)    0.667     0.677       0.337
+    #     第三档    4800 以上        0.917     0.977       0.487
+    #
+    #   峰谷时段：峰 06:00-22:00，谷 22:00-次日 06:00
+    #   居民可自主选择是否执行分时；未选择的统一按"未分时"栏计费。
+    #
+    # 本 Table 中「执行居民价格的非居民用户」（不满 1 千伏 0.641、
+    # 10 千伏 0.636）非家庭场景，本项目忽略。
+    #
+    # 档位处理：单价随"户年用电量"累进，而仿真单回合仅 7 天，
+    # 无法观测年度累计。经与项目所有者确认，采用**固定档位**口径，
+    # 即一次实验内电价恒定，通过 --tier 选择档位，
+    # 三个档位分别训练以做电价水平的敏感性分析。
+    TIER_TABLE = {
+        # tier: (未分时, 分时峰时, 分时谷时)
+        1: (0.617, 0.617, 0.307),
+        2: (0.667, 0.677, 0.337),
+        3: (0.917, 0.977, 0.487),
+    }
+
+    if args.tariff in ("shanghai_tou", "shanghai_flat"):
+        flat, peak, valley = TIER_TABLE[args.tier]
+        if args.tariff == "shanghai_tou":
+            rew_cfg.tou_enabled = True
+            rew_cfg.price_peak = peak
+            rew_cfg.price_valley = valley
+            # 峰谷两段已覆盖全天 24 小时，price_flat 不会实际生效；
+            # 置为峰段值以免时段边界落到非预期档位。
+            rew_cfg.price_flat = peak
+            rew_cfg.peak_periods = [(6, 22)]
+            rew_cfg.valley_periods = [(22, 6)]
+        else:
+            rew_cfg.tou_enabled = False
+            # 未选择分时：全天按"未分时"单价计费。
+            rew_cfg.price_flat_tariff = flat
+    # else: "default" —— 不改动，保持既有实验口径（旧三段式）
+
     if args.energy_scale is not None:
         rew_cfg.energy_scale = args.energy_scale
     if args.temp_scale is not None:
@@ -232,6 +285,13 @@ def main():
     print("=" * 72)
     print(" 强化学习训练 —— 智能家居自适应决策系统")
     print("=" * 72)
+    print(f"  电价场景     : {args.tariff}" + (f"  第{args.tier}档" if args.tariff != "default" else ""))
+    if args.tariff == "shanghai_tou":
+        print(f"     峰段 06-22 时 : {rew_cfg.price_peak} 元/度")
+        print(f"     谷段 22-06 时 : {rew_cfg.price_valley} 元/度")
+        print(f"     峰谷比       : {rew_cfg.price_peak/rew_cfg.price_valley:.2f}")
+    elif args.tariff == "shanghai_flat":
+        print(f"     全天统一      : {rew_cfg.price_flat_tariff} 元/度（未选分时）")
     print(f"  能耗权重模式 : {args.weight_mode}")
     print(f"  总训练步数   : {args.timesteps:,}")
     print(f"  并行环境数   : {args.n_envs}")
