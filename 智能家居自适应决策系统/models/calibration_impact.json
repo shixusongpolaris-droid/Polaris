@@ -1,0 +1,40 @@
+{
+  "ablation": [
+    {
+      "group": "A1 固定权重",
+      "metric": "energy",
+      "old": 4.771,
+      "new": 5.541473513702491
+    },
+    {
+      "group": "A1 固定权重",
+      "metric": "discomfort",
+      "old": 0.1204,
+      "new": 0.091984126984127
+    },
+    {
+      "group": "A2 场景化权重(本方法)",
+      "metric": "energy",
+      "old": 5.018,
+      "new": 6.5772134606696655
+    },
+    {
+      "group": "A2 场景化权重(本方法)",
+      "metric": "discomfort",
+      "old": 0.1189,
+      "new": 0.06722222222222221
+    },
+    {
+      "group": "A3 随机变化权重",
+      "metric": "energy",
+      "old": 4.794,
+      "new": 5.7655028402400195
+    },
+    {
+      "group": "A3 随机变化权重",
+      "metric": "discomfort",
+      "old": 0.1192,
+      "new": 0.08751984126984128
+    }
+  ]
+}

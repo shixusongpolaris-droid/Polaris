@@ -19,6 +19,7 @@ r"""
 
 import json
 import re
+import os
 import sys
 from pathlib import Path
 
@@ -34,12 +35,24 @@ except (AttributeError, OSError):
 # ============================================================
 # 期望值：从原始结果文件读出的"真值"
 # ============================================================
+def MODELS_ROOT():
+    """结果文件根目录。
+
+    默认指向 models/；设置环境变量 VERIFY_MODELS_ROOT 可改指向
+    models/_oldparams_backup/，用于核对标定前的历史数字。
+    背景：2026-10-16 标定热参数后，文档正文保留的是标定前结果，
+    并在文首以显著提示标注，因此核对正文时应指向备份目录。
+    """
+    return Path(os.environ.get(
+        "VERIFY_MODELS_ROOT", str(PROJECT_ROOT / "models")))
+
+
 def load_truth():
     """从原始结果文件提取权威数字。"""
     truth = {}
 
     # --- 主实验（无 TOU，v2）---
-    p = PROJECT_ROOT / "models" / "evaluation" / "results_v2_notou.json"
+    p = MODELS_ROOT() / "evaluation" / "results_v2_notou.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         r = d["results"]
@@ -59,7 +72,7 @@ def load_truth():
         }
 
     # --- 主实验（v1，已废止）---
-    p = PROJECT_ROOT / "models" / "evaluation" / "results_notou.json"
+    p = MODELS_ROOT() / "evaluation" / "results_notou.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         r = d["results"]
@@ -71,7 +84,7 @@ def load_truth():
         }
 
     # --- TOU 场景 ---
-    p = PROJECT_ROOT / "models" / "evaluation" / "results_v2_tou.json"
+    p = MODELS_ROOT() / "evaluation" / "results_v2_tou.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         r = d["results"]
@@ -82,7 +95,7 @@ def load_truth():
         }
 
     # --- 循环网络实验 ---
-    p = PROJECT_ROOT / "models" / "recurrent" / "results.json"
+    p = MODELS_ROOT() / "recurrent" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         truth["recurrent"] = {
@@ -93,7 +106,7 @@ def load_truth():
         }
 
     # --- 储能实验 ---
-    p = PROJECT_ROOT / "models" / "storage" / "results.json"
+    p = MODELS_ROOT() / "storage" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         truth["storage"] = {
@@ -103,7 +116,7 @@ def load_truth():
         }
 
     # --- 储能等舒适度比较（三旋钮）---
-    p = PROJECT_ROOT / "models" / "storage_equal" / "results.json"
+    p = MODELS_ROOT() / "storage_equal" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         truth["storage_equal"] = {
@@ -113,7 +126,7 @@ def load_truth():
         }
 
     # --- 循环网络实验（等舒适度）---
-    p = PROJECT_ROOT / "models" / "tou_equal_comfort" / "results.json"
+    p = MODELS_ROOT() / "tou_equal_comfort" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         truth["tou_equal"] = {
@@ -122,13 +135,13 @@ def load_truth():
         }
 
     # --- 训练步数扫描 ---
-    p = PROJECT_ROOT / "models" / "train_steps" / "results.json"
+    p = MODELS_ROOT() / "train_steps" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         truth["train_steps"] = d.get("means")
 
     # --- 参数扫描（完整）---
-    p = PROJECT_ROOT / "models" / "param_sweep" / "results.json"
+    p = MODELS_ROOT() / "param_sweep" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         summary = {}
@@ -146,7 +159,7 @@ def load_truth():
         truth["param_sweep"] = summary
 
     # --- 奖励权重重标定 ---
-    p = PROJECT_ROOT / "models" / "reward_rebalance" / "results.json"
+    p = MODELS_ROOT() / "reward_rebalance" / "results.json"
     if p.exists():
         d = json.load(open(p, encoding="utf-8"))
         truth["reward_rebalance"] = {

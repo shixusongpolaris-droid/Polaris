@@ -1,0 +1,54 @@
+{
+  "config": {
+    "timesteps": 5000,
+    "eval_episodes": 5,
+    "weight_mode": "scenario",
+    "tou": false,
+    "energy_scale": null,
+    "temp_scale": null,
+    "seed": 42,
+    "tag": "smoke_newparam",
+    "n_envs": 4,
+    "gamma": 0.99,
+    "skip_baselines": true
+  },
+  "train_time_sec": 1.4349496364593506,
+  "n_episodes_trained": 12,
+  "policy_params": 44453,
+  "results": {
+    "PPO(本方法)": {
+      "total_energy_kwh": [
+        52.085573669162955,
+        1.164015145699608
+      ],
+      "energy_per_day_kwh": [
+        7.440796238451851,
+        0.16628787795708663
+      ],
+      "discomfort_ratio": [
+        0.23095238095238096,
+        0.0066149139199085894
+      ],
+      "temp_dev_rmse": [
+        0.6511600986520346,
+        0.02696167803376339
+      ],
+      "response_delay_mean": [
+        4.493087027914614,
+        1.105351772747487
+      ],
+      "recovery_time_mean": [
+        6.633333333333333,
+        2.433470315779047
+      ],
+      "switch_per_day": [
+        27.74285714285714,
+        0.8731832451392068
+      ],
+      "mean_reward": [
+        -1.4562475890466724,
+        0.05076427973589306
+      ]
+    }
+  }
+}

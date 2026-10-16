@@ -449,8 +449,10 @@ def main():
                     default=[0.10, 0.20, 0.30, 0.40],
                     help="实验2 扫描的最低功率比例")
     ap.add_argument("--ua-values", type=float, nargs="+",
-                    default=[0.03, 0.04, 0.06, 0.08],
-                    help="实验2 扫描的传热系数")
+                    default=[0.070, 0.115, 0.170, 0.240],
+                    help=("实验2 扫描的传热系数。"
+                          "以实测标定值 0.115 为中心向两侧展开"
+                          "（标定依据见 docs/仿真热参数标定报告.md）"))
     args = ap.parse_args()
 
     if args.quick:
@@ -459,7 +461,7 @@ def main():
         args.timesteps = 40000
         args.lambdas = [0.5, 2.0]
         args.power_ratios = [0.20, 0.40]
-        args.ua_values = [0.04, 0.08]
+        args.ua_values = [0.08, 0.115, 0.17]
 
     t0 = time.time()
     print("=" * 76)
