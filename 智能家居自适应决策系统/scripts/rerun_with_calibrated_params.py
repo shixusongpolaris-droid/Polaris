@@ -97,11 +97,24 @@ def main():
     log("=" * 78)
     log(" 用标定后的热参数重跑全部关键实验")
     log("=" * 78)
-    log(f" 参数：ua_coef=0.115, internal_gain=0.80, "
-        f"temp_outdoor_mean=22.0, temp_outdoor_swing=3.0")
+    # 从配置读取实际参数打印，避免文字与实际不符
+    try:
+        sys.path.insert(0, PROJ)
+        from src.env.config import SimConfig as _SC
+        _c = _SC()
+        log(f" 实际参数（读自 src/env/config.py）：")
+        log(f"   ua_coef={_c.ua_coef}（tau={15.0/_c.ua_coef:.1f} 分钟）  "
+            f"internal_gain={_c.internal_gain}  "
+            f"ac_coef={_c.ac_coef}  ac_max_cooling={_c.ac_max_cooling}")
+        log(f"   temp_outdoor_mean={_c.temp_outdoor_mean}  "
+            f"temp_outdoor_swing={_c.temp_outdoor_swing}")
+    except Exception as e:
+        log(f"  （读取配置失败：{e}）")
 
+    # 备份同时保留历史代次：除 _oldparams_backup 外，
+    # 若已有 _gen1_backup / _gen2_backup 则不再覆盖。
     nb = backup_old()
-    log(f" 已备份旧结果 {nb} 个 json 到 models/_oldparams_backup/")
+    log(f" 已备份上一代结果 {nb} 个 json 到 models/_oldparams_backup/")
 
     results = []
     t_all = time.time()

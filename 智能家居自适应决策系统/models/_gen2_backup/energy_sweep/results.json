@@ -1,0 +1,111 @@
+{
+  "args": {
+    "seeds": 2,
+    "episodes": 8,
+    "timesteps": 300000,
+    "energy_scales": [
+      10.0,
+      30.0,
+      60.0
+    ],
+    "lookahead_weights": [
+      0.6,
+      0.0
+    ],
+    "quick": false
+  },
+  "rule_baseline": {
+    "cost": 0.9769201584212117,
+    "cost_sd": 0.0411450011847496,
+    "discomfort": 0.255859375,
+    "energy": 2.5469215039895094,
+    "valley_share": 0.7531268951565527,
+    "peak_share": 0.2468731048434472
+  },
+  "results": [
+    {
+      "energy_scale": 10.0,
+      "lookahead_weight": 0.6,
+      "metrics": {
+        "cost": 2.9180366812044953,
+        "cost_sd": 0.042603633861527254,
+        "discomfort": 0.07682291666666667,
+        "energy": 5.830121457542427,
+        "valley_share": 0.41319796613511867,
+        "peak_share": 0.5868020338648814
+      },
+      "diff_vs_rule": 1.9869756049668352,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 30.0,
+      "lookahead_weight": 0.6,
+      "metrics": {
+        "cost": 1.5713834629226227,
+        "cost_sd": 0.03981338001461865,
+        "discomfort": 0.08798363095238096,
+        "energy": 3.4522753782634514,
+        "valley_share": 0.5190858572026109,
+        "peak_share": 0.4809141427973891
+      },
+      "diff_vs_rule": 0.6085075626467935,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 60.0,
+      "lookahead_weight": 0.6,
+      "metrics": {
+        "cost": 0.7480399812141145,
+        "cost_sd": 0.036709007849602224,
+        "discomfort": 0.13234747023809523,
+        "energy": 1.4296579588465312,
+        "valley_share": 0.3030661011545637,
+        "peak_share": 0.6969338988454363
+      },
+      "diff_vs_rule": -0.23428749548682418,
+      "verdict": "超过规则"
+    },
+    {
+      "energy_scale": 10.0,
+      "lookahead_weight": 0.0,
+      "metrics": {
+        "cost": 3.7347473330404553,
+        "cost_sd": 0.053692950897672904,
+        "discomfort": 0.06724330357142858,
+        "energy": 7.174421353498726,
+        "valley_share": 0.31155331206059217,
+        "peak_share": 0.6884466879394078
+      },
+      "diff_vs_rule": 2.8229811319239566,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 30.0,
+      "lookahead_weight": 0.0,
+      "metrics": {
+        "cost": 1.5883955939959136,
+        "cost_sd": 0.05524459776911475,
+        "discomfort": 0.09095982142857142,
+        "energy": 3.5096551337218966,
+        "valley_share": 0.5286087814192699,
+        "peak_share": 0.4713912185807302
+      },
+      "diff_vs_rule": 0.6259216071074831,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 60.0,
+      "lookahead_weight": 0.0,
+      "metrics": {
+        "cost": 0.9900229930886364,
+        "cost_sd": 0.03481166327449555,
+        "discomfort": 0.16824776785714285,
+        "energy": 2.2754342282889577,
+        "valley_share": 0.5765926942104153,
+        "peak_share": 0.42340730578958474
+      },
+      "diff_vs_rule": 0.013412390515720346,
+      "verdict": "仍逊于规则"
+    }
+  ]
+}
