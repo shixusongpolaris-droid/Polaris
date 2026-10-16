@@ -1,0 +1,49 @@
+{
+  "ground_truth": {
+    "ua_w_per_k": 250.0,
+    "c_j_per_k": 1800000.0,
+    "q_internal_w": 120.0,
+    "ac_cooling_max_w": 3500.0,
+    "ac_gain_per_k": 1400.0,
+    "ac_cop": 3.0,
+    "ac_setpoint_c": 26.0,
+    "ac_hysteresis_c": 1.0,
+    "temp_out_mean_c": 28.0,
+    "temp_out_swing_c": 5.0,
+    "temp_in_init_c": 28.0,
+    "sample_interval_s": 10,
+    "seed": 2026,
+    "days": 3
+  },
+  "days": [
+    {
+      "date": "2026-10-11",
+      "rows": 8640,
+      "ac_on_hours": 6.53,
+      "data_file": "2026-10-11.csv",
+      "event_file": "2026-10-11_events.csv"
+    },
+    {
+      "date": "2026-10-12",
+      "rows": 8640,
+      "ac_on_hours": 3.69,
+      "data_file": "2026-10-12.csv",
+      "event_file": "2026-10-12_events.csv"
+    },
+    {
+      "date": "2026-10-13",
+      "rows": 8640,
+      "ac_on_hours": 3.71,
+      "data_file": "2026-10-13.csv",
+      "event_file": "2026-10-13_events.csv"
+    }
+  ],
+  "summary": {
+    "total_rows": 25920,
+    "total_ac_hours": 13.93,
+    "ac_duty_cycle": 0.1934,
+    "ac_cooling_kwh_per_day": 9.642,
+    "ac_electric_kwh_per_day": 3.214,
+    "occupancy_ratio": null
+  }
+}
