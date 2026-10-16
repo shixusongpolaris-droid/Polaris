@@ -80,12 +80,35 @@ def make_rew_cfg(energy_scale=None, weight_mode="scenario"):
 
 
 def thermostat(env, target, deadband=0.5):
-    T = env.sim.state.temp_in
-    if T > target + deadband:
-        return 2
-    if T < target - deadband:
-        return 0
-    return 1
+    """带滞环的恒温器控制，返回空调档位索引。
+
+    ⚠️ 修订记录（2026-10-17）：
+        初版此函数在"房间过热"分支返回常量 2，但 `ac_idx` 的语义是
+        0=关闭、1~5 = 25/26/27/28/29 °C，返回 2 等于把设定温度调到
+        26 °C，即在过热时反而减小制冷量。该缺陷使规则基线的不达标率
+        虚高到 17.9%（正确约 4.6%），并导致"强化学习双赢"的错误结论
+        （见 docs/能耗权重验证.md 顶部的更正提示）。
+
+        现已改为与 `evaluate_all.py` 一致的正确写法：过热时使用目标
+        温度对应的档位（`ac_idx_for`），过冷时关闭，滞环区内维持。
+        修正版的对比见 `scripts/verify_energy_scale_fixed.py`。
+    """
+    t = env.get_obs_dict()["temp_in"]
+    if t > target + deadband:
+        return ac_idx_for(target, env.act_cfg)
+    if t < target - deadband:
+        return AC_OFF
+    return env.sim.state.ac_idx
+
+
+def ac_idx_for(target_c, cfg):
+    """把目标温度映射为最接近的空调档位索引（与 evaluate_all.py 一致）。"""
+    best, best_d = AC_OFF, 1e9
+    for i, s in enumerate(cfg.ac_setpoints):
+        d = abs(s - target_c)
+        if d < best_d:
+            best_d, best = d, i + 1
+    return best
 
 
 def policy_rule(env):
