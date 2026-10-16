@@ -116,7 +116,7 @@ def load_timeline():
             out.append({
                 "start": s, "end": e,
                 "ac_on": ("开" in str(r.get("ac", ""))),
-                "occupied": ("在房间" in str(r.get("state", ""))),
+                "occupied": (str(r.get("state", "")).strip().startswith("在房间")),
                 "window": ("开" in str(r.get("door_window", ""))),
             })
     return out

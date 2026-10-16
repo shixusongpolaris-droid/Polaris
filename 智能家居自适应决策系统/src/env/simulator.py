@@ -347,15 +347,34 @@ class HomeSimulator:
     # ------------------------------------------------------------
     # 物理演变
     # ------------------------------------------------------------
+    def _solar_factor(self) -> float:
+        """当前时刻的太阳因子（0~1），与 `_update_outdoor` 的口径一致。
+
+        6:00-18:00 之间取 sin(pi*(hour-6)/12)，其余为 0。
+        日照增益项使用该因子，而非室内光照值——这样在复演外部光照时
+        仍然按"真实太阳高度"计热，且与联合标定的输入完全一致。
+        """
+        hf = self.sim_time.hour + self.sim_time.minute / 60.0
+        if 6.0 <= hf <= 18.0:
+            return math.sin(math.pi * (hf - 6.0) / 12.0)
+        return 0.0
+
     def _update_temperature(
         self, ac_cooling_cmd: float, ac_on: bool, vent_on: bool
     ) -> None:
         """按一阶热模型更新室内温度。
 
-        温度变化由三部分组成：
+        温度变化由五部分组成：
             1. 围护结构传热：向室外温度靠拢
-            2. 空调制冷：向设定温度靠拢（受最大能力限制）
-            3. 通风换热 + 内部热增益
+            2. 基础得热：楼板/邻户传热、电器待机、墙体蓄热释放
+               （与是否有人无关）
+            3. 日照得热：按太阳因子加权
+            4. 空调制冷：向设定温度靠拢（受最大能力限制）
+            5. 通风换热 + 人员得热
+
+        说明（2026-10-17）：第 2、3 项为本次新增。此前模型只有一个
+        按"有人"生效的热增益，缺少与人员无关的基础得热，导致标定结果
+        在物理上不自洽（详见 SimConfig.gain_base 的注释）。
         """
         cfg = self.sim_cfg
         T = self.state.temp_in
@@ -363,7 +382,13 @@ class HomeSimulator:
         # 1) 围护结构传热
         dT = -cfg.ua_coef * (T - self._temp_out)
 
-        # 2) 空调制冷
+        # 2) 基础得热（与人员无关）
+        dT += cfg.gain_base
+
+        # 3) 日照得热
+        dT += cfg.solar_coef * self._solar_factor()
+
+        # 4) 空调制冷
         if ac_on:
             # 制冷需求：室内与设定温度之差，乘以等效降温系数
             demand = cfg.ac_coef * (T - ac_cooling_cmd)
@@ -371,7 +396,7 @@ class HomeSimulator:
             cooling = min(max(demand, 0.0), cfg.ac_max_cooling)
             dT -= cooling
 
-        # 3) 通风换热 + 内部热增益
+        # 5) 通风换热 + 人员得热
         if vent_on:
             dT -= cfg.vent_coef * (T - self._temp_out)
         if self.state.occupied:

@@ -109,7 +109,7 @@ def load_occ():
                 e = datetime.strptime(r["end"][:19], "%Y-%m-%d %H:%M:%S")
             except (ValueError, KeyError):
                 continue
-            segs.append((s, e, "在房间" in str(r.get("state", ""))))
+            segs.append((s, e, str(r.get("state", "")).strip().startswith("在房间")))
     return segs
 
 

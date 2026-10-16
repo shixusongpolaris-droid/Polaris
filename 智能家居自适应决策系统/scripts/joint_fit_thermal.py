@@ -90,7 +90,7 @@ def load_occ():
                 e = datetime.strptime(r["end"][:19], "%Y-%m-%d %H:%M:%S")
             except (ValueError, KeyError):
                 continue
-            segs.append((s, e, "在房间" in str(r.get("state", ""))))
+            segs.append((s, e, str(r.get("state", "")).strip().startswith("在房间")))
     return segs
 
 
@@ -167,24 +167,47 @@ def build_series():
 
 
 def simulate(series, p):
-    """按参数 p 前向积分整个序列，返回预测温度数组。"""
-    ua, gain, solar, ac_c, ac_m = p
+    """按参数 p 前向积分整个序列，返回预测温度数组。
+
+    参数 p = (ua, gain_base, gain_occ, solar, ac_c, ac_m)
+
+        dT/dt = -ua·(T − T_out)          围护传热
+                + gain_base              基础得热（楼板/邻户传热、电器待机、
+                                         墙体蓄热释放），与是否有人无关
+                + gain_occ·1{有人}        人员活动得热
+                + solar·太阳因子          日照
+                − min(ac_coef·max(T−T_set,0), ac_max)·1{空调开}
+
+    为什么把 gain 拆成 base 与 occ
+    ------------------------------
+    初版只有一个 gain 且乘以"有人"指示。当时 occupancy 因字符串匹配缺陷
+    （"在房间" in "不在房间" 为真）被误判为 100%，该 gain 实际充当了
+    "常开热源"，恰好补偿了模型缺失的基础得热，因此拟合看似很好
+    （RMSE 1.728，tau=72 分钟）。
+
+    修正占用判定（真实在室率 68%）后，同一模型必须靠"极慢响应
+    （tau=706 分钟）+ 极大增益（gain/ua=22.9 °C）"硬凑，
+    RMSE 反而升到 1.896，且参数在物理上不可能。
+
+    把基础得热显式建模后，两个热源各司其职，参数可解释性显著改善。
+    """
+    ua, g_base, g_occ, solar, ac_c, ac_m = p
     dt = DT_MIN / 60.0
     pred = [series[0]["T"]]
     for i in range(len(series) - 1):
         s = series[i]
         T = pred[-1]
-        dT = -ua * (T - s["tout"]) + (gain if s["occ"] else 0.0) \
-            + solar * s["sun"]
+        dT = -ua * (T - s["tout"]) + g_base \
+            + (g_occ if s["occ"] else 0.0) + solar * s["sun"]
         if s["ac"]:
             dT -= min(ac_c * max(T - T_SET, 0.0), ac_m)
-        # dT 的单位是 °C/小时，dt 单位为小时，故一步增量为 dT·dt
+        # dT 单位为 °C/小时，dt 单位为小时
         pred.append(T + dT * dt)
     return pred
 
 
 def rmse(series, p):
-    if p[0] <= 0 or p[1] < 0 or p[2] < 0 or p[3] < 0 or p[4] <= 0:
+    if p[0] <= 0 or any(x < 0 for x in p[1:]) or p[5] <= 0:
         return 1e9
     pred = simulate(series, p)
     se = sum((a["T"] - b) ** 2 for a, b in zip(series, pred))
@@ -205,55 +228,67 @@ def main():
 
     from src.env.config import SimConfig
     cur = SimConfig()
-    print(f"  当前仿真参数：ua={cur.ua_coef}, gain={cur.internal_gain}, "
+    print(f"  当前仿真参数：ua={cur.ua_coef}, gain={cur.internal_gain}(全部按有人计), "
           f"ac_coef={cur.ac_coef}, ac_max={cur.ac_max_cooling}")
-    r_cur = rmse(series, [cur.ua_coef, cur.internal_gain, 0.0,
+    # 当前配置只有一个 gain 且按"有人"生效，为可比起见令 gain_occ=cur 值、
+    # gain_base=0
+    r_cur = rmse(series, [cur.ua_coef, 0.0, cur.internal_gain, 0.0,
                           cur.ac_coef, cur.ac_max_cooling])
     print(f"  当前参数的全时段 RMSE = {r_cur:.4f} °C")
     print()
 
     # 粗搜 + Nelder-Mead
+    # 参数 = (ua, gain_base, gain_occ, solar, ac_c, ac_m)
     best = None
-    for ua in [0.1, 0.3, 0.6, 1.0, 1.6, 2.4, 3.5, 5.0]:
-        for gain in [0.5, 2.0, 5.0, 10.0, 18.0, 30.0]:
-            for solar in [0.0, 1.0, 3.0]:
-                for ac_c in [1.0, 3.0, 8.0]:
-                    for ac_m in [2.0, 6.0]:
-                        r = rmse(series, [ua, gain, solar, ac_c, ac_m])
-                        if best is None or r < best[0]:
-                            best = (r, ua, gain, solar, ac_c, ac_m)
+    for ua in [0.1, 0.3, 0.6, 1.0, 1.6, 2.4, 3.5]:
+        for g_base in [0.0, 1.0, 3.0, 6.0, 10.0, 16.0, 24.0]:
+            for g_occ in [0.0, 1.0, 3.0, 6.0]:
+                for solar in [0.0, 1.0, 3.0]:
+                    for ac_c in [1.0, 3.0, 8.0]:
+                        for ac_m in [2.0, 8.0]:
+                            r = rmse(series, [ua, g_base, g_occ, solar,
+                                              ac_c, ac_m])
+                            if best is None or r < best[0]:
+                                best = (r, ua, g_base, g_occ, solar,
+                                        ac_c, ac_m)
     print(f"  粗搜最优 RMSE = {best[0]:.4f}")
-    print(f"    ua={best[1]:.3f} gain={best[2]:.2f} solar={best[3]:.2f} "
-          f"ac_coef={best[4]:.2f} ac_max={best[5]:.2f}")
+    print(f"    ua={best[1]:.3f} gain_base={best[2]:.2f} "
+          f"gain_occ={best[3]:.2f} solar={best[4]:.2f} "
+          f"ac_coef={best[5]:.2f} ac_max={best[6]:.2f}")
 
     try:
         from scipy.optimize import minimize
         res = minimize(lambda p: rmse(series, p), list(best[1:]),
                        method="Nelder-Mead",
                        options={"xatol": 1e-4, "fatol": 1e-6,
-                                "maxiter": 8000, "maxfev": 20000})
+                                "maxiter": 12000, "maxfev": 30000})
         if res.fun < best[0]:
             best = (float(res.fun), *[float(x) for x in res.x])
     except Exception as e:
         print(f"  细化失败：{e}")
 
-    r, ua, gain, solar, ac_c, ac_m = best
+    r, ua, g_base, g_occ, solar, ac_c, ac_m = best
     print()
     print("=" * 80)
     print(" 联合标定结果")
     print("=" * 80)
     print(f"  全时段 RMSE = {r:.4f} °C   （当前参数 {r_cur:.4f}）")
-    print(f"    ua_coef        {cur.ua_coef:>8.3f} -> {ua:>8.3f}")
-    print(f"    internal_gain  {cur.internal_gain:>8.2f} -> {gain:>8.2f}")
+    print(f"    ua_coef        {cur.ua_coef:>8.3f} -> {ua:>8.3f}"
+          f"   (tau = {60.0/ua:.0f} 分钟)")
+    print(f"    gain_base      {'(无此项)':>8} -> {g_base:>8.2f} °C/小时")
+    print(f"    gain_occ       {cur.internal_gain:>8.2f} -> {g_occ:>8.2f} °C/小时")
     print(f"    solar_coef     {'(无此项)':>8} -> {solar:>8.2f}")
     print(f"    ac_coef        {cur.ac_coef:>8.2f} -> {ac_c:>8.2f}")
     print(f"    ac_max_cooling {cur.ac_max_cooling:>8.2f} -> {ac_m:>8.2f}")
     print()
-    print(f"    tau = {60.0/ua:.1f} 分钟    gain/ua = {gain/ua:.2f} °C")
+    print(f"    (gain_base + gain_occ)/ua = {(g_base+g_occ)/ua:.2f} °C "
+          f"  <- 有人时的稳态室内外温差")
+    print(f"    gain_base/ua              = {g_base/ua:.2f} °C "
+          f"  <- 无人时的稳态室内外温差")
     print(f"    最大制冷 {ac_m:.2f} °C/步 = {ac_m*4:.1f} °C/小时")
 
     # 分状态误差
-    pred = simulate(series, [ua, gain, solar, ac_c, ac_m])
+    pred = simulate(series, [ua, g_base, g_occ, solar, ac_c, ac_m])
     for label, sel in [("空调开启段", lambda s: s["ac"]),
                        ("空调关闭段", lambda s: not s["ac"]),
                        ("有人段", lambda s: s["occ"]),
@@ -266,15 +301,19 @@ def main():
 
     out = {"n_steps": len(series),
            "current": {"ua_coef": cur.ua_coef,
-                       "internal_gain": cur.internal_gain,
+                       "gain_base": 0.0,
+                       "gain_occ": cur.internal_gain,
                        "solar_coef": 0.0,
                        "ac_coef": cur.ac_coef,
                        "ac_max_cooling": cur.ac_max_cooling,
                        "rmse": r_cur},
-           "fitted": {"ua_coef": ua, "internal_gain": gain,
+           "fitted": {"ua_coef": ua, "gain_base": g_base,
+                      "gain_occ": g_occ,
                       "solar_coef": solar, "ac_coef": ac_c,
                       "ac_max_cooling": ac_m, "rmse": r,
-                      "tau_min": 60.0 / ua, "gain_over_ua": gain / ua}}
+                      "tau_min": 60.0 / ua,
+                      "offset_occupied": (g_base + g_occ) / ua,
+                      "offset_empty": g_base / ua}}
     with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
 
@@ -295,23 +334,37 @@ def main():
           "合起来才能把 τ 与 gain 分开。", "",
           "## 二、模型", "",
           "```",
-          "T' = T + Δt·[ −ua·(T − T_out(t))",
-          "              + gain·1{有人}(t)",
-          "              + solar·(光照(t)/1000) ]",
-          "         − min(ac_coef·max(T − T_set, 0), ac_max)·1{空调开}",
+          "dT/dt = −ua·(T − T_out(t))            围护传热",
+          "        + gain_base                    基础得热（楼板/邻户传热、",
+          "                                       电器待机、墙体蓄热释放）",
+          "        + gain_occ·1{有人}(t)          人员活动得热",
+          "        + solar·太阳因子(t)             日照",
+          "        − min(ac_coef·max(T−T_set,0), ac_max)·1{空调开}",
           "```", "",
           f"空调设定温度取实测报告的 **{T_SET} °C**；Δt = {DT_MIN} 分钟。", "",
+          "**为什么把 gain 拆成两部分**：初版只有一个 gain 且乘以"
+          "\"有人\"指示。",
+          "当 occupancy 因字符串匹配缺陷（`\"在房间\" in \"不在房间\"` 为真）",
+          "被误判为 100% 时，该 gain 实际充当\"常开热源\"，恰好补偿了模型",
+          "缺失的基础得热，因此拟合看似很好（RMSE 1.728、τ=72 分钟）。",
+          "修正占用判定（真实在室率 68%）后，同一模型必须靠\"极慢响应",
+          "（τ=706 分钟）+ 极大增益（gain/ua=22.9 °C）\"硬凑，",
+          "RMSE 反而升到 1.896，且参数在物理上不可能。",
+          "把基础得热显式建模后两个热源各司其职。", "",
           "## 三、结果", "",
-          "| 参数 | 当前仿真 | **联合标定** |",
+          "| 参数 | 折当前仿真 | **联合标定** |",
           "|---|---|---|",
-          f"| `ua_coef` | {cur.ua_coef} | **{ua:.3f}** |",
-          f"| `internal_gain` | {cur.internal_gain} | **{gain:.2f}** |",
+          f"| `ua_coef` | {cur.ua_coef} | **{ua:.4f}**（τ = {60.0/ua:.0f} 分钟） |",
+          f"| `gain_base` | 无此项 | **{g_base:.2f}** °C/小时 |",
+          f"| `gain_occ` | {cur.internal_gain}（全按有人计） | **{g_occ:.2f}** °C/小时 |",
           f"| `solar_coef` | 无此项 | **{solar:.2f}** |",
           f"| `ac_coef` | {cur.ac_coef} | **{ac_c:.2f}** |",
           f"| `ac_max_cooling` | {cur.ac_max_cooling} | **{ac_m:.2f}** |",
           "",
           f"全时段 RMSE：**{r:.4f} °C**（当前参数为 {r_cur:.4f} °C）", "",
-          f"隐含 τ = **{60.0/ua:.1f} 分钟**；`gain/ua` = {gain/ua:.2f} °C；",
+          f"有人时稳态室内外温差 = (gain_base+gain_occ)/ua = "
+          f"**{(g_base+g_occ)/ua:.2f} °C**；",
+          f"无人时 = gain_base/ua = **{g_base/ua:.2f} °C**；",
           f"最大制冷 {ac_m:.2f} °C/步 = {ac_m*4:.1f} °C/小时。", ""]
     with open(OUT_MD, "w", encoding="utf-8") as f:
         f.write("\n".join(md) + "\n")

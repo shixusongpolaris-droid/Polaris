@@ -118,7 +118,7 @@ def load_occupancy():
             except (ValueError, KeyError):
                 continue
             out.append({"start": s, "end": e,
-                        "occ": "在房间" in str(r.get("state", ""))})
+                        "occ": str(r.get("state", "")).strip().startswith("在房间")})
     return out
 
 
