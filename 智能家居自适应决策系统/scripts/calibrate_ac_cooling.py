@@ -48,6 +48,7 @@ models/ac_calibration.json
 import csv
 import io
 import json
+import math
 import os
 import sys
 from datetime import datetime, timedelta
