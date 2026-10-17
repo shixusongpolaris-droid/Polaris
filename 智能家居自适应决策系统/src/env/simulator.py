@@ -557,6 +557,16 @@ class HomeSimulator:
 
         # ---------- 保存切换前的状态（用于计算派生特征）----------
         prev_occ = self.state.occupied
+        # 保存切换前的空调档位。必须在下面写入新档位之前取，
+        # 否则无法判断本步是否为"压缩机启动"。
+        #
+        # 修复记录（2026-10-17）：原先在第 577 行用
+        #     ac_started = (ac_idx > 0 and self.state.ac_idx == 0)
+        # 判断启动，但那时 `self.state.ac_idx` 已被赋为 `ac_idx`
+        # （见下方 562 行），条件退化为 `ac_idx > 0 and ac_idx == 0`，
+        # 恒为 False。后果是 `ac_startup_penalty_kwh` 从未计入能耗、
+        # `ac_start_count` 恒为 0，规则控制频繁启停的代价被完全忽略。
+        prev_ac_idx = self.state.ac_idx
 
         # ---------- 执行动作并推进物理状态 ----------
         self.state.ac_idx = ac_idx
@@ -574,7 +584,8 @@ class HomeSimulator:
         self._update_humidity(ac_on, vent_on)
 
         # ---------- 计算并累加能耗 ----------
-        ac_started = (ac_idx > 0 and self.state.ac_idx == 0)
+        # 本步是否发生"压缩机启动"：上一步关闭、本步开启
+        ac_started = (ac_idx > 0 and prev_ac_idx == 0)
         e_load_only = self._step_energy_kwh(ac_idx, light_idx, vent_idx,
                                             max(cooling_delivered, 0.0),
                                             ac_started=ac_started)
