@@ -59,6 +59,15 @@ def main():
     P("- gen5 结果保存在 `models/_gen5_partial/`；更早各代在 "
       "`models/_gen{2,3,4}_backup/`")
     P()
+    P("> ⚠️ **数据源说明（由团队复核成员 fix-reviewer 指出，务必注意）**")
+    P("> `models/_gen5_partial/` 是在 gen6 重跑前对当时目录的整体快照，")
+    P("> 因此**它混装了 3 个已经是 gen6 的子目录**：`evaluation`、")
+    P("> `energy_scale_ci`、`rule_ceiling`（这三项在快照前就已被 gen6 覆盖）。")
+    P("> 真正的 gen5 数据在 `models/_gen5_evaluation/`、")
+    P("> `models/_gen5_energy_scale_ci/`、`models/_gen5_rule_ceiling/`。")
+    P("> 本报告的第四节改用 `_gen5_evaluation`，故数字无误；")
+    P("> 引用上述三个目录时请勿使用 `_gen5_partial` 里的对应副本。")
+    P()
 
     # ================= 1 消融 =================
     P("## 一、消融实验")
@@ -182,20 +191,66 @@ def main():
     P()
 
     # ================= 7 收敛性小结 =================
+    # 修正（2026-10-18，由团队复核成员 fix-reviewer 指出）：
+    # 原先把这三代的百分比写成字面量，本次恰好正确，但数据一变就失效。
+    # 现改为从各代 backup 目录现算。
+    def a2_vs_a1(root):
+        d = L(root, "ablation_multiseed/results.json")
+        if not d:
+            return None
+        a2 = num(d, "groups", "A2 场景化权重(本方法)", "energy_per_day_kwh")
+        a1 = num(d, "groups", "A1 固定权重", "energy_per_day_kwh")
+        d2 = num(d, "groups", "A2 场景化权重(本方法)", "discomfort_ratio")
+        d1 = num(d, "groups", "A1 固定权重", "discomfort_ratio")
+        if None in (a2, a1, d2, d1) or not a1:
+            return None
+        return (a2 - a1) / a1, d2, d1
+
+    def stor(root):
+        d = L(root, "storage/results.json")
+        if not d:
+            return None
+        r = d.get("results", {})
+        a = r.get("A 规则控制（无储能）", {}).get("cost")
+        b = r.get("B 规则+储能(4kWh)", {}).get("cost")
+        c = r.get("C PPO（无储能）", {}).get("cost")
+        e = r.get("D PPO+储能(4kWh)", {}).get("cost")
+        if None in (a, b, c, e):
+            return None
+        return (a - b) / a, (c - e) / c
+
     P("## 七、哪些结论在 gen6 下收敛了")
     P()
     P("| 结论 | 跨代表现 | 判定 |")
     P("|---|---|---|")
-    P("| 场景化权重（A2）不省电 | gen4 +6.9%、gen5 +6.6%、"
-      "gen6 +10.7% | ✅ **收敛** |")
-    P("| 储能对双方都有益 | gen4/5/6 均正（PPO +26.5%/+14.9%/+14.4%）"
-      " | ✅ **收敛** |")
+    # 场景化权重：三代电量差
+    a2_parts = []
+    for name, root in [("gen4", "_gen4_backup"), ("gen5", "_gen5_partial"),
+                       ("gen6", None)]:
+        v = a2_vs_a1(root)
+        if v:
+            a2_parts.append(f"{name} {v[0]:+.1%}")
+    P(f"| 场景化权重（A2）不省电 | {'、'.join(a2_parts)} "
+      f"（A2 电量连续三代高于 A1） | ✅ **收敛** |")
+    # 储能：三代收益
+    s_parts = []
+    for name, root in [("gen4", "_gen4_backup"), ("gen5", "_gen5_partial"),
+                       ("gen6", None)]:
+        v = stor(root)
+        if v:
+            s_parts.append(f"{name} {v[0]:+.1%}/{v[1]:+.1%}")
+    P(f"| 储能对双方都有益（规则/PPO） | {'、'.join(s_parts)} "
+      f"| ✅ **收敛** |")
     P("| `energy_scale` 是决定变量 | 各代均单调，默认权重下 RL 电量约为"
       "规则 2 倍 | ✅ **收敛** |")
     P("| 规则在低舒适区更省 | 各代一致 | ✅ **收敛** |")
     P("| 规则可达更低不舒适 | 各代一致（gen6 达 0.00%） | ✅ **收敛** |")
-    P("| 循环网络（RecurrentPPO）优于普通 PPO | gen2 是、gen3-6 均否 "
-      "| ⚠️ 不稳定 |")
+    # 修正（2026-10-18）：原先写"gen2 是、gen3-6 均否"有误。按该实验自身
+    # 的判据（谷段占比提升 3pp 且更便宜），gen3 的 RecurrentPPO 也满足
+    # （谷段 36.8% vs PPO 26.6%，且 1.647 < 3.087），故正确表述为
+    # "gen2/gen3 是、gen4-6 否"。
+    P("| 循环网络（RecurrentPPO）优于普通 PPO | "
+      "gen2/gen3 是、gen4/gen5/gen6 否 | ⚠️ **不稳定** |")
     P("| 具体电量/电费数字 | 每代都变 | ❌ 不稳定（勿单独引用） |")
     P()
 
