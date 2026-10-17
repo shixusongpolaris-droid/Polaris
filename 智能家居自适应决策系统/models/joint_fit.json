@@ -1,13 +1,13 @@
 {
   "n_steps": 200,
   "current": {
-    "ua_coef": 0.1383,
+    "ua_coef": 0.15175,
     "gain_base": 0.0,
     "gain_occ": 0.0,
     "solar_coef": 0.0,
-    "ac_coef": 2.0125,
-    "ac_max_cooling": 2.1475,
-    "rmse": 4.613833050898506
+    "ac_coef": 1.83,
+    "ac_max_cooling": 2.1175,
+    "rmse": 1.7790417485016807
   },
   "fitted": {
     "ua_coef": 0.607279492959816,

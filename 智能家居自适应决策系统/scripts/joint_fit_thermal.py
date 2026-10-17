@@ -229,13 +229,26 @@ def main():
 
     from src.env.config import SimConfig
     cur = SimConfig()
-    print(f"  当前仿真参数：ua={cur.ua_coef}, gain={cur.internal_gain}(全部按有人计), "
-          f"ac_coef={cur.ac_coef}, ac_max={cur.ac_max_cooling}")
-    # 当前配置只有一个 gain 且按"有人"生效，为可比起见令 gain_occ=cur 值、
-    # gain_base=0
-    r_cur = rmse(series, [cur.ua_coef, 0.0, cur.internal_gain, 0.0,
-                          cur.ac_coef, cur.ac_max_cooling])
-    print(f"  当前参数的全时段 RMSE = {r_cur:.4f} °C")
+    print(f"  当前仿真参数：ua={cur.ua_coef}, gain_base={cur.gain_base}, "
+          f"gain_occ={cur.internal_gain}, solar={cur.solar_coef}, "
+          f"ac_coef={cur.ac_coef}, ac_max={cur.ac_max_cooling}"
+          f"（均为每步 15 分钟量）")
+    # ⚠️ 单位换算（2026-10-17 修正，由团队复核成员 fix-reviewer 指出）：
+    # SimConfig 里的热参数是【每步(15 分钟)】量（simulator 中 dT 直接加到
+    # 温度上、不乘 dt）；而本脚本 simulate() 的模型按【每小时】速率工作，
+    # 最后乘 dt=0.25 小时。因此把 config 的值直接喂进 rmse() 会让动力学
+    # 慢 4 倍，得到的"当前参数 RMSE"严重偏大，使拟合改善被夸大成
+    # "4.6138 -> 1.7790（-61%）"，而真实的同口径比较只差 0.17%。
+    # 修正：统一乘 4 换算到每小时，并补齐 gain_base 与 solar_coef 两项
+    # （旧代码把这两项置 0，本身也与 gen4 之后的模型不符）。
+    r_cur = rmse(series, [cur.ua_coef * 4.0,
+                          cur.gain_base * 4.0,
+                          cur.internal_gain * 4.0,
+                          cur.solar_coef * 4.0,
+                          cur.ac_coef * 4.0,
+                          cur.ac_max_cooling * 4.0])
+    print(f"  当前参数的全时段 RMSE = {r_cur:.4f} °C"
+          f"（已换算到每小时口径，与拟合值可比）")
     print()
 
     # 粗搜 + Nelder-Mead
@@ -286,7 +299,10 @@ def main():
           f"  <- 有人时的稳态室内外温差")
     print(f"    gain_base/ua              = {g_base/ua:.2f} °C "
           f"  <- 无人时的稳态室内外温差")
-    print(f"    最大制冷 {ac_m:.2f} °C/步 = {ac_m*4:.1f} °C/小时")
+    # 单位说明（2026-10-17 修正，由团队复核成员 fix-reviewer 指出）：
+    # ac_m 是拟合出的【每小时】速率（simulate 内部按每小时工作），
+    # 原代码把它标成"°C/步"再乘 4 得"°C/小时"，单位恰好反了。
+    print(f"    最大制冷 {ac_m/4:.4f} °C/步 = {ac_m:.2f} °C/小时")
 
     # 分状态误差
     pred = simulate(series, [ua, g_base, g_occ, solar, ac_c, ac_m])
@@ -366,7 +382,7 @@ def main():
           f"有人时稳态室内外温差 = (gain_base+gain_occ)/ua = "
           f"**{(g_base+g_occ)/ua:.2f} °C**；",
           f"无人时 = gain_base/ua = **{g_base/ua:.2f} °C**；",
-          f"最大制冷 {ac_m:.2f} °C/步 = {ac_m*4:.1f} °C/小时。", ""]
+          f"最大制冷 {ac_m/4:.4f} °C/步 = {ac_m:.2f} °C/小时。", ""]
     with open(OUT_MD, "w", encoding="utf-8") as f:
         f.write("\n".join(md) + "\n")
     print()

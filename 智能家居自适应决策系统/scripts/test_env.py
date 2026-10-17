@@ -151,26 +151,26 @@ def check_dynamics(env: SmartHomeEnv) -> bool:
         return temps
 
     t_no_ac = run_days(ac_idx=0)          # 全程关空调
-    t_ac24 = run_days(ac_idx=ac_25)         # 全程开空调设定 25°C
-    t_ac28 = run_days(ac_idx=ac_27)         # 全程开空调设定 27°C
+    t_ac25 = run_days(ac_idx=ac_25)         # 全程开空调设定 25°C
+    t_ac27 = run_days(ac_idx=ac_27)         # 全程开空调设定 27°C
 
     print("  实验 A：连续 8 小时（32 步）不同空调策略的室温变化")
     print(f"    不开空调      : 起点 {t_no_ac[0]:.2f}°C -> 终点 {t_no_ac[-1]:.2f}°C")
-    print(f"    空调设定 24°C : 起点 {t_ac24[0]:.2f}°C -> 终点 {t_ac24[-1]:.2f}°C")
-    print(f"    空调设定 28°C : 起点 {t_ac28[0]:.2f}°C -> 终点 {t_ac28[-1]:.2f}°C")
+    print(f"    空调设定 25°C : 起点 {t_ac25[0]:.2f}°C -> 终点 {t_ac25[-1]:.2f}°C")
+    print(f"    空调设定 27°C : 起点 {t_ac27[0]:.2f}°C -> 终点 {t_ac27[-1]:.2f}°C")
 
-    if t_ac24[-1] >= t_no_ac[-1]:
+    if t_ac25[-1] >= t_no_ac[-1]:
         print(f"  {FAIL} 开空调后室温未低于不开空调，热模型可能有误")
         ok = False
     else:
-        cool_effect = t_no_ac[-1] - t_ac24[-1]
+        cool_effect = t_no_ac[-1] - t_ac25[-1]
         print(f"    开空调相对不开空调降温幅度: {cool_effect:.2f}°C")
 
     # 设定温度越低应越凉
-    if not (t_ac24[-1] <= t_ac28[-1] + 0.01):
-        print(f"  {WARN} 设定 24°C 的室温未低于设定 28°C，检查功率模型")
+    if not (t_ac25[-1] <= t_ac27[-1] + 0.01):
+        print(f"  {WARN} 设定 25°C 的室温未低于设定 27°C，检查功率模型")
     else:
-        print(f"    设定温度关系正确: 24°C档({t_ac24[-1]:.2f}) <= 28°C档({t_ac28[-1]:.2f})")
+        print(f"    设定温度关系正确: 25°C档({t_ac25[-1]:.2f}) <= 27°C档({t_ac27[-1]:.2f})")
 
     # --- 实验 B：温度连续性（无跳变） ---
     env.reset(seed=11)
