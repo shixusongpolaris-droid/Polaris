@@ -1,0 +1,962 @@
+{
+  "args": {
+    "seeds": 1,
+    "episodes": 4,
+    "timesteps": 80000,
+    "temp_scale": 1.0,
+    "quick": true
+  },
+  "grid": {
+    "ua": [
+      0.07,
+      0.115,
+      0.17,
+      0.24
+    ],
+    "power": [
+      0.25,
+      0.45,
+      0.65
+    ],
+    "gain": [
+      0.3,
+      0.8,
+      1.4,
+      2.0
+    ]
+  },
+  "results": {
+    "无分时电价": [
+      {
+        "ua": 0.07,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.540755786098298,
+          "discomfort_ratio": 0.08258928571428571,
+          "temp_dev_rmse": 0.14160451012454917,
+          "switch_per_day": 11.928571428571429,
+          "cost": 9.540755786098298
+        },
+        "rule": {
+          "energy_per_day_kwh": 6.224182908943634,
+          "discomfort_ratio": 0.38839285714285715,
+          "temp_dev_rmse": 2.598349366715509,
+          "switch_per_day": 27.142857142857142,
+          "cost": 6.224182908943634
+        },
+        "always": {
+          "energy_per_day_kwh": 8.435278262559263,
+          "discomfort_ratio": 0.06287202380952381,
+          "temp_dev_rmse": 0.0794567545270065,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.435278262559263
+        },
+        "diff_vs_rule": 0.5328527335514232,
+        "diff_vs_always": 0.13105406711309045,
+        "discomfort_gap": 0.30580357142857145
+      },
+      {
+        "ua": 0.07,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 11.376754877573516,
+          "discomfort_ratio": 0.11793154761904762,
+          "temp_dev_rmse": 0.23646694505511792,
+          "switch_per_day": 39.142857142857146,
+          "cost": 11.376754877573516
+        },
+        "rule": {
+          "energy_per_day_kwh": 8.05520064122374,
+          "discomfort_ratio": 0.38839285714285715,
+          "temp_dev_rmse": 2.598349366715509,
+          "switch_per_day": 27.142857142857142,
+          "cost": 8.05520064122374
+        },
+        "always": {
+          "energy_per_day_kwh": 12.427430257347451,
+          "discomfort_ratio": 0.06287202380952381,
+          "temp_dev_rmse": 0.0794567545270065,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 12.427430257347451
+        },
+        "diff_vs_rule": 0.41234903812962853,
+        "diff_vs_always": -0.08454486229385562,
+        "discomfort_gap": 0.27046130952380953
+      },
+      {
+        "ua": 0.07,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 15.277424466840227,
+          "discomfort_ratio": 0.12462797619047619,
+          "temp_dev_rmse": 0.4249289042254899,
+          "switch_per_day": 16.107142857142858,
+          "cost": 15.277424466840227
+        },
+        "rule": {
+          "energy_per_day_kwh": 10.915908442529982,
+          "discomfort_ratio": 0.38839285714285715,
+          "temp_dev_rmse": 2.598349366715509,
+          "switch_per_day": 27.142857142857142,
+          "cost": 10.915908442529982
+        },
+        "always": {
+          "energy_per_day_kwh": 17.278929365858133,
+          "discomfort_ratio": 0.06287202380952381,
+          "temp_dev_rmse": 0.0794567545270065,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 17.278929365858133
+        },
+        "diff_vs_rule": 0.3995559368487498,
+        "diff_vs_always": -0.11583500670896482,
+        "discomfort_gap": 0.26376488095238093
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.400769185534502,
+          "discomfort_ratio": 0.05431547619047619,
+          "temp_dev_rmse": 0.1237429327008733,
+          "switch_per_day": 36.0,
+          "cost": 9.400769185534502
+        },
+        "rule": {
+          "energy_per_day_kwh": 6.202290289670298,
+          "discomfort_ratio": 0.29129464285714285,
+          "temp_dev_rmse": 1.137027535155165,
+          "switch_per_day": 26.214285714285715,
+          "cost": 6.202290289670298
+        },
+        "always": {
+          "energy_per_day_kwh": 8.881752616898309,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.881752616898309
+        },
+        "diff_vs_rule": 0.5156931950107464,
+        "diff_vs_always": 0.0584362784039626,
+        "discomfort_gap": 0.23697916666666666
+      },
+      {
+        "ua": 0.115,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 11.385176598506284,
+          "discomfort_ratio": 0.0662202380952381,
+          "temp_dev_rmse": 0.17702237558868653,
+          "switch_per_day": 26.607142857142858,
+          "cost": 11.385176598506284
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.903378919562899,
+          "discomfort_ratio": 0.29129464285714285,
+          "temp_dev_rmse": 1.137027535155165,
+          "switch_per_day": 26.214285714285715,
+          "cost": 7.903378919562899
+        },
+        "always": {
+          "energy_per_day_kwh": 12.521391705622639,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 12.521391705622639
+        },
+        "diff_vs_rule": 0.4405454571240459,
+        "diff_vs_always": -0.09074191861645425,
+        "discomfort_gap": 0.22507440476190477
+      },
+      {
+        "ua": 0.115,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.781741635119365,
+          "discomfort_ratio": 0.3169642857142857,
+          "temp_dev_rmse": 1.1100399388183393,
+          "switch_per_day": 5.928571428571428,
+          "cost": 9.781741635119365
+        },
+        "rule": {
+          "energy_per_day_kwh": 10.691114206306265,
+          "discomfort_ratio": 0.29129464285714285,
+          "temp_dev_rmse": 1.137027535155165,
+          "switch_per_day": 26.214285714285715,
+          "cost": 10.691114206306265
+        },
+        "always": {
+          "energy_per_day_kwh": 17.3412610499081,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 17.3412610499081
+        },
+        "diff_vs_rule": -0.0850587276161073,
+        "diff_vs_always": -0.4359267410272216,
+        "discomfort_gap": 0.02566964285714285
+      },
+      {
+        "ua": 0.17,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 8.694473854466164,
+          "discomfort_ratio": 0.049479166666666664,
+          "temp_dev_rmse": 0.14717321785712237,
+          "switch_per_day": 42.07142857142857,
+          "cost": 8.694473854466164
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.606250499923002,
+          "discomfort_ratio": 0.15215773809523808,
+          "temp_dev_rmse": 0.5644334505043569,
+          "switch_per_day": 25.57142857142857,
+          "cost": 5.606250499923002
+        },
+        "always": {
+          "energy_per_day_kwh": 8.492905276602807,
+          "discomfort_ratio": 0.05245535714285714,
+          "temp_dev_rmse": 0.06578691255841808,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.492905276602807
+        },
+        "diff_vs_rule": 0.5508536150115977,
+        "diff_vs_always": 0.02373376027384416,
+        "discomfort_gap": 0.10267857142857142
+      },
+      {
+        "ua": 0.17,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 10.326779911182296,
+          "discomfort_ratio": 0.08110119047619047,
+          "temp_dev_rmse": 0.2214203855163416,
+          "switch_per_day": 23.75,
+          "cost": 10.326779911182296
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.651817641674705,
+          "discomfort_ratio": 0.15215773809523808,
+          "temp_dev_rmse": 0.5644334505043569,
+          "switch_per_day": 25.57142857142857,
+          "cost": 7.651817641674705
+        },
+        "always": {
+          "energy_per_day_kwh": 12.48809072406312,
+          "discomfort_ratio": 0.05245535714285714,
+          "temp_dev_rmse": 0.06578691255841808,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 12.48809072406312
+        },
+        "diff_vs_rule": 0.34958520900167966,
+        "diff_vs_always": -0.1730697558687835,
+        "discomfort_gap": 0.07105654761904762
+      },
+      {
+        "ua": 0.17,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 1.9047735170507845,
+          "discomfort_ratio": 0.3229166666666667,
+          "temp_dev_rmse": 1.3032903370113946,
+          "switch_per_day": 3.75,
+          "cost": 1.9047735170507845
+        },
+        "rule": {
+          "energy_per_day_kwh": 10.40411521623258,
+          "discomfort_ratio": 0.15215773809523808,
+          "temp_dev_rmse": 0.5644334505043569,
+          "switch_per_day": 25.57142857142857,
+          "cost": 10.40411521623258
+        },
+        "always": {
+          "energy_per_day_kwh": 17.34794178559192,
+          "discomfort_ratio": 0.05245535714285714,
+          "temp_dev_rmse": 0.06578691255841808,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 17.34794178559192
+        },
+        "diff_vs_rule": -0.8169211434645646,
+        "diff_vs_always": -0.8902017576152598,
+        "discomfort_gap": 0.1707589285714286
+      },
+      {
+        "ua": 0.24,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 5.696039275869834,
+          "discomfort_ratio": 0.3463541666666667,
+          "temp_dev_rmse": 0.4789223414869304,
+          "switch_per_day": 6.642857142857142,
+          "cost": 5.696039275869834
+        },
+        "rule": {
+          "energy_per_day_kwh": 4.948857928684019,
+          "discomfort_ratio": 0.09523809523809525,
+          "temp_dev_rmse": 0.33116843109607397,
+          "switch_per_day": 22.28571428571429,
+          "cost": 4.948857928684019
+        },
+        "always": {
+          "energy_per_day_kwh": 8.170959205914787,
+          "discomfort_ratio": 0.041294642857142856,
+          "temp_dev_rmse": 0.05783528408664755,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.170959205914787
+        },
+        "diff_vs_rule": 0.1509805611624222,
+        "diff_vs_always": -0.3028922146929102,
+        "discomfort_gap": 0.25111607142857145
+      },
+      {
+        "ua": 0.24,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 1.6567139604277157,
+          "discomfort_ratio": 0.33742559523809523,
+          "temp_dev_rmse": 0.8567556932066814,
+          "switch_per_day": 10.25,
+          "cost": 1.6567139604277157
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.0195647373698895,
+          "discomfort_ratio": 0.09523809523809525,
+          "temp_dev_rmse": 0.33116843109607397,
+          "switch_per_day": 22.28571428571429,
+          "cost": 7.0195647373698895
+        },
+        "always": {
+          "energy_per_day_kwh": 12.428249636183992,
+          "discomfort_ratio": 0.041294642857142856,
+          "temp_dev_rmse": 0.05783528408664755,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 12.428249636183992
+        },
+        "diff_vs_rule": -0.7639862267231603,
+        "diff_vs_always": -0.8666977242230227,
+        "discomfort_gap": 0.2421875
+      },
+      {
+        "ua": 0.24,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 1.6927098214285798,
+          "discomfort_ratio": 0.46354166666666663,
+          "temp_dev_rmse": 0.9363218127212466,
+          "switch_per_day": 3.6428571428571432,
+          "cost": 1.6927098214285798
+        },
+        "rule": {
+          "energy_per_day_kwh": 9.526928070811001,
+          "discomfort_ratio": 0.09523809523809525,
+          "temp_dev_rmse": 0.33116843109607397,
+          "switch_per_day": 22.28571428571429,
+          "cost": 9.526928070811001
+        },
+        "always": {
+          "energy_per_day_kwh": 17.337188008743393,
+          "discomfort_ratio": 0.041294642857142856,
+          "temp_dev_rmse": 0.05783528408664755,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 17.337188008743393
+        },
+        "diff_vs_rule": -0.8223236484156131,
+        "diff_vs_always": -0.9023653766357658,
+        "discomfort_gap": 0.3683035714285714
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 0.3,
+        "ppo": {
+          "energy_per_day_kwh": 8.212636004027571,
+          "discomfort_ratio": 0.17894345238095238,
+          "temp_dev_rmse": 0.18408447444977707,
+          "switch_per_day": 35.17857142857143,
+          "cost": 8.212636004027571
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.806874730542859,
+          "discomfort_ratio": 0.20610119047619047,
+          "temp_dev_rmse": 1.0084085568287802,
+          "switch_per_day": 26.142857142857142,
+          "cost": 5.806874730542859
+        },
+        "always": {
+          "energy_per_day_kwh": 7.524744948688214,
+          "discomfort_ratio": 0.009300595238095236,
+          "temp_dev_rmse": 0.009413149136114988,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 7.524744948688214
+        },
+        "diff_vs_rule": 0.41429536284482726,
+        "diff_vs_always": 0.09141719221450509,
+        "discomfort_gap": 0.027157738095238082
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.400769185534502,
+          "discomfort_ratio": 0.05431547619047619,
+          "temp_dev_rmse": 0.1237429327008733,
+          "switch_per_day": 36.0,
+          "cost": 9.400769185534502
+        },
+        "rule": {
+          "energy_per_day_kwh": 6.202290289670298,
+          "discomfort_ratio": 0.29129464285714285,
+          "temp_dev_rmse": 1.137027535155165,
+          "switch_per_day": 26.214285714285715,
+          "cost": 6.202290289670298
+        },
+        "always": {
+          "energy_per_day_kwh": 8.881752616898309,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.881752616898309
+        },
+        "diff_vs_rule": 0.5156931950107464,
+        "diff_vs_always": 0.0584362784039626,
+        "discomfort_gap": 0.23697916666666666
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 1.4,
+        "ppo": {
+          "energy_per_day_kwh": 9.1780102624473,
+          "discomfort_ratio": 0.15438988095238096,
+          "temp_dev_rmse": 0.15492494911411797,
+          "switch_per_day": 7.892857142857143,
+          "cost": 9.1780102624473
+        },
+        "rule": {
+          "energy_per_day_kwh": 4.942792726404798,
+          "discomfort_ratio": 0.390625,
+          "temp_dev_rmse": 1.466426222188693,
+          "switch_per_day": 27.285714285714285,
+          "cost": 4.942792726404798
+        },
+        "always": {
+          "energy_per_day_kwh": 8.546643415899672,
+          "discomfort_ratio": 0.1290922619047619,
+          "temp_dev_rmse": 0.1931558061723068,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.546643415899672
+        },
+        "diff_vs_rule": 0.8568470843249459,
+        "diff_vs_always": 0.07387307692901644,
+        "discomfort_gap": 0.23623511904761904
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 2.0,
+        "ppo": {
+          "energy_per_day_kwh": 10.082265917570354,
+          "discomfort_ratio": 0.17931547619047616,
+          "temp_dev_rmse": 0.23296072759197542,
+          "switch_per_day": 10.071428571428573,
+          "cost": 10.082265917570354
+        },
+        "rule": {
+          "energy_per_day_kwh": 4.416915178571439,
+          "discomfort_ratio": 0.5621279761904763,
+          "temp_dev_rmse": 2.4845455491937174,
+          "switch_per_day": 27.357142857142858,
+          "cost": 4.416915178571439
+        },
+        "always": {
+          "energy_per_day_kwh": 8.691730532582177,
+          "discomfort_ratio": 0.27120535714285715,
+          "temp_dev_rmse": 0.9112397630375811,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.691730532582177
+        },
+        "diff_vs_rule": 1.2826487514372547,
+        "diff_vs_always": 0.1599837201320909,
+        "discomfort_gap": 0.3828125000000001
+      }
+    ],
+    "有分时电价": [
+      {
+        "ua": 0.07,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 10.349532382509098,
+          "discomfort_ratio": 0.05691964285714286,
+          "temp_dev_rmse": 0.06201675018875033,
+          "switch_per_day": 12.642857142857142,
+          "cost": 5.435747319528533
+        },
+        "rule": {
+          "energy_per_day_kwh": 6.1738865733530695,
+          "discomfort_ratio": 0.5647321428571428,
+          "temp_dev_rmse": 3.0550199258924673,
+          "switch_per_day": 26.464285714285715,
+          "cost": 2.834602005571711
+        },
+        "always": {
+          "energy_per_day_kwh": 8.435278262559263,
+          "discomfort_ratio": 0.06287202380952381,
+          "temp_dev_rmse": 0.0794567545270065,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.288653529841295
+        },
+        "diff_vs_rule": 0.9176403984912148,
+        "diff_vs_always": 0.2674717791273025,
+        "discomfort_gap": 0.5078124999999999
+      },
+      {
+        "ua": 0.07,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 13.70969469857291,
+          "discomfort_ratio": 0.05505952380952381,
+          "temp_dev_rmse": 0.06354370914844451,
+          "switch_per_day": 6.928571428571429,
+          "cost": 7.066384966005341
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.849401451352723,
+          "discomfort_ratio": 0.5647321428571428,
+          "temp_dev_rmse": 3.0550199258924673,
+          "switch_per_day": 26.464285714285715,
+          "cost": 3.5643157797346605
+        },
+        "always": {
+          "energy_per_day_kwh": 12.427430257347451,
+          "discomfort_ratio": 0.06287202380952381,
+          "temp_dev_rmse": 0.0794567545270065,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 6.3752958480410715
+        },
+        "diff_vs_rule": 0.982536173192653,
+        "diff_vs_always": 0.10840110552306671,
+        "discomfort_gap": 0.509672619047619
+      },
+      {
+        "ua": 0.07,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 18.295962727667856,
+          "discomfort_ratio": 0.12909226190476192,
+          "temp_dev_rmse": 0.23449913855250198,
+          "switch_per_day": 18.428571428571427,
+          "cost": 9.402347020197569
+        },
+        "rule": {
+          "energy_per_day_kwh": 10.494683869357674,
+          "discomfort_ratio": 0.5647321428571428,
+          "temp_dev_rmse": 3.0550199258924673,
+          "switch_per_day": 26.464285714285715,
+          "cost": 4.746109143822258
+        },
+        "always": {
+          "energy_per_day_kwh": 17.278929365858133,
+          "discomfort_ratio": 0.06287202380952381,
+          "temp_dev_rmse": 0.0794567545270065,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.877308473125023
+        },
+        "diff_vs_rule": 0.9810642223506538,
+        "diff_vs_always": 0.05914388901343651,
+        "discomfort_gap": 0.4356398809523809
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.764619146503565,
+          "discomfort_ratio": 0.06510416666666666,
+          "temp_dev_rmse": 0.07834282157972111,
+          "switch_per_day": 15.464285714285714,
+          "cost": 4.988739794866314
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.929010128074275,
+          "discomfort_ratio": 0.4642857142857143,
+          "temp_dev_rmse": 1.721451220186967,
+          "switch_per_day": 24.75,
+          "cost": 2.667933735032385
+        },
+        "always": {
+          "energy_per_day_kwh": 8.881752616898309,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.5212443453067275
+        },
+        "diff_vs_rule": 0.869888944151665,
+        "diff_vs_always": 0.10339973110386515,
+        "discomfort_gap": 0.39918154761904767
+      },
+      {
+        "ua": 0.115,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 13.389795325989988,
+          "discomfort_ratio": 0.061755952380952384,
+          "temp_dev_rmse": 0.06620754539631651,
+          "switch_per_day": 19.071428571428573,
+          "cost": 6.919040916787389
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.593086501979003,
+          "discomfort_ratio": 0.4642857142857143,
+          "temp_dev_rmse": 1.721451220186967,
+          "switch_per_day": 24.75,
+          "cost": 3.4201745600749733
+        },
+        "always": {
+          "energy_per_day_kwh": 12.521391705622639,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 6.434180561530281
+        },
+        "diff_vs_rule": 1.0230081229057844,
+        "diff_vs_always": 0.07535697057618634,
+        "discomfort_gap": 0.4025297619047619
+      },
+      {
+        "ua": 0.115,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 16.57667149696048,
+          "discomfort_ratio": 0.06733630952380952,
+          "temp_dev_rmse": 0.08402563803780974,
+          "switch_per_day": 15.25,
+          "cost": 8.694111149662625
+        },
+        "rule": {
+          "energy_per_day_kwh": 10.183621371042046,
+          "discomfort_ratio": 0.4642857142857143,
+          "temp_dev_rmse": 1.721451220186967,
+          "switch_per_day": 24.75,
+          "cost": 4.568676590129051
+        },
+        "always": {
+          "energy_per_day_kwh": 17.3412610499081,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.911485943098654
+        },
+        "diff_vs_rule": 0.9029824016098812,
+        "diff_vs_always": -0.024392654022460915,
+        "discomfort_gap": 0.39694940476190477
+      },
+      {
+        "ua": 0.17,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.314576192623305,
+          "discomfort_ratio": 0.05171130952380952,
+          "temp_dev_rmse": 0.07457790170743021,
+          "switch_per_day": 4.821428571428572,
+          "cost": 4.878858012567465
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.048667262754055,
+          "discomfort_ratio": 0.33556547619047616,
+          "temp_dev_rmse": 1.3094584852352698,
+          "switch_per_day": 21.964285714285715,
+          "cost": 2.2606677362598306
+        },
+        "always": {
+          "energy_per_day_kwh": 8.492905276602807,
+          "discomfort_ratio": 0.05245535714285714,
+          "temp_dev_rmse": 0.06578691255841808,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.434117231014188
+        },
+        "diff_vs_rule": 1.1581490876847336,
+        "diff_vs_always": 0.10029973462193618,
+        "discomfort_gap": 0.28385416666666663
+      },
+      {
+        "ua": 0.17,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 13.674171782053252,
+          "discomfort_ratio": 0.1566220238095238,
+          "temp_dev_rmse": 0.22495432511778385,
+          "switch_per_day": 37.714285714285715,
+          "cost": 7.022520500073371
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.062113833198006,
+          "discomfort_ratio": 0.33556547619047616,
+          "temp_dev_rmse": 1.3094584852352698,
+          "switch_per_day": 21.964285714285715,
+          "cost": 3.120910676760526
+        },
+        "always": {
+          "energy_per_day_kwh": 12.48809072406312,
+          "discomfort_ratio": 0.05245535714285714,
+          "temp_dev_rmse": 0.06578691255841808,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 6.448726347887564
+        },
+        "diff_vs_rule": 1.250151070444181,
+        "diff_vs_always": 0.08897790373346631,
+        "discomfort_gap": 0.17894345238095236
+      },
+      {
+        "ua": 0.17,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 15.063925823434843,
+          "discomfort_ratio": 0.11495535714285714,
+          "temp_dev_rmse": 0.2801262525940432,
+          "switch_per_day": 33.85714285714286,
+          "cost": 8.33855481868974
+        },
+        "rule": {
+          "energy_per_day_kwh": 9.525127580563591,
+          "discomfort_ratio": 0.33556547619047616,
+          "temp_dev_rmse": 1.3094584852352698,
+          "switch_per_day": 21.964285714285715,
+          "cost": 4.1936481617492465
+        },
+        "always": {
+          "energy_per_day_kwh": 17.34794178559192,
+          "discomfort_ratio": 0.05245535714285714,
+          "temp_dev_rmse": 0.06578691255841808,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.920061431296977
+        },
+        "diff_vs_rule": 0.988377302308446,
+        "diff_vs_always": -0.06519087531919451,
+        "discomfort_gap": 0.220610119047619
+      },
+      {
+        "ua": 0.24,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.196766654865344,
+          "discomfort_ratio": 0.026041666666666668,
+          "temp_dev_rmse": 0.061474475890736624,
+          "switch_per_day": 20.96428571428571,
+          "cost": 4.770872174698406
+        },
+        "rule": {
+          "energy_per_day_kwh": 3.8280780913789063,
+          "discomfort_ratio": 0.2700892857142857,
+          "temp_dev_rmse": 1.1212906222010155,
+          "switch_per_day": 17.392857142857146,
+          "cost": 1.6629780569698354
+        },
+        "always": {
+          "energy_per_day_kwh": 8.170959205914787,
+          "discomfort_ratio": 0.041294642857142856,
+          "temp_dev_rmse": 0.05783528408664755,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.3091440872112585
+        },
+        "diff_vs_rule": 1.8688725955840704,
+        "diff_vs_always": 0.10715076547509067,
+        "discomfort_gap": 0.24404761904761904
+      },
+      {
+        "ua": 0.24,
+        "power": 0.45,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 11.637334594112907,
+          "discomfort_ratio": 0.03459821428571429,
+          "temp_dev_rmse": 0.1074845126301775,
+          "switch_per_day": 9.142857142857142,
+          "cost": 6.230747687815811
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.746169010707056,
+          "discomfort_ratio": 0.2700892857142857,
+          "temp_dev_rmse": 1.1212906222010155,
+          "switch_per_day": 17.392857142857146,
+          "cost": 2.4605526987775574
+        },
+        "always": {
+          "energy_per_day_kwh": 12.428249636183992,
+          "discomfort_ratio": 0.041294642857142856,
+          "temp_dev_rmse": 0.05783528408664755,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 6.426883430537051
+        },
+        "diff_vs_rule": 1.5322553306463818,
+        "diff_vs_always": -0.03051801776726022,
+        "discomfort_gap": 0.2354910714285714
+      },
+      {
+        "ua": 0.24,
+        "power": 0.65,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 13.21856487769683,
+          "discomfort_ratio": 0.2075892857142857,
+          "temp_dev_rmse": 0.26286742472763847,
+          "switch_per_day": 12.25,
+          "cost": 7.512806995352463
+        },
+        "rule": {
+          "energy_per_day_kwh": 7.839804315599702,
+          "discomfort_ratio": 0.2700892857142857,
+          "temp_dev_rmse": 1.1212906222010155,
+          "switch_per_day": 17.392857142857146,
+          "cost": 3.3500228118549593
+        },
+        "always": {
+          "energy_per_day_kwh": 17.337188008743393,
+          "discomfort_ratio": 0.041294642857142856,
+          "temp_dev_rmse": 0.05783528408664755,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 8.917701509612536
+        },
+        "diff_vs_rule": 1.2426136827386276,
+        "diff_vs_always": -0.15753997964001312,
+        "discomfort_gap": 0.0625
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 0.3,
+        "ppo": {
+          "energy_per_day_kwh": 7.3596870649007755,
+          "discomfort_ratio": 0.21540178571428573,
+          "temp_dev_rmse": 0.7316641839530407,
+          "switch_per_day": 15.75,
+          "cost": 4.068438035227596
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.127255357117763,
+          "discomfort_ratio": 0.4378720238095238,
+          "temp_dev_rmse": 1.54963224890139,
+          "switch_per_day": 23.464285714285715,
+          "cost": 2.3613035860358877
+        },
+        "always": {
+          "energy_per_day_kwh": 7.524744948688214,
+          "discomfort_ratio": 0.009300595238095236,
+          "temp_dev_rmse": 0.009413149136114988,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 3.927841782033033
+        },
+        "diff_vs_rule": 0.7229627140225598,
+        "diff_vs_always": 0.03579478527818692,
+        "discomfort_gap": 0.22247023809523805
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 0.8,
+        "ppo": {
+          "energy_per_day_kwh": 9.764619146503565,
+          "discomfort_ratio": 0.06510416666666666,
+          "temp_dev_rmse": 0.07834282157972111,
+          "switch_per_day": 15.464285714285714,
+          "cost": 4.988739794866314
+        },
+        "rule": {
+          "energy_per_day_kwh": 5.929010128074275,
+          "discomfort_ratio": 0.4642857142857143,
+          "temp_dev_rmse": 1.721451220186967,
+          "switch_per_day": 24.75,
+          "cost": 2.667933735032385
+        },
+        "always": {
+          "energy_per_day_kwh": 8.881752616898309,
+          "discomfort_ratio": 0.08035714285714285,
+          "temp_dev_rmse": 0.07190633572502629,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.5212443453067275
+        },
+        "diff_vs_rule": 0.869888944151665,
+        "diff_vs_always": 0.10339973110386515,
+        "discomfort_gap": 0.39918154761904767
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 1.4,
+        "ppo": {
+          "energy_per_day_kwh": 10.002748070663792,
+          "discomfort_ratio": 0.20982142857142858,
+          "temp_dev_rmse": 0.2717592364854813,
+          "switch_per_day": 4.321428571428571,
+          "cost": 5.369949853469712
+        },
+        "rule": {
+          "energy_per_day_kwh": 4.9426302816356,
+          "discomfort_ratio": 0.5141369047619047,
+          "temp_dev_rmse": 1.9720731907720375,
+          "switch_per_day": 26.321428571428573,
+          "cost": 2.2070086022605975
+        },
+        "always": {
+          "energy_per_day_kwh": 8.546643415899672,
+          "discomfort_ratio": 0.1290922619047619,
+          "temp_dev_rmse": 0.1931558061723068,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.4404058076557105
+        },
+        "diff_vs_rule": 1.43313499003555,
+        "diff_vs_always": 0.20933763400889466,
+        "discomfort_gap": 0.30431547619047605
+      },
+      {
+        "ua": 0.115,
+        "power": 0.25,
+        "gain": 2.0,
+        "ppo": {
+          "energy_per_day_kwh": 10.93891383002477,
+          "discomfort_ratio": 0.15104166666666669,
+          "temp_dev_rmse": 0.24474119325406885,
+          "switch_per_day": 24.107142857142858,
+          "cost": 5.634229284811622
+        },
+        "rule": {
+          "energy_per_day_kwh": 4.2817767857142925,
+          "discomfort_ratio": 0.6104910714285714,
+          "temp_dev_rmse": 2.6266724322347916,
+          "switch_per_day": 27.107142857142854,
+          "cost": 1.9450067232142878
+        },
+        "always": {
+          "energy_per_day_kwh": 8.691730532582177,
+          "discomfort_ratio": 0.27120535714285715,
+          "temp_dev_rmse": 0.9112397630375811,
+          "switch_per_day": 0.14285714285714285,
+          "cost": 4.587901829890609
+        },
+        "diff_vs_rule": 1.8967659687574665,
+        "diff_vs_always": 0.22806230248958065,
+        "discomfort_gap": 0.4594494047619047
+      }
+    ]
+  }
+}
