@@ -48,8 +48,9 @@ from stable_baselines3 import PPO                      # noqa: E402
 from stable_baselines3.common.monitor import Monitor   # noqa: E402
 from stable_baselines3.common.vec_env import DummyVecEnv  # noqa: E402
 
-OLD_DIR = os.path.join(PROJ, "models", "energy_scale_verify")
-OUT_DIR = os.path.join(PROJ, "models", "energy_scale_fine")
+# gen4：只复用 gen4 自己目录下的模型；旧代次目录不再参与复用
+OLD_DIR = os.path.join(PROJ, "models", "energy_scale_gen4_old")
+OUT_DIR = os.path.join(PROJ, "models", "energy_scale_gen4")
 OUT_MD = os.path.join(PROJ, "docs", "能耗权重细扫与帕累托对比.md")
 
 AC_OFF = 0

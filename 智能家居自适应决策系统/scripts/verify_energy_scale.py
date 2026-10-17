@@ -54,7 +54,8 @@ PROJ = r"D:\Dev\Projects\Polaris\智能家居自适应决策系统"
 sys.path.insert(0, PROJ)
 
 import numpy as np                                     # noqa: E402
-from src.env import RewardConfig, SmartHomeEnv, encode_action  # noqa: E402
+from src.env import (RewardConfig, SmartHomeEnv, encode_action,  # noqa: E402
+                      ActionConfig)
 from stable_baselines3 import PPO                      # noqa: E402
 from stable_baselines3.common.monitor import Monitor   # noqa: E402
 from stable_baselines3.common.vec_env import DummyVecEnv  # noqa: E402
@@ -63,8 +64,17 @@ OUT_DIR = os.path.join(PROJ, "models", "energy_scale_verify")
 OUT_MD = os.path.join(PROJ, "docs", "能耗权重验证.md")
 
 AC_OFF = 0
-AC_25C, AC_26C, AC_27C, AC_28C, AC_29C = 1, 2, 3, 4, 5
-
+# 档位索引由配置推导，不再硬编码。
+# 2026-10-17：空调档位由 [25..29] 扩展为 [23..29]（最低档改为 23 °C，
+# 见 docs/空调最低档位验证.md），硬编码的 AC_25C = 1 已不再表示 25 °C。
+_AC_DEFAULT = ActionConfig()
+AC_25C = _AC_DEFAULT.ac_setpoints.index(25.0) + 1
+AC_26C = _AC_DEFAULT.ac_setpoints.index(26.0) + 1
+AC_27C = _AC_DEFAULT.ac_setpoints.index(27.0) + 1
+AC_28C = _AC_DEFAULT.ac_setpoints.index(28.0) + 1
+AC_29C = _AC_DEFAULT.ac_setpoints.index(29.0) + 1
+AC_23C = _AC_DEFAULT.ac_setpoints.index(23.0) + 1
+AC_24C = _AC_DEFAULT.ac_setpoints.index(24.0) + 1
 SCALES = [10.0, 30.0, 60.0, 100.0]
 SEEDS = [42, 66, 2026, 7, 123]
 TIMESTEPS = 400_000

@@ -1,0 +1,54 @@
+{
+  "config": {
+    "timesteps": 300000,
+    "eval_episodes": 5,
+    "weight_mode": "scenario",
+    "tou": false,
+    "energy_scale": null,
+    "temp_scale": null,
+    "seed": 42,
+    "tag": "rl_notou",
+    "n_envs": 4,
+    "gamma": 0.99,
+    "skip_baselines": true
+  },
+  "train_time_sec": 49.581822633743286,
+  "n_episodes_trained": 448,
+  "policy_params": 42649,
+  "results": {
+    "PPO(本方法)": {
+      "total_energy_kwh": [
+        27.252542497496837,
+        0.5393869441604521
+      ],
+      "energy_per_day_kwh": [
+        3.893220356785263,
+        0.0770552777372075
+      ],
+      "discomfort_ratio": [
+        0.041666666666666664,
+        0.019310866901795638
+      ],
+      "temp_dev_rmse": [
+        0.16544587490929502,
+        0.09264772811945902
+      ],
+      "response_delay_mean": [
+        10.583333333333332,
+        6.3635245300418575
+      ],
+      "recovery_time_mean": [
+        0.4,
+        0.48989794855663565
+      ],
+      "switch_per_day": [
+        5.314285714285714,
+        0.20995626366712947
+      ],
+      "mean_reward": [
+        -0.6407835690536502,
+        0.07829598499760507
+      ]
+    }
+  }
+}

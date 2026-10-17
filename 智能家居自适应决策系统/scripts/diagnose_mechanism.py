@@ -29,13 +29,23 @@ PROJ = r"D:\Dev\Projects\Polaris\智能家居自适应决策系统"
 sys.path.insert(0, PROJ)
 
 import numpy as np                                        # noqa: E402
-from src.env import RewardConfig, SmartHomeEnv, encode_action  # noqa: E402
+from src.env import (RewardConfig, SmartHomeEnv, encode_action,  # noqa: E402
+                      ActionConfig)
 from stable_baselines3 import PPO                          # noqa: E402
 
 # 动作编号与各实验脚本保持一致（见 scripts/evaluate_all.py 第 69-70 行）
 AC_OFF = 0
-AC_25C, AC_26C, AC_27C, AC_28C, AC_29C = 1, 2, 3, 4, 5
-
+# 档位索引由配置推导，不再硬编码。
+# 2026-10-17：空调档位由 [25..29] 扩展为 [23..29]（最低档改为 23 °C，
+# 见 docs/空调最低档位验证.md），硬编码的 AC_25C = 1 已不再表示 25 °C。
+_AC_DEFAULT = ActionConfig()
+AC_25C = _AC_DEFAULT.ac_setpoints.index(25.0) + 1
+AC_26C = _AC_DEFAULT.ac_setpoints.index(26.0) + 1
+AC_27C = _AC_DEFAULT.ac_setpoints.index(27.0) + 1
+AC_28C = _AC_DEFAULT.ac_setpoints.index(28.0) + 1
+AC_29C = _AC_DEFAULT.ac_setpoints.index(29.0) + 1
+AC_23C = _AC_DEFAULT.ac_setpoints.index(23.0) + 1
+AC_24C = _AC_DEFAULT.ac_setpoints.index(24.0) + 1
 OUT_MD = os.path.join(PROJ, "docs", "仿真机制诊断.md")
 EPISODES = 10
 SEED0 = 3000
@@ -124,9 +134,15 @@ def main():
     gain = env.sim_cfg.internal_gain
     ac = env.sim_cfg.ac_coef
     Tout = env.sim_cfg.temp_outdoor_mean
-    T_eq_occ = (ua * Tout + gain + ac * 25.0) / (ua + ac)
-    T_eq_unocc = (ua * Tout + ac * 25.0) / (ua + ac)
-    T_no_ac = Tout + gain / ua
+    # 注意：gen4 起模型含 gain_base（常开基础得热）与 solar_coef（日照），
+    # 因此平衡温度须一并计入，不能再只用 internal_gain。
+    gb = env.sim_cfg.gain_base
+    gocc = env.sim_cfg.internal_gain
+    solar = env.sim_cfg.solar_coef
+    # 日照取白天中值（太阳因子 0.5）作为代表
+    T_eq_occ = (ua * Tout + gb + gocc + solar * 0.5 + ac * 25.0) / (ua + ac)
+    T_eq_unocc = T_eq_occ
+    T_no_ac = Tout + (gb + gocc + solar * 0.5) / ua
     print("  理论平衡室温（一阶模型）：")
     print(f"    空调全开@25°C 且有人：{T_eq_occ:.2f} °C")
     print(f"    空调全开@25°C 且无人：{T_eq_unocc:.2f} °C")

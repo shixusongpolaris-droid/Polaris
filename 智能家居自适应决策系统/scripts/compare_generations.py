@@ -40,7 +40,9 @@ G2 = os.path.join(MD, "_gen2_backup")
 OUT_MD = os.path.join(PROJ, "docs", "三代结果对比.md")
 OUT_JSON = os.path.join(MD, "gen_comparison.json")
 
-GENS = [("gen1 标定前", G1), ("gen2 首次重标定", G2), ("gen3 联合标定", MD)]
+G3 = os.path.join(MD, "_gen3_backup")
+GENS = [("gen1 标定前", G1), ("gen2 首次重标定", G2),
+        ("gen3 联合标定", G3), ("gen4 定稿", MD)]
 
 
 def load(root, rel):
@@ -83,7 +85,7 @@ def main():
     P()
     P("## 三代的热工参数")
     P()
-    P("| 参数 | gen1 标定前 | gen2 首次重标定 | **gen3 联合标定** |")
+    P("| 参数 | gen1 | gen2 | gen3 | **gen4 定稿** |")
     P("|---|---|---|---|")
     P("| `ua_coef` | 0.040 | 0.115 | **0.2072** |")
     P("| 隐含 τ | 375 分钟 | 130 分钟 | **72.4 分钟** |")

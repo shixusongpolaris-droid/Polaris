@@ -1,0 +1,111 @@
+{
+  "args": {
+    "seeds": 2,
+    "episodes": 8,
+    "timesteps": 300000,
+    "energy_scales": [
+      10.0,
+      30.0,
+      60.0
+    ],
+    "lookahead_weights": [
+      0.6,
+      0.0
+    ],
+    "quick": false
+  },
+  "rule_baseline": {
+    "cost": 0.9814706349253739,
+    "cost_sd": 0.052688955330427216,
+    "discomfort": 0.24507068452380953,
+    "energy": 2.438743606258935,
+    "valley_share": 0.6918087547995264,
+    "peak_share": 0.3081912452004737
+  },
+  "results": [
+    {
+      "energy_scale": 10.0,
+      "lookahead_weight": 0.6,
+      "metrics": {
+        "cost": 3.4280625767029598,
+        "cost_sd": 0.0385843208671645,
+        "discomfort": 0.03813244047619047,
+        "energy": 6.568175531118573,
+        "valley_share": 0.30715990868326903,
+        "peak_share": 0.692840091316731
+      },
+      "diff_vs_rule": 2.492781602134854,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 30.0,
+      "lookahead_weight": 0.6,
+      "metrics": {
+        "cost": 2.9309859476147895,
+        "cost_sd": 0.049778434264845184,
+        "discomfort": 0.030226934523809524,
+        "energy": 5.435341678600977,
+        "valley_share": 0.2467953194951723,
+        "peak_share": 0.7532046805048277
+      },
+      "diff_vs_rule": 1.9863205717180188,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 60.0,
+      "lookahead_weight": 0.6,
+      "metrics": {
+        "cost": 1.0463799956567303,
+        "cost_sd": 0.03864755579056389,
+        "discomfort": 0.10165550595238096,
+        "energy": 2.0840211970130764,
+        "valley_share": 0.3760545471877943,
+        "peak_share": 0.6239454528122057
+      },
+      "diff_vs_rule": 0.06613479652021563,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 10.0,
+      "lookahead_weight": 0.0,
+      "metrics": {
+        "cost": 3.280911224279889,
+        "cost_sd": 0.03546076076518474,
+        "discomfort": 0.03459821428571428,
+        "energy": 6.35142107490468,
+        "valley_share": 0.32328687917673715,
+        "peak_share": 0.6767131208232628
+      },
+      "diff_vs_rule": 2.342852152198474,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 30.0,
+      "lookahead_weight": 0.0,
+      "metrics": {
+        "cost": 1.4960285247516683,
+        "cost_sd": 0.03207252602140286,
+        "discomfort": 0.09691220238095238,
+        "energy": 3.4321504525370266,
+        "valley_share": 0.5845883090282915,
+        "peak_share": 0.41541169097170844
+      },
+      "diff_vs_rule": 0.5242723230995279,
+      "verdict": "仍逊于规则"
+    },
+    {
+      "energy_scale": 60.0,
+      "lookahead_weight": 0.0,
+      "metrics": {
+        "cost": 1.0644935948632548,
+        "cost_sd": 0.03463860567324764,
+        "discomfort": 0.09998139880952381,
+        "energy": 2.3220923926793855,
+        "valley_share": 0.5108554120411185,
+        "peak_share": 0.4891445879588815
+      },
+      "diff_vs_rule": 0.08459036570584054,
+      "verdict": "仍逊于规则"
+    }
+  ]
+}
