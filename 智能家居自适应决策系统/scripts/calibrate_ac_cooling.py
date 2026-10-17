@@ -137,8 +137,15 @@ def build_samples(data, tl):
 
     对每个时间点 t，用其后 DT_MIN 分钟的温度变化计算 dT。
     """
-    ua = SimConfig().ua_coef
-    gain = SimConfig().internal_gain
+    # 修正（2026-10-17，由团队复核成员 fix-reviewer 指出）：
+    # gen4 起模型含常开基础得热 gain_base 与日照项 solar_coef，
+    # 反演里若漏掉这两项，每个样本的制冷量会被系统性低估约
+    # 0.76~0.99 °C/步，得出"实测制冷能力远低于当前参数"的假象。
+    _c = SimConfig()
+    ua = _c.ua_coef
+    gain = _c.internal_gain
+    gain_base = _c.gain_base
+    solar_coef = _c.solar_coef
     by_t = {r["t"]: r for r in data}
     samples = []
     for r in data:
@@ -169,7 +176,11 @@ def build_samples(data, tl):
         dT = r1["temp_in"] - T
         # 窗口内若有人则加热，否则不加
         occ = 1.0 if (seg["occupied"] or seg1["occupied"]) else 0.0
-        cooling = -dT - ua * (T - T_out) + gain * occ
+        _hf = t0.hour + t0.minute / 60.0
+        sun = (math.sin(math.pi * (_hf - 6.0) / 12.0)
+               if 6.0 <= _hf <= 18.0 else 0.0)
+        cooling = (-dT - ua * (T - T_out) + gain_base
+                   + solar_coef * sun + gain * occ)
         samples.append({
             "t": t0.strftime("%Y-%m-%d %H:%M:%S"),
             "T": T, "T_out": T_out, "dT": dT,

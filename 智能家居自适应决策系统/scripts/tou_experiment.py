@@ -88,12 +88,25 @@ def ac_idx_for(target_c, cfg):
 # 基线策略
 # ============================================================
 def policy_rule_fixed(env):
-    """B1：常规规则控制（不感知电价）。有人则维持 25°C 附近，无人关闭。"""
+    """B1：常规规则控制（不感知电价）。有人则维持 25°C 附近，无人关闭。
+
+    修正（2026-10-17，由团队复核成员 fix-reviewer 指出）：
+    原实现用写死的档位 `ac = 2 if t > 26 else (1 if t > 25 else ...)`，
+    本意是"高于 26 设 26 °C、高于 25 设 25 °C"。但空调档位由
+    [25..29] 扩展为 [23..29] 后，ac_idx=2 已变成 24 °C、1 变成 23 °C，
+    实测下发分布为 {23.0: 67, 24.0: 41}，与声明的"维持 25 °C"不符。
+    现改为按目标温度动态推导，保留原有的三级结构与 24 °C 关断阈值。
+    """
     obs = env.get_obs_dict()
     if not (obs["occ_a"] or obs["occ_b"]):
         return encode_action(0, 0, 0, env.act_cfg)
     t = obs["temp_in"]
-    ac = 2 if t > 26.0 else (1 if t > 25.0 else env.sim.state.ac_idx)
+    if t > 26.0:
+        ac = ac_idx_for(26.0, env.act_cfg)
+    elif t > 25.0:
+        ac = ac_idx_for(25.0, env.act_cfg)
+    else:
+        ac = env.sim.state.ac_idx
     if t < 24.0:
         ac = 0
     light = 1 if obs["light_in"] < 300 else 0

@@ -39,7 +39,8 @@ sys.path.insert(0, PROJ)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from src.env.config import SimConfig                       # noqa: E402
 from _timeline_util import (ac_on_at as _ac_on_at,          # noqa: E402
-                           ac_on_intervals as _ac_on_intervals)
+                           ac_on_intervals as _ac_on_intervals,
+                           AC_ON_PERIODS as _AC_ON_PERIODS)
 
 OUT_MD = os.path.join(PROJ, "docs", "空调温度数据可信度诊断.md")
 OUT_JSON = os.path.join(PROJ, "models", "ac_sensor_diag.json")
@@ -94,15 +95,23 @@ def load_timeline():
 
 
 def ac_state_at(tl, t):
-    """查询时刻 t 空调是否开启。
+    """查询时刻 t 空调是否开启；不在观测窗口内返回 None。
 
-    修正（2026-10-17）：原实现取时间表 `ac` 列的前缀判断，
-    会把 '开→02:54关→05:40开→08:42关' 这类段内多次转移的标注
-    整段判为开机（620 分钟里约 200 分钟实际关机）。
-    现改为查询权威启停表（来源 data/raw/*_events.csv 的用户报告与
-    雷达反推），与 joint_fit_thermal.py 的标定输入一致。
-    （由团队审计成员 script-auditor 发现）
+    修正历史：
+      2026-10-17 第一版（由团队审计成员 script-auditor 指出）：
+        原实现取时间表 `ac` 列的前缀判断，会把
+        '开→02:54关→05:40开→08:42关' 这类段内多次转移的标注整段判为
+        开机（620 分钟里约 200 分钟实际关机）。改为查询权威启停表。
+      2026-10-17 第二版（由团队复核成员 fix-reviewer 指出）：
+        第一版直接返回布尔值，丢失了"不在观测窗口内"的第三种状态，
+        调用方的 `st is None: continue` 分支因此失效，窗口外样本被
+        当作"空调关闭"，把关闭组的 |dT| 均值从 0.450 抬到 0.487。
+        现恢复三态语义：窗口外返回 None，窗口内返回权威表判定。
     """
+    if not _AC_ON_PERIODS:
+        return None
+    if t < _AC_ON_PERIODS[0][0] or t >= _AC_ON_PERIODS[-1][1]:
+        return None
     return _ac_on_at(t)
 
 

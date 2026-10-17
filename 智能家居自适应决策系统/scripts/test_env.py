@@ -30,6 +30,13 @@ except (AttributeError, OSError):
 import numpy as np
 
 from src.env import SmartHomeEnv, SimConfig, decode_action, encode_action
+from src.env.config import ActionConfig
+
+# 空调档位索引由配置推导（2026-10-17：档位由 [25..29] 扩展为 [23..29]，
+# 写死的 1/3 已不再表示 25/28 °C）。
+_AC = ActionConfig()
+ac_25 = _AC.ac_setpoints.index(25.0) + 1
+ac_27 = _AC.ac_setpoints.index(27.0) + 1
 
 
 PASS = "[通过]"
@@ -144,8 +151,8 @@ def check_dynamics(env: SmartHomeEnv) -> bool:
         return temps
 
     t_no_ac = run_days(ac_idx=0)          # 全程关空调
-    t_ac24 = run_days(ac_idx=1)           # 全程开空调设定 24°C
-    t_ac28 = run_days(ac_idx=3)           # 全程开空调设定 28°C
+    t_ac24 = run_days(ac_idx=ac_25)         # 全程开空调设定 25°C
+    t_ac28 = run_days(ac_idx=ac_27)         # 全程开空调设定 27°C
 
     print("  实验 A：连续 8 小时（32 步）不同空调策略的室温变化")
     print(f"    不开空调      : 起点 {t_no_ac[0]:.2f}°C -> 终点 {t_no_ac[-1]:.2f}°C")

@@ -25,7 +25,7 @@
                         则当前目标温度再降 precool 度
     R3 全参数网格       v_sp × f_sp × p_sp × precool
 
-    v_sp      ∈ {23, 24, 25}
+    v_sp      ∈ {23, 24, 25, 26}
     f_sp      ∈ {25, 26, 27}
     p_sp      ∈ {27, 28, 29}
     precool   ∈ {0, 1, 2}
@@ -164,7 +164,13 @@ def evaluate(action_fn, n=EVAL_EPISODES):
 
 
 def pareto(points, keys=("cost", "discomfort")):
-    """返回非支配点（两个目标都越小越好）。"""
+    """返回非支配点（keys 中的两个目标都越小越好）。
+
+    修正（2026-10-17，由团队复核成员 fix-reviewer 指出）：
+    去重与排序原先写死按 (cost, discomfort)，当 keys=("energy",
+    "discomfort") 时会用错键——本例恰好未触发（电量与电费的前沿点位
+    不重合），但属于潜在错误。现改为按 keys 动态处理。
+    """
     out = []
     for p in points:
         dominated = False
@@ -178,10 +184,10 @@ def pareto(points, keys=("cost", "discomfort")):
                 break
         if not dominated:
             out.append(p)
-    # 去重（按目标值）
+    # 去重（按 keys 指定的目标值）
     seen, uniq = set(), []
-    for p in sorted(out, key=lambda x: (x["cost"], x["discomfort"])):
-        k = (round(p["cost"], 6), round(p["discomfort"], 6))
+    for p in sorted(out, key=lambda x: tuple(x[k] for k in keys)):
+        k = tuple(round(p[kk], 6) for kk in keys)
         if k not in seen:
             seen.add(k)
             uniq.append(p)
@@ -368,6 +374,21 @@ def main():
         md += ["## 四、此前的朴素规则", "",
                f"谷 25 / 平 26 / 峰 28、无预冷：电量 {base['energy']:.3f} kWh，"
                f"电费 {base['cost']:.3f} 元，不达标 {base['discomfort']:.2%}", ""]
+    # 电量前沿单独列出（2026-10-17 加入，由团队审计成员 stats-reviewer 指出）：
+    # 分时电价下把用电从峰段挪到谷段会抬高总电量而降低电费，
+    # 因此"电费前沿"与"电量前沿"不是同一条，讨论"更省电"不能用前者代替。
+    md += ["## 四点五、电量前沿（按电量取非支配点）", "",
+           "> ⚠️ 分时电价下电费与电量不等价：把用电从峰段挪到谷段会**抬高",
+           "> 总电量、降低电费**。因此下面这条前沿才是回答\"谁更省电\"的依据，",
+           "> 上面第三节的 `front` 是按**电费**取的。", "",
+           "| 谷 | 平 | 峰 | 预冷 | 无人时 | 电量(kWh/天) | 电费(元/天) | 不达标率 |",
+           "|---|---|---|---|---|---|---|---|"]
+    for p in sorted(front_energy, key=lambda x: x["energy"]):
+        ko = "关机" if not p.get("keep_on") else "不停机"
+        md.append(f"| {p['v']:.0f} | {p['f']:.0f} | {p['p']:.0f} | "
+                  f"{p['precool']:.0f} | {ko} | {p['energy']:.3f} | "
+                  f"{p['cost']:.3f} | {p['discomfort']:.2%} |")
+    md.append("")
     md += ["## 五、RL 工作点（10 种子均值）", "",
            "| energy_scale | 电量(kWh/天) | 电费(元/天) | 不达标率 |",
            "|---|---|---|---|"]
