@@ -130,7 +130,12 @@ class SmartHomeEnv(gym.Env):
             23.0, 6.0, 1.0, 1.0,    # hour, dow, is_weekend, is_holiday
             1.0, 1.0,               # hour_sin, hour_cos
             60.0, 30000.0,          # temp_out, light_out
-            5.0, 2.0, 1.0, 1.0,     # ac_idx(0-5), light_idx, vent_idx, ac_on
+            # ac_idx 的上界必须跟随动作空间。2026-10-17 空调档位由
+            # [25..29]（ac_idx 0~5）扩展为 [23..29]（ac_idx 0~7），
+            # 此处原先写死 5.0，导致观测值 6/7 超出声明上界，
+            # scripts/test_env.py 自检失败（353 处越界）。
+            float(self.act_cfg.ac_choices - 1),
+            2.0, 1.0, 1.0,          # light_idx, vent_idx, ac_on
             1.0, 1.0, 480.0, 1.0,   # ev_enter, ev_leave, dur_occ, p_occ_slot
             5.0, 2.0, 5.0,          # elec_price, price_tier, price_forward
         ]

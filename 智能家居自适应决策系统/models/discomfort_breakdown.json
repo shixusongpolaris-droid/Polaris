@@ -1,0 +1,290 @@
+{
+  "R1 规则(25,无人关机)": {
+    "total_steps": 8064,
+    "bad_steps": 970,
+    "discomfort": 0.12028769841269842,
+    "temp_mean": 26.10688473676011,
+    "temp_min": 24.18916694433527,
+    "temp_max": 31.46821213768683,
+    "buckets": {
+      "有人·清醒·过热": {
+        "steps": 519,
+        "share_of_all": 0.06436011904761904,
+        "max_dev": 5.447315741958928,
+        "mean_dev": 1.9884578213285558
+      },
+      "有人·清醒·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过热": {
+        "steps": 2,
+        "share_of_all": 0.000248015873015873,
+        "max_dev": 0.6368213964857006,
+        "mean_dev": 0.6368213964857006
+      },
+      "有人·睡眠·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过热": {
+        "steps": 449,
+        "share_of_all": 0.055679563492063495,
+        "max_dev": 1.4682121376868302,
+        "mean_dev": 0.6936936011357849
+      },
+      "无人·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      }
+    },
+    "occupied_bad_steps": 521,
+    "occupied_bad_ratio": 0.06460813492063493
+  },
+  "R2 规则(25,不停机)": {
+    "total_steps": 8064,
+    "bad_steps": 12,
+    "discomfort": 0.001488095238095238,
+    "temp_mean": 25.151105656965736,
+    "temp_min": 24.20086449190635,
+    "temp_max": 30.90975834238597,
+    "buckets": {
+      "有人·清醒·过热": {
+        "steps": 7,
+        "share_of_all": 0.0008680555555555555,
+        "max_dev": 4.90975834238597,
+        "mean_dev": 2.2427467747313896
+      },
+      "有人·清醒·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过热": {
+        "steps": 5,
+        "share_of_all": 0.0006200396825396825,
+        "max_dev": 0.7663321711377975,
+        "mean_dev": 0.41582799437340723
+      },
+      "无人·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      }
+    },
+    "occupied_bad_steps": 7,
+    "occupied_bad_ratio": 0.0008680555555555555
+  },
+  "RL energy_scale=10": {
+    "total_steps": 8064,
+    "bad_steps": 1,
+    "discomfort": 0.0001240079365079365,
+    "temp_mean": 24.257336500353144,
+    "temp_min": 22.0956499298103,
+    "temp_max": 28.150466849379143,
+    "buckets": {
+      "有人·清醒·过热": {
+        "steps": 1,
+        "share_of_all": 0.0001240079365079365,
+        "max_dev": 2.150466849379143,
+        "mean_dev": 2.150466849379143
+      },
+      "有人·清醒·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      }
+    },
+    "occupied_bad_steps": 1,
+    "occupied_bad_ratio": 0.0001240079365079365
+  },
+  "RL energy_scale=30": {
+    "total_steps": 8064,
+    "bad_steps": 476,
+    "discomfort": 0.059027777777777776,
+    "temp_mean": 25.2942092174413,
+    "temp_min": 23.8734055190622,
+    "temp_max": 27.20861714191339,
+    "buckets": {
+      "有人·清醒·过热": {
+        "steps": 476,
+        "share_of_all": 0.059027777777777776,
+        "max_dev": 1.2086171419133898,
+        "mean_dev": 0.35140501685041253
+      },
+      "有人·清醒·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      }
+    },
+    "occupied_bad_steps": 476,
+    "occupied_bad_ratio": 0.059027777777777776
+  },
+  "RL energy_scale=60": {
+    "total_steps": 8064,
+    "bad_steps": 1758,
+    "discomfort": 0.21800595238095238,
+    "temp_mean": 26.125960792212148,
+    "temp_min": 23.88312030754652,
+    "temp_max": 28.541246658877117,
+    "buckets": {
+      "有人·清醒·过热": {
+        "steps": 1758,
+        "share_of_all": 0.21800595238095238,
+        "max_dev": 2.541246658877114,
+        "mean_dev": 0.9696207865379146
+      },
+      "有人·清醒·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      }
+    },
+    "occupied_bad_steps": 1758,
+    "occupied_bad_ratio": 0.21800595238095238
+  },
+  "RL energy_scale=100": {
+    "total_steps": 8064,
+    "bad_steps": 1851,
+    "discomfort": 0.22953869047619047,
+    "temp_mean": 26.16221842183355,
+    "temp_min": 23.88312030754652,
+    "temp_max": 28.54124694001803,
+    "buckets": {
+      "有人·清醒·过热": {
+        "steps": 1851,
+        "share_of_all": 0.22953869047619047,
+        "max_dev": 2.5412469400180306,
+        "mean_dev": 1.0194774098128265
+      },
+      "有人·清醒·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "有人·睡眠·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过热": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      },
+      "无人·过冷": {
+        "steps": 0,
+        "share_of_all": 0.0,
+        "max_dev": 0.0,
+        "mean_dev": 0.0
+      }
+    },
+    "occupied_bad_steps": 1851,
+    "occupied_bad_ratio": 0.22953869047619047
+  }
+}

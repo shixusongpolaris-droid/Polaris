@@ -1,0 +1,274 @@
+{
+  "rules": [
+    {
+      "energy": 7.681719586429999,
+      "cost": 4.118458486692793,
+      "total_discomfort": 0.3020833333333333,
+      "occ_discomfort": 0.4836212030970816,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设23°C/不停机",
+      "s": 23.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 5.5573034309021185,
+      "cost": 2.8318873406502725,
+      "total_discomfort": 0.39967757936507936,
+      "occ_discomfort": 0.5560849712130236,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设23°C/关机",
+      "s": 23.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 7.045751141974917,
+      "cost": 3.773893197085939,
+      "total_discomfort": 0.12400793650793651,
+      "occ_discomfort": 0.1985308715505261,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设24°C/不停机",
+      "s": 24.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 4.914329473588883,
+      "cost": 2.549397993009444,
+      "total_discomfort": 0.2013888888888889,
+      "occ_discomfort": 0.2364502680166766,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设24°C/关机",
+      "s": 24.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 6.325107873249981,
+      "cost": 3.34927215302878,
+      "total_discomfort": 0.001488095238095238,
+      "occ_discomfort": 0.0013897161008536827,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设25°C/不停机",
+      "s": 25.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 4.179375480908351,
+      "cost": 2.2030793533480546,
+      "total_discomfort": 0.12028769841269842,
+      "occ_discomfort": 0.1034345840778241,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设25°C/关机",
+      "s": 25.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 4.148341181354236,
+      "cost": 2.2735847231812785,
+      "total_discomfort": 0.20634920634920634,
+      "occ_discomfort": 0.3027595791145523,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设26°C/不停机",
+      "s": 26.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 3.24031361537085,
+      "cost": 1.7876630954102393,
+      "total_discomfort": 0.27938988095238093,
+      "occ_discomfort": 0.3515981735159817,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设26°C/关机",
+      "s": 26.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 3.4178492217912426,
+      "cost": 1.9123781484166247,
+      "total_discomfort": 0.33122519841269843,
+      "occ_discomfort": 0.4935477466746079,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设27°C/不停机",
+      "s": 27.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 2.583131008775631,
+      "cost": 1.4598702601213636,
+      "total_discomfort": 0.37177579365079366,
+      "occ_discomfort": 0.49394480841770894,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设27°C/关机",
+      "s": 27.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 2.5788147856013333,
+      "cost": 1.5109171453350634,
+      "total_discomfort": 0.36259920634920634,
+      "occ_discomfort": 0.51697438951757,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设28°C/不停机",
+      "s": 28.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 1.7831149778740825,
+      "cost": 1.0429620306340184,
+      "total_discomfort": 0.39360119047619047,
+      "occ_discomfort": 0.51697438951757,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设28°C/关机",
+      "s": 28.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 2.05073553811987,
+      "cost": 1.2169438270199517,
+      "total_discomfort": 0.38566468253968256,
+      "occ_discomfort": 0.5334524518562637,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设29°C/不停机",
+      "s": 29.0,
+      "keep_on": true,
+      "family": "常设"
+    },
+    {
+      "energy": 1.203087947063204,
+      "cost": 0.6959713347665645,
+      "total_discomfort": 0.4185267857142857,
+      "occ_discomfort": 0.5332539209847131,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "常设29°C/关机",
+      "s": 29.0,
+      "keep_on": false,
+      "family": "常设"
+    },
+    {
+      "energy": 2.6472679632879093,
+      "cost": 1.479513908034533,
+      "total_discomfort": 0.34226190476190477,
+      "occ_discomfort": 0.44669446098868376,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "谷26/平25/峰27/关机",
+      "family": "分时"
+    },
+    {
+      "energy": 2.0874736519410333,
+      "cost": 1.1363521807476118,
+      "total_discomfort": 0.34970238095238093,
+      "occ_discomfort": 0.44669446098868376,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "谷26/平25/峰28/关机",
+      "family": "分时"
+    },
+    {
+      "energy": 1.974394078365665,
+      "cost": 0.9327363546849462,
+      "total_discomfort": 0.3644593253968254,
+      "occ_discomfort": 0.44669446098868376,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "谷26/平25/峰29/关机",
+      "family": "分时"
+    },
+    {
+      "energy": 3.064816751599097,
+      "cost": 1.4417963012867092,
+      "total_discomfort": 0.3490823412698413,
+      "occ_discomfort": 0.44669446098868376,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "谷25/平25/峰28/关机",
+      "family": "分时"
+    },
+    {
+      "energy": 2.503605483479516,
+      "cost": 1.1008883854606604,
+      "total_discomfort": 0.36334325396825395,
+      "occ_discomfort": 0.44669446098868376,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "谷25/平25/峰29/关机",
+      "family": "分时"
+    },
+    {
+      "energy": 1.203087947063204,
+      "cost": 0.6959713347665645,
+      "total_discomfort": 0.4185267857142857,
+      "occ_discomfort": 0.5332539209847131,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "谷29/平29/峰29/关机",
+      "family": "分时"
+    }
+  ],
+  "rl": [
+    {
+      "energy": 7.722360393822468,
+      "cost": 4.160575708222026,
+      "total_discomfort": 0.0001240079365079365,
+      "occ_discomfort": 0.0001985308715505261,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "RL es=10",
+      "scale": 10.0
+    },
+    {
+      "energy": 6.496184203394635,
+      "cost": 3.404024998728058,
+      "total_discomfort": 0.059027777777777776,
+      "occ_discomfort": 0.09450069485805043,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "RL es=30",
+      "scale": 30.0
+    },
+    {
+      "energy": 3.694831712698626,
+      "cost": 1.679285452449352,
+      "total_discomfort": 0.21800595238095238,
+      "occ_discomfort": 0.3490172721858249,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "RL es=60",
+      "scale": 60.0
+    },
+    {
+      "energy": 2.486257761830412,
+      "cost": 1.2652547295255516,
+      "total_discomfort": 0.22953869047619047,
+      "occ_discomfort": 0.36748064324002383,
+      "occ_steps": 5037,
+      "total_steps": 8064,
+      "label": "RL es=100",
+      "scale": 100.0
+    }
+  ]
+}
