@@ -36,7 +36,10 @@ except Exception:
 
 PROJ = r"D:\Dev\Projects\Polaris\智能家居自适应决策系统"
 sys.path.insert(0, PROJ)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from src.env.config import SimConfig                       # noqa: E402
+from _timeline_util import (ac_on_at as _ac_on_at,          # noqa: E402
+                           ac_on_intervals as _ac_on_intervals)
 
 OUT_MD = os.path.join(PROJ, "docs", "空调温度数据可信度诊断.md")
 OUT_JSON = os.path.join(PROJ, "models", "ac_sensor_diag.json")
@@ -74,6 +77,7 @@ def load_data():
 
 
 def load_timeline():
+    """读取时段表（用于占用状态）。空调开关状态改用权威启停表。"""
     p = os.path.join(PROJ, "data", "processed", "timeline_final.csv")
     out = []
     if not os.path.exists(p):
@@ -85,18 +89,21 @@ def load_timeline():
                 e = datetime.strptime(r["end"][:19], "%Y-%m-%d %H:%M:%S")
             except (ValueError, KeyError):
                 continue
-            out.append({"start": s, "end": e,
-                        "ac_on": str(r.get("ac", "")).strip().startswith("开")
-                        or "**开**" in str(r.get("ac", "")),
-                        "raw_ac": r.get("ac", "")})
+            out.append({"start": s, "end": e, "raw_ac": r.get("ac", "")})
     return out
 
 
 def ac_state_at(tl, t):
-    for seg in tl:
-        if seg["start"] <= t < seg["end"]:
-            return seg["ac_on"]
-    return None
+    """查询时刻 t 空调是否开启。
+
+    修正（2026-10-17）：原实现取时间表 `ac` 列的前缀判断，
+    会把 '开→02:54关→05:40开→08:42关' 这类段内多次转移的标注
+    整段判为开机（620 分钟里约 200 分钟实际关机）。
+    现改为查询权威启停表（来源 data/raw/*_events.csv 的用户报告与
+    雷达反推），与 joint_fit_thermal.py 的标定输入一致。
+    （由团队审计成员 script-auditor 发现）
+    """
+    return _ac_on_at(t)
 
 
 def analyze_oscillation(data, tl):
@@ -127,8 +134,10 @@ def envelope_estimate(data, tl):
 
     可靠性低于逐窗口拟合：震荡被平均后仍会残留偏差。
     """
-    # 取空调开启的连续区间
-    segs = [s for s in tl if s["ac_on"]]
+    # 取空调开启的连续区间（权威启停表）
+    # 修正（2026-10-17）：原先从时段表按 seg["ac_on"] 取，会把多转移
+    # 标注整段视为开机；现改用权威启停表的时间区间。
+    segs = [{"start": a, "end": b} for a, b in _ac_on_intervals()]
     print("  --- 空调开启区间的净降温速率（1 小时平滑）---")
     print(f"  {'区间':<40}{'起点T':>8}{'终点T':>8}{'ΔT':>8}{'小时':>7}{'°C/小时':>10}")
     rows = []

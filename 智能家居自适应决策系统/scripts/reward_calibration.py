@@ -64,21 +64,42 @@ OUT_DIR = PROJECT_ROOT / "models" / "reward_calibration"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def ac_idx_for(target_c, cfg):
+    """把目标温度映射为最接近的空调档位索引（0 = 关闭）。
+
+    必须动态推导，不能写死 ac_idx。
+    2026-10-17 空调档位由 [25..29]（ac_idx 1..5）扩展为
+    [23..29]（ac_idx 1..7），原先写死的 1/2/3 已分别变成
+    23/24/25 °C，与声明的 24/25/27 °C 不符。
+    （由团队审计成员 script-auditor 发现）
+    """
+    best, best_d = 0, 1e18
+    for i, s in enumerate(cfg.ac_setpoints):
+        d = abs(s - target_c)
+        if d < best_d:
+            best_d, best = d, i + 1
+    return best
+
+
 def policy_rule_tou(env):
-    """参考基准：按时段调温的规则控制（B2）。"""
+    """参考基准：按时段调温的规则控制（B2）。
+
+    与 tou_experiment.py 的同名策略保持完全一致：
+    谷段 24 °C、平段 25 °C、峰段 27 °C，无人关闭。
+    """
     obs = env.get_obs_dict()
     if not (obs["occ_a"] or obs["occ_b"]):
         return encode_action(0, 0, 0, env.act_cfg)
     tier = obs["price_tier"]
     t = obs["temp_in"]
     if tier == 0.0:
-        idx, tt = 1, 24.0
+        tt = 24.0
     elif tier == 2.0:
-        idx, tt = 3, 28.0
+        tt = 27.0
     else:
-        idx, tt = 2, 26.0
+        tt = 25.0
     if t > tt + 0.5:
-        ac = idx
+        ac = ac_idx_for(tt, env.act_cfg)
     elif t < tt - 0.5:
         ac = 0
     else:

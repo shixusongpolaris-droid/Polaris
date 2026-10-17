@@ -108,15 +108,34 @@ def make_rew_cfg(tariff):
 
 
 # ============================================================
-# 规则基线（与 train.py 保持一致）
+# 规则基线
 # ============================================================
+def ac_idx_for(target_c, cfg):
+    """把目标温度映射为最接近的空调档位索引（0 = 关闭）。"""
+    best, best_d = 0, 1e18
+    for i, s in enumerate(cfg.ac_setpoints):
+        d = abs(s - target_c)
+        if d < best_d:
+            best_d, best = d, i + 1
+    return best
+
+
 def _thermostat(env, target, deadband=0.5):
+    """带滞环的恒温器，返回空调档位索引。
+
+    修正（2026-10-17）：原实现 `return 2` 表示"制冷"、`return 1` 表示
+    "维持"，是在空调档位为 [25..29]（ac_idx 1..5）时写的。档位扩展为
+    [23..29]（ac_idx 1..7）后，2 已变成 24 °C、1 已变成 23 °C——
+    即"制冷"实际设到 24 °C，"维持"实际设到 23 °C，均与标注的 25 °C
+    不符。现改为按目标温度动态推导。
+    （由团队审计成员 script-auditor 发现）
+    """
     T = env.sim.state.temp_in
     if T > target + deadband:
-        return 2      # 制冷
+        return ac_idx_for(target, env.act_cfg)
     if T < target - deadband:
         return 0      # 关闭
-    return 1          # 维持
+    return env.sim.state.ac_idx   # 维持当前档位
 
 
 def policy_always_ac(env):

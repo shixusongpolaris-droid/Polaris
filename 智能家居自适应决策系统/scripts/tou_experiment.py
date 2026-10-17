@@ -67,6 +67,23 @@ METRIC_KEYS = ["energy_per_day_kwh", "discomfort_ratio", "temp_dev_rmse",
                "switch_per_day", "response_delay_mean"]
 
 
+def ac_idx_for(target_c, cfg):
+    """把目标温度映射为最接近的空调档位索引（0 = 关闭）。
+
+    必须动态推导，不能写死 ac_idx。
+    2026-10-17 空调档位由 [25..29]（ac_idx 1..5）扩展为
+    [23..29]（ac_idx 1..7），原先写死的 `ac_idx=1/2/3` 已分别
+    变成 23/24/25 °C，与本文档声明的 24/25/27 °C 完全不符。
+    （由团队审计成员 script-auditor 发现）
+    """
+    best, best_d = 0, 1e18
+    for i, s in enumerate(cfg.ac_setpoints):
+        d = abs(s - target_c)
+        if d < best_d:
+            best_d, best = d, i + 1
+    return best
+
+
 # ============================================================
 # 基线策略
 # ============================================================
@@ -100,16 +117,21 @@ def policy_rule_tou(env):
     tier = obs["price_tier"]          # 0=谷 1=平 2=峰
     t = obs["temp_in"]
 
-    if tier == 0.0:                   # 谷段：制冷到 24°C（对应 ac_idx=1）
-        target_idx, target_t = 1, 24.0
-    elif tier == 2.0:                 # 峰段：允许到 27°C（对应 ac_idx=3）
-        target_idx, target_t = 3, 28.0
+    # 修正（2026-10-17）：原代码用写死的 (target_idx, target_t) 二元组，
+    # 且两者互相矛盾——注释写峰段 27 °C、平段 25 °C，代码的 target_t 却是
+    # 28 / 26，而 target_idx=1/2/3 在档位扩展后更变成 23/24/25 °C。
+    # 现改为"以目标温度为唯一真值，索引由 ac_idx_for 动态推导"，
+    # 数值与本文档声明保持一致：谷 24 / 平 25 / 峰 27 °C。
+    if tier == 0.0:                   # 谷段：提前制冷，为峰段蓄冷
+        target_t = 24.0
+    elif tier == 2.0:                 # 峰段：容忍更高室温，尽量少用电
+        target_t = 27.0
     else:                             # 平段
-        target_idx, target_t = 2, 26.0
+        target_t = 25.0
 
     # 滞环：高于目标 +0.5 开，低于目标 -0.5 关
     if t > target_t + 0.5:
-        ac = target_idx
+        ac = ac_idx_for(target_t, env.act_cfg)
     elif t < target_t - 0.5:
         ac = 0
     else:

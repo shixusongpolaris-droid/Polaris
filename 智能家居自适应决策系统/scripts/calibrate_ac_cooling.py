@@ -60,7 +60,11 @@ except Exception:
 PROJ = r"D:\Dev\Projects\Polaris\智能家居自适应决策系统"
 sys.path.insert(0, PROJ)
 
-from src.env.config import SimConfig                      # noqa: E402
+from src.env.config import SimConfig
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _timeline_util import (ac_on_at as _ac_on_at,          # noqa: E402
+                          ac_on_intervals as _ac_periods,
+                          total_on_minutes as _ac_total_minutes)
 
 OUT_MD = os.path.join(PROJ, "docs", "空调制冷能力标定.md")
 OUT_JSON = os.path.join(PROJ, "models", "ac_calibration.json")
@@ -115,7 +119,6 @@ def load_timeline():
                 continue
             out.append({
                 "start": s, "end": e,
-                "ac_on": ("开" in str(r.get("ac", ""))),
                 "occupied": (str(r.get("state", "")).strip().startswith("在房间")),
                 "window": ("开" in str(r.get("door_window", ""))),
             })
@@ -145,11 +148,20 @@ def build_samples(data, tl):
         if r1 is None or r1["temp_in"] is None:
             continue
         seg = state_at(tl, t0)
-        if seg is None or not seg["ac_on"]:
+        if seg is None:
+            continue
+        # 空调是否开启改用权威启停表判断（2026-10-17 修正）。
+        # 原实现取时间表 `ac` 列的子串包含判断，"开" in "关" 之类的
+        # 多转移标注会被整段判为开机，导致开机时长虚增约 32%。
+        # （由团队审计成员 script-auditor 发现）
+        if not _ac_on_at(t0):
             continue
         # 要求整个窗口都在空调开启区间内
+        if not _ac_on_at(t1 - timedelta(seconds=1)):
+            continue
+        # 占用状态仍取自时间表
         seg1 = state_at(tl, t1 - timedelta(seconds=1))
-        if seg1 is None or not seg1["ac_on"]:
+        if seg1 is None:
             continue
         T = r["temp_in"]
         T_out = r["temp_out"] if r["temp_out"] is not None else \
@@ -190,11 +202,9 @@ def main():
     print(" 空调制冷能力标定")
     print("=" * 74)
     print(f"  实测样本 {len(data)} 条")
-    print(f"  时段表 {len(tl)} 段，其中空调开启 "
-          f"{sum(1 for s in tl if s['ac_on'])} 段")
-    ac_min = min((s["start"] for s in tl if s["ac_on"]), default=None)
-    ac_max_t = max((s["end"] for s in tl if s["ac_on"]), default=None)
-    print(f"  空调开启时间范围：{ac_min} ~ {ac_max_t}")
+    print(f"  时段表 {len(tl)} 段（仅用于占用状态）")
+    print(f"  空调启动用权威启停表：{_ac_periods()} 段，"
+          f"合计开机 {_ac_total_minutes():.1f} 分钟")
     print(f"  设定温度（用户报告）：{T_SET} °C")
     print()
 
