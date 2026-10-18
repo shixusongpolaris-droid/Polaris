@@ -1,0 +1,86 @@
+[
+  {
+    "cost": 2.8199419350800183,
+    "occ_discomfort": 0.0,
+    "energy": 5.549289690814495,
+    "representative": "全开 25°C",
+    "n_tied_rules": 11
+  },
+  {
+    "cost": 2.331174219738236,
+    "occ_discomfort": 0.001635322976287817,
+    "energy": 4.125469184549797,
+    "representative": "睡/醒 26/25 空步>=1 预冷25",
+    "n_tied_rules": 1
+  },
+  {
+    "cost": 2.293566395069752,
+    "occ_discomfort": 0.0021804306350504225,
+    "energy": 3.997636383353311,
+    "representative": "睡/醒+峰谷 25/26 空步>=1 预冷25",
+    "n_tied_rules": 1
+  },
+  {
+    "cost": 2.2820397245228365,
+    "occ_discomfort": 0.009811937857726901,
+    "energy": 4.3930775506833255,
+    "representative": "电价>=0.02 谷26/平25/峰25 维持25",
+    "n_tied_rules": 21
+  },
+  {
+    "cost": 2.1827635644476384,
+    "occ_discomfort": 0.0133363991722235,
+    "energy": 4.2766412253112875,
+    "representative": "电价风险>=0.10 谷26/平24/峰25 维持25",
+    "n_tied_rules": 4
+  },
+  {
+    "cost": 2.180778117833674,
+    "occ_discomfort": 0.022349414009266832,
+    "energy": 4.103530670345662,
+    "representative": "电价>=0.02 谷24/平25/峰25 维持25",
+    "n_tied_rules": 21
+  },
+  {
+    "cost": 2.055875513101203,
+    "occ_discomfort": 0.026442860427684525,
+    "energy": 3.9113528412152503,
+    "representative": "电价风险>=0.10 谷24/平24/峰25 维持25",
+    "n_tied_rules": 4
+  },
+  {
+    "cost": 2.0329673706955473,
+    "occ_discomfort": 0.32329462989840346,
+    "energy": 3.5582264490484103,
+    "representative": "风险>=0.10 预冷25 维持26",
+    "n_tied_rules": 3
+  },
+  {
+    "cost": 1.9579287208815779,
+    "occ_discomfort": 0.3583091436865022,
+    "energy": 3.443228813038889,
+    "representative": "风险>=0.70 预冷25 维持26",
+    "n_tied_rules": 1
+  },
+  {
+    "cost": 1.948105737610022,
+    "occ_discomfort": 0.44099209593894795,
+    "energy": 3.5358098605901738,
+    "representative": "睡/醒 25/26 空步>=47 预冷23",
+    "n_tied_rules": 2
+  },
+  {
+    "cost": 1.8169656693878937,
+    "occ_discomfort": 0.45301161103047893,
+    "energy": 3.2330343302473272,
+    "representative": "风险>=0.90 预冷25 维持26",
+    "n_tied_rules": 1
+  },
+  {
+    "cost": 1.795707855969594,
+    "occ_discomfort": 0.4553701015965167,
+    "energy": 3.1933430383269616,
+    "representative": "26°C/无人关",
+    "n_tied_rules": 1
+  }
+]
