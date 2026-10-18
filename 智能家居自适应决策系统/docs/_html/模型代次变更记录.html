@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>模型代次变更记录</title>
+<style>
+:root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
+        --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
+* { box-sizing: border-box; }
+body { margin:0; background:#f6f8fa; color:var(--fg);
+       font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei",
+             "PingFang SC", sans-serif; }
+.page { max-width: 1000px; margin: 0 auto; padding: 40px 28px 80px;
+        background: var(--bg); }
+h1,h2,h3,h4,h5 { line-height:1.35; margin: 1.6em 0 .6em; font-weight:600; }
+h1 { font-size: 2em; border-bottom:2px solid var(--bd); padding-bottom:.3em; }
+h2 { font-size: 1.5em; border-bottom:1px solid var(--bd); padding-bottom:.25em; }
+h3 { font-size: 1.22em; }
+h4 { font-size: 1.06em; color:var(--muted); }
+p { margin: .75em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--code); padding: .15em .4em; border-radius: 5px;
+       font: .9em/1.5 "Cascadia Mono", Consolas, monospace; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px;
+      overflow: auto; border: 1px solid var(--bd); }
+pre code { background: none; padding: 0; font-size: .88em; }
+table { border-collapse: collapse; margin: 1.1em 0; width: 100%;
+        font-size: .94em; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--bd); padding: 7px 11px; text-align: left;
+         vertical-align: top; }
+th { background: #eef2f6; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fbfcfd; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid var(--accent);
+             background: #f0f7ff; color: #1f2328; }
+blockquote p { margin: .3em 0; }
+ul, ol { margin: .7em 0; padding-left: 1.8em; }
+li { margin: .25em 0; }
+hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
+.toc { background:#f6f8fa; border:1px solid var(--bd); border-radius:8px;
+       padding: 14px 20px; margin: 1.5em 0 2em; font-size: .94em; }
+.toc div { margin: .2em 0; }
+.toc .l2 { padding-left: 1.2em; color: var(--muted); }
+.toc .l3 { padding-left: 2.4em; color: var(--muted); font-size: .95em; }
+.meta { color: var(--muted); font-size: .86em; margin-bottom: 1.5em; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="meta">源文件：模型代次变更记录.md
+　·　由 scripts/md2html.py 生成</div>
+<div class="toc"><strong>目录</strong>
+<div class="l1">模型代次变更记录</div>
+<div class="l2">总览</div>
+<div class="l2">一、gen1：项目初版（未标定）</div>
+<div class="l2">二、gen2：首次热参数标定</div>
+<div class="l2">三、gen3：全时段联合标定</div>
+<div class="l2">四、gen4：修复占用判定 + 热模型扩展</div>
+<div class="l3">4.1 发现的 bug（由项目所有者发现）</div>
+<div class="l3">4.2 修正后暴露的模型形式缺陷</div>
+<div class="l3">4.3 热模型扩展</div>
+<div class="l2">五、gen5：动作空间扩展 + 修复启动损耗</div>
+<div class="l3">5.1 发现的问题：仿真最低档位与实测不符</div>
+<div class="l3">5.2 判据：用实测启停强制驱动仿真</div>
+<div class="l3">5.3 另一个 bug：启动损耗从未生效</div>
+<div class="l3">5.4 变更汇总</div>
+<div class="l2">五点五、gen6：补入第 6 段空调开机并重标定</div>
+<div class="l3">6.1 发现</div>
+<div class="l3">6.2 参数变化</div>
+<div class="l3">6.3 重要修正：gen6 并不比 gen5 拟合得更好</div>
+<div class="l3">6.4 重跑范围与结论</div>
+<div class="l3">6.5 两代并存的解读</div>
+<div class="l2">六、各代实验数字对比</div>
+<div class="l3">6.1 消融实验（三种权重模式 × 5 种子）</div>
+<div class="l3">6.2 统一评估基线（无分时电价，20 回合）</div>
+<div class="l3">6.3 显式储能（4 kWh，3 种子）</div>
+<div class="l3">6.4 循环网络对比（分时电价场景）</div>
+<div class="l3">6.5 能耗权重（<code>energy_scale</code>）的临界值</div>
+<div class="l2">七、gen5 的最终定论（10 种子置信区间）</div>
+<div class="l2">八、变更的动机分类</div>
+<div class="l2">九、这份记录能回答的问题</div>
+</div>
+<h1>模型代次变更记录</h1>
+<p>本文档如实记录仿真模型从 gen1 到 gen5 的全部变更：**每一代改了什么、</p>
+<p>为什么改、依据是什么、以及改完之后结论如何变化**。</p>
+<p>之所以保留这份记录，是因为本项目在推进中多次发现缺陷并修正，</p>
+<p>结论也因此数度变化。把变化过程完整留痕，比只呈现最终结果更能说明</p>
+<p>工作的严谨性；同时也便于答辩时回答&quot;你的结论为什么和中期不一样&quot;。</p>
+<hr>
+<h2>总览</h2>
+<table>
+<thead><tr>
+<th>代次</th>
+<th>提交</th>
+<th>关键变更</th>
+<th>空调动作空间</th>
+<th>全时段 RMSE</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>gen1</strong></td>
+<td><code>155950b</code></td>
+<td>项目初版参数（未标定）</td>
+<td>36</td>
+<td>未评估</td>
+</tr>
+<tr>
+<td><strong>gen2</strong></td>
+<td><code>7f32934</code></td>
+<td>首次热参数标定</td>
+<td>36</td>
+<td>2.381 °C</td>
+</tr>
+<tr>
+<td><strong>gen3</strong></td>
+<td><code>65bd6a8</code></td>
+<td>全时段联合标定</td>
+<td>36</td>
+<td>1.728 °C</td>
+</tr>
+<tr>
+<td><strong>gen4</strong></td>
+<td><code>afb7b97</code> → <code>f38139a</code></td>
+<td>修占用 bug + 热模型扩展</td>
+<td>36</td>
+<td>1.888 °C</td>
+</tr>
+<tr>
+<td><strong>gen5</strong></td>
+<td><code>92f086b</code> + <code>104bec4</code></td>
+<td>动作空间扩展 + 修启动损耗</td>
+<td><strong>48</strong></td>
+<td>1.888 °C</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>一、gen1：项目初版（未标定）</h2>
+<p><strong>参数</strong></p>
+<table>
+<thead><tr>
+<th>参数</th>
+<th>值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ua_coef</code></td>
+<td>0.040（隐含 τ = 375 分钟）</td>
+</tr>
+<tr>
+<td><code>internal_gain</code></td>
+<td>0.02</td>
+</tr>
+<tr>
+<td><code>ac_coef</code></td>
+<td>0.30</td>
+</tr>
+<tr>
+<td><code>ac_max_cooling</code></td>
+<td>1.2</td>
+</tr>
+<tr>
+<td><code>temp_outdoor_mean</code></td>
+<td>30.0</td>
+</tr>
+<tr>
+<td><code>ac_setpoints</code></td>
+<td>[25, 26, 27, 28, 29]</td>
+</tr>
+</tbody></table>
+<p><strong>问题</strong></p>
+<ol>
+<li>室外温度取 30 °C 的常数假设，与 10 月上海实测（17~26 °C）不符</li>
+<li>τ = 375 分钟远超房间的合理热惯性</li>
+<li><strong>空调制冷能力严重不足</strong>：<code>ac_coef = 0.30</code> 意味着室温每高于设定值</li>
+</ol>
+<p>1 °C 只产生 0.3 °C 的降温，设定 25 °C 时平衡室温远高于 26 °C，</p>
+<p>即&quot;空调压不住设定温度&quot;</p>
+<p><strong>后果</strong>：以&quot;全程开空调 25 °C&quot;作为舒适度上界参照本身就不达标，</p>
+<p>所有以它为基准的结论都失去意义。</p>
+<hr>
+<h2>二、gen2：首次热参数标定</h2>
+<p><strong>参数变化</strong></p>
+<table>
+<thead><tr>
+<th>参数</th>
+<th>gen1</th>
+<th>gen2</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>temp_outdoor_mean</code></td>
+<td>30.0</td>
+<td><strong>22.0</strong></td>
+</tr>
+<tr>
+<td><code>ua_coef</code></td>
+<td>0.040</td>
+<td><strong>0.115</strong>（τ = 130 分钟）</td>
+</tr>
+<tr>
+<td><code>internal_gain</code></td>
+<td>0.02</td>
+<td><strong>0.80</strong></td>
+</tr>
+<tr>
+<td><code>ac_coef</code></td>
+<td>0.30</td>
+<td>0.30（未改）</td>
+</tr>
+<tr>
+<td><code>ac_max_cooling</code></td>
+<td>1.2</td>
+<td>1.2（未改）</td>
+</tr>
+</tbody></table>
+<p><strong>依据</strong>：用实测 49.9 小时数据做均值与斜率拟合，温度均值误差由</p>
+<p>3.55 °C 降到 0.13 °C。</p>
+<p><strong>遗留问题</strong>：<code>ac_coef</code> 未动，空调仍然压不住温度。设定 25 °C 时</p>
+<p>平衡室温 26.10 °C 仍高于舒适区上限 26 °C。</p>
+<p><strong>实验结果</strong></p>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>电量(kWh/天)</th>
+<th>不达标率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>全程开空调 25 °C</td>
+<td>6.194</td>
+<td><strong>16.8%</strong> ← 参照基线自身不达标</td>
+</tr>
+<tr>
+<td>规则控制(定温)</td>
+<td>2.955</td>
+<td>20.2%</td>
+</tr>
+<tr>
+<td>全程不开空调</td>
+<td>0.036</td>
+<td>36.3%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>三、gen3：全时段联合标定</h2>
+<p><strong>核心问题</strong></p>
+<p>单窗口解析拟合无法确定 τ：同一段数据换个窗口起止即可得</p>
+<p>τ = 8 / 23 / 25 / 26 / 80 / 170 / 600 分钟。原因是 <code>(T∞, τ)</code> 在该</p>
+<p>公式里退化——短窗口内温度尚未接近平衡，数据只提供&quot;初始斜率&quot;</p>
+<p>= (T∞−T₀)/τ 一个信息，无法拆出两个参数。</p>
+<p><strong>方法</strong>：改用全时段联合拟合（前向积分整条序列，Nelder-Mead + 粗网格），</p>
+<p>利用整段数据中的多次转折（空调 5 次启停、日出日落、人员进出），</p>
+<p>每次转折提供独立约束。</p>
+<p><strong>参数变化</strong></p>
+<table>
+<thead><tr>
+<th>参数</th>
+<th>gen2</th>
+<th>gen3</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ua_coef</code></td>
+<td>0.115</td>
+<td><strong>0.2072</strong>（τ = 72 分钟）</td>
+</tr>
+<tr>
+<td><code>internal_gain</code></td>
+<td>0.80</td>
+<td><strong>1.3375</strong></td>
+</tr>
+<tr>
+<td><code>ac_coef</code></td>
+<td>0.30</td>
+<td><strong>1.8825</strong></td>
+</tr>
+<tr>
+<td><code>ac_max_cooling</code></td>
+<td>1.2</td>
+<td><strong>3.1675</strong></td>
+</tr>
+</tbody></table>
+<p><strong>效果</strong></p>
+<ul>
+<li>全时段 RMSE：2.381 → <strong>1.728 °C</strong></li>
+<li>τ 由两种独立日照驱动方式分别标定均得 69~72 分钟，互相印证</li>
+<li>空调终于能维持设定温度（设定 25 °C 平衡室温 25.34 °C）</li>
+<li><strong>&quot;全程开空调 25 °C&quot;的不达标率由 16.8% 降到 3.6%</strong></li>
+</ul>
+<p><strong>⚠️ 本代遗留一个未发现的缺陷</strong>：占用判定的字符串匹配错误（见 gen4）。</p>
+<hr>
+<h2>四、gen4：修复占用判定 + 热模型扩展</h2>
+<h3>4.1 发现的 bug（由项目所有者发现）</h3>
+<p>多处脚本用如下方式判定人员占用：</p>
+<pre><code>&quot;在房间&quot; in str(state)</code></pre>
+<p>而<strong>&quot;不在房间&quot;含有&quot;在房间&quot;这个子串</strong>，因此所有&quot;不在房间&quot;的时段</p>
+<p>都被误判为&quot;在房间&quot;：</p>
+<pre><code>旧判定：在室 2859/2859 分钟 = 100%
+正确值：在室 1937/2859 分钟 =  67.8%</code></pre>
+<p>受影响脚本 5 个，其中 <code>joint_fit_thermal.py</code> 正是产生 gen3 参数的脚本。</p>
+<p><strong>因此 gen3 的全部参数都是在&quot;在室率 100%&quot;的错误假设下标定出来的。</strong></p>
+<h3>4.2 修正后暴露的模型形式缺陷</h3>
+<p>把占用改对之后，原模型（单个 <code>gain</code> 且按&quot;有人&quot;生效）的标定结果</p>
+<p>反而恶化：</p>
+<table>
+<thead><tr>
+<th></th>
+<th>占用判错(100%)</th>
+<th>占用修正(68%)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>τ</td>
+<td>72 分钟</td>
+<td><strong>706 分钟</strong>（物理上不可能）</td>
+</tr>
+<tr>
+<td>稳态室内外温差</td>
+<td>6.46 °C</td>
+<td><strong>22.88 °C</strong>（不可能）</td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td>1.728</td>
+<td>1.896</td>
+</tr>
+</tbody></table>
+<p><strong>原因</strong>：占用判错时，那个 <code>gain</code> 实际充当了&quot;常开热源&quot;，</p>
+<p>恰好补偿了模型缺失的<strong>基础得热</strong>（楼板/邻户传热、电器待机、</p>
+<p>墙体蓄热释放）。占用改正后，同一模型必须靠&quot;极慢响应 + 极大增益&quot;</p>
+<p>来硬凑。</p>
+<h3>4.3 热模型扩展</h3>
+<p>把得热拆为两部分并显式加入日照项：</p>
+<pre><code>dT = −ua·(T − T_out)                       围护传热
+     + gain_base                           基础得热（与人员无关）
+     + gain_occ·1{有人}                     人员得热
+     + solar_coef·太阳因子                   日照
+     − min(ac_coef·max(T−T_set,0), ac_max)  空调制冷</code></pre>
+<p><strong>标定结果</strong></p>
+<table>
+<thead><tr>
+<th>参数</th>
+<th>gen3</th>
+<th>gen4</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ua_coef</code></td>
+<td>0.2072</td>
+<td><strong>0.1383</strong>（τ = 108 分钟）</td>
+</tr>
+<tr>
+<td><code>gain_base</code></td>
+<td>无</td>
+<td><strong>0.76</strong></td>
+</tr>
+<tr>
+<td><code>internal_gain</code>（=gain_occ）</td>
+<td>1.3375</td>
+<td><strong>0.00</strong></td>
+</tr>
+<tr>
+<td><code>solar_coef</code></td>
+<td>无</td>
+<td><strong>0.23</strong></td>
+</tr>
+<tr>
+<td><code>ac_coef</code></td>
+<td>1.8825</td>
+<td><strong>2.0125</strong></td>
+</tr>
+<tr>
+<td><code>ac_max_cooling</code></td>
+<td>3.1675</td>
+<td><strong>2.1475</strong></td>
+</tr>
+<tr>
+<td>全时段 RMSE</td>
+<td>1.728</td>
+<td><strong>1.888</strong></td>
+</tr>
+</tbody></table>
+<p><strong>重要发现</strong>：<code>gain_occ ≈ 0</code>——<strong>人员得热在实测数据中可以忽略</strong>，</p>
+<p>全部得热来自基础项。对 15 楼公寓而言，一人约 100 W 的代谢热</p>
+<p>远小于建筑传热与蓄热释放，物理上说得通。</p>
+<p><strong>参数现在物理自洽</strong></p>
+<pre><code>设定 25 °C 的平衡室温 = 25.16 °C
+设定 27 °C 的平衡室温 = 27.03 °C
+无人时稳态室内外温差 = 5.50 °C</code></pre>
+<p><strong>注</strong>：gen4 期间还按项目所有者的核对回复修正了时段表</p>
+<p>（19:54 而非 20:09 出门；10-16 14:21~14:30 在房间），</p>
+<p>在室率由 67.8% 微调为 67.5%。</p>
+<hr>
+<h2>五、gen5：动作空间扩展 + 修复启动损耗</h2>
+<h3>5.1 发现的问题：仿真最低档位与实测不符</h3>
+<p>仿真的空调档位是 <code>[25, 26, 27, 28, 29]</code>，最低只能设 25 °C；</p>
+<p>而<strong>实测中用户把空调设为 23 °C</strong>。</p>
+<p>后果不止是&quot;表达不了真实设定&quot;：规则策略的设定温度扫描中，</p>
+<p>22/23/24 °C 会被 <code>ac_idx_for</code> 全部映射到 25 °C，</p>
+<p><strong>&quot;降低设定温度&quot;这条节能路径在仿真中根本不存在</strong>——这也解释了</p>
+<p>为什么规则在 22/23/24/25 °C 下给出完全相同的结果。</p>
+<h3>5.2 判据：用实测启停强制驱动仿真</h3>
+<p>不依赖策略，直接按实测的空调启停序列驱动仿真，</p>
+<p>比较仿真室温与实测室温：</p>
+<table>
+<thead><tr>
+<th>最低档</th>
+<th>仿真均值</th>
+<th>仿真范围</th>
+<th>RMSE</th>
+<th>偏差</th>
+<th>相关系数</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>23 °C</strong></td>
+<td>25.05</td>
+<td>22.4~29.6</td>
+<td><strong>1.793</strong></td>
+<td><strong>−0.179</strong></td>
+<td><strong>0.756</strong></td>
+</tr>
+<tr>
+<td>24 °C</td>
+<td>25.61</td>
+<td>23.4~29.8</td>
+<td>1.914</td>
+<td>+0.389</td>
+<td>0.718</td>
+</tr>
+<tr>
+<td>25 °C</td>
+<td>26.08</td>
+<td>23.4~29.9</td>
+<td>2.237</td>
+<td>+0.854</td>
+<td>0.640</td>
+</tr>
+</tbody></table>
+<p><strong>23 °C 三项指标全面最优，RMSE 改善 19.9%。</strong></p>
+<h3>5.3 另一个 bug：启动损耗从未生效</h3>
+<p><code>HomeSimulator.step</code> 中判断&quot;压缩机启动&quot;的代码为：</p>
+<pre><code>self.state.ac_idx = ac_idx                             # 先写入新档位
+...
+ac_started = (ac_idx &gt; 0 and self.state.ac_idx == 0)   # 再与 0 比较</code></pre>
+<p>由于 <code>self.state.ac_idx</code> 已被赋为 <code>ac_idx</code>，条件退化为</p>
+<p><code>ac_idx &gt; 0 and ac_idx == 0</code>，<strong>恒为 False</strong>。</p>
+<p><strong>后果</strong>：<code>ac_startup_penalty_kwh</code>（0.010 kWh/次）从未计入能耗，</p>
+<p><code>ac_start_count</code> 恒为 0，<strong>规则控制频繁启停的代价被完全忽略</strong>。</p>
+<p>而 <code>RewardConfig.ac_startup_penalty_kwh</code> 的注释恰好写着</p>
+<p>&quot;若不建模该损耗，仿真会得出恒温运行比间歇运行更省电的结论&quot;</p>
+<p>——该建模实际上从未生效。</p>
+<p><strong>修复后验证</strong>（规则控制 @25 °C）</p>
+<table>
+<thead><tr>
+<th>启动损耗</th>
+<th>电量(kWh/天)</th>
+<th>空调启动(次/天)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0.000</td>
+<td>4.149</td>
+<td>7.3</td>
+</tr>
+<tr>
+<td>0.010</td>
+<td>4.221</td>
+<td>7.3</td>
+</tr>
+<tr>
+<td>0.050</td>
+<td>4.513</td>
+<td>7.3</td>
+</tr>
+<tr>
+<td>0.120</td>
+<td>5.023</td>
+<td>7.3</td>
+</tr>
+</tbody></table>
+<h3>5.4 变更汇总</h3>
+<table>
+<thead><tr>
+<th>项目</th>
+<th>gen4</th>
+<th>gen5</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ac_setpoints</code></td>
+<td>[25,26,27,28,29]</td>
+<td><strong>[23,24,25,26,27,28,29]</strong></td>
+</tr>
+<tr>
+<td><code>ac_choices</code></td>
+<td>6</td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td><code>n_actions</code></td>
+<td>36</td>
+<td><strong>48</strong></td>
+</tr>
+<tr>
+<td><code>ac_started</code> 判定</td>
+<td>恒为 False（bug）</td>
+<td>正确</td>
+</tr>
+<tr>
+<td>热参数</td>
+<td>同 gen4</td>
+<td>同 gen4（未变）</td>
+</tr>
+</tbody></table>
+<p><strong>连带修复</strong>：7 个脚本原有的硬编码档位常量</p>
+<p><code>AC_25C, AC_26C, ... = 1, 2, 3, 4, 5</code> 在档位扩展后失效</p>
+<p>（索引 1 已变成 23 °C），已全部改为由配置推导。</p>
+<hr>
+<h2>五点五、gen6：补入第 6 段空调开机并重标定</h2>
+<h3>6.1 发现</h3>
+<p>启停表原只有 5 段、止于 10-16 13:48，但 data/raw/daily_2026-10-16_events.csv</p>
+<p>记录着：</p>
+<p>2026-10-16 16:50:44, 用户报告: 打开空调（此前 13:48 关闭）</p>
+<p>实测佐证：16:40~16:50 室温稳定在 27.7~27.8 °C，16:52:53 起开始下降</p>
+<p>（27.7 -&gt; 27.6 -&gt; 27.5），实测数据终点 17:59:33。即最后约 69 分钟</p>
+<p>空调处于开机状态却被当作关机。</p>
+<p>（由团队复核成员 fix-reviewer 发现）</p>
+<h3>6.2 参数变化</h3>
+<table>
+<thead><tr>
+<th>参数</th>
+<th>gen5</th>
+<th>gen6</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ua_coef</td>
+<td>0.1383</td>
+<td><strong>0.15175</strong>（tau = 99 分钟）</td>
+</tr>
+<tr>
+<td>gain_base</td>
+<td>0.76</td>
+<td><strong>0.8925</strong></td>
+</tr>
+<tr>
+<td>solar_coef</td>
+<td>0.23</td>
+<td><strong>0.215</strong></td>
+</tr>
+<tr>
+<td>c_coef</td>
+<td>2.0125</td>
+<td><strong>1.83</strong></td>
+</tr>
+<tr>
+<td>c_max_cooling</td>
+<td>2.1475</td>
+<td><strong>2.1175</strong></td>
+</tr>
+</tbody></table>
+<p>物理自洽：各档平衡室温 23.37/25.22/27.07/28.91 °C，均可维持；</p>
+<p>无人时稳态室内外温差 5.88 °C。</p>
+<h3>6.3 重要修正：gen6 并不比 gen5 拟合得更好</h3>
+<p>同口径比较（scripts/compare_gen5_gen6_rmse.py）：</p>
+<p>gen5  RMSE 1.7821</p>
+<p>gen6  RMSE 1.7790     （仅改善 0.17%）</p>
+<p><strong>参数变动 1.4%~17.4% 只换来 0.17% 的拟合改善</strong>，说明这 6 个参数</p>
+<p>在该数据上可辨识性差。gen6 的意义在于<strong>用了更完整的空调启停数据</strong>，</p>
+<p>而非拟合更准。</p>
+<h3>6.4 重跑范围与结论</h3>
+<p>gen6 下重跑了 3 项：energy_scale_ci、</p>
+<p>ule_ceiling、evaluate_all。</p>
+<p>结论与 gen5 一致（详见 docs/结题引用守则.md）：</p>
+<p>命题                         gen5         gen6</p>
+<p>低舒适区规则更省              是 44-82%   是 30-46%</p>
+<p>高舒适区 RL 更省              是          是</p>
+<p>规则可达更低不舒适            0.15%       0.00%</p>
+<p>RL 的不舒适下界              6.28%       3.74%（全时段）</p>
+<p>只有 es=100 通过区间判据       是          是</p>
+<p><strong>更正（2026-10-18）</strong>：其余 9 项实验（消融、储能、循环网络、能耗权重</p>
+<p>扫描、参数扫描、设定点扫描、统一评估、配平比较、帕累托分析）已于</p>
+<p>2026-10-18 在 gen6 下<strong>全部重跑完毕</strong>（72.1 分钟），</p>
+<p>详见 <code>docs/gen6体检报告.md</code>。gen5 的对应结果保存在</p>
+<p><code>models/_gen5_partial/</code>——但注意该目录是重跑前的整体快照，</p>
+<p><strong>混装了 3 个已属 gen6 的子目录</strong>（<code>evaluation</code>、<code>energy_scale_ci</code>、</p>
+<p><code>rule_ceiling</code>），真正的 gen5 数据在 <code>models/_gen5_evaluation/</code>、</p>
+<p><code>models/_gen5_energy_scale_ci/</code>、<code>models/_gen5_rule_ceiling/</code>。</p>
+<h3>6.5 两代并存的解读</h3>
+<p>参数在一个可辨识性差的方向上变动 1.4%~17.4%，而结论完全一致——</p>
+<p>这本身构成一次<strong>参数不确定性下的稳健性检验</strong>，可作为结论鲁棒性的证据。</p>
+<hr>
+<h2>六、各代实验数字对比</h2>
+<h3>6.1 消融实验（三种权重模式 × 5 种子）</h3>
+<table>
+<thead><tr>
+<th>组别</th>
+<th>指标</th>
+<th>gen2</th>
+<th>gen3</th>
+<th>gen4</th>
+<th>gen5</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A1 固定权重</td>
+<td>电量</td>
+<td>5.541</td>
+<td>5.724</td>
+<td>5.675</td>
+<td>6.041</td>
+</tr>
+<tr>
+<td>A1 固定权重</td>
+<td>不达标</td>
+<td>9.20%</td>
+<td>5.22%</td>
+<td>1.50%</td>
+<td>0.39%</td>
+</tr>
+<tr>
+<td>A2 场景化（本方法）</td>
+<td>电量</td>
+<td>6.577</td>
+<td>5.395</td>
+<td>6.067</td>
+<td>6.439</td>
+</tr>
+<tr>
+<td>A2 场景化（本方法）</td>
+<td>不达标</td>
+<td>6.72%</td>
+<td>3.47%</td>
+<td>0.16%</td>
+<td>1.62%</td>
+</tr>
+<tr>
+<td>A3 随机变化</td>
+<td>电量</td>
+<td>5.766</td>
+<td>4.684</td>
+<td>5.774</td>
+<td>5.777</td>
+</tr>
+<tr>
+<td>A3 随机变化</td>
+<td>不达标</td>
+<td>8.75%</td>
+<td>3.88%</td>
+<td>0.54%</td>
+<td>0.27%</td>
+</tr>
+</tbody></table>
+<p><strong>A2 相对 A1 的结论在各代之间翻转了四次</strong></p>
+<table>
+<thead><tr>
+<th>代次</th>
+<th>电量</th>
+<th>舒适度</th>
+<th>结论</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gen2</td>
+<td>+18.69%（更费）</td>
+<td>更好</td>
+<td>双输一边</td>
+</tr>
+<tr>
+<td>gen3</td>
+<td>−5.75%（更省）</td>
+<td>更好</td>
+<td><strong>双赢</strong></td>
+</tr>
+<tr>
+<td>gen4</td>
+<td>+6.90%（更费）</td>
+<td>更好</td>
+<td>能耗换舒适</td>
+</tr>
+<tr>
+<td>gen5</td>
+<td>+6.60%（更费）</td>
+<td><strong>更差</strong></td>
+<td><strong>双输</strong></td>
+</tr>
+</tbody></table>
+<p><strong>因此&quot;场景化权重&quot;这一机制</strong>不建议作为硬结论，</p>
+<p>四代中三次不利、一次有利。</p>
+<h3>6.2 统一评估基线（无分时电价，20 回合）</h3>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>指标</th>
+<th>gen2</th>
+<th>gen3</th>
+<th>gen4</th>
+<th>gen5</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>全程开空调 25 °C</td>
+<td>电量</td>
+<td>6.194</td>
+<td>6.049</td>
+<td>6.356</td>
+<td>6.357</td>
+</tr>
+<tr>
+<td>全程开空调 25 °C</td>
+<td>不达标</td>
+<td><strong>16.8%</strong></td>
+<td>3.6%</td>
+<td><strong>0.0%</strong></td>
+<td><strong>0.0%</strong></td>
+</tr>
+<tr>
+<td>规则控制(定温)</td>
+<td>电量</td>
+<td>2.955</td>
+<td>2.987</td>
+<td>4.220</td>
+<td>4.300</td>
+</tr>
+<tr>
+<td>规则控制(定温)</td>
+<td>不达标</td>
+<td>20.2%</td>
+<td>4.8%</td>
+<td>11.9%</td>
+<td>11.9%</td>
+</tr>
+<tr>
+<td>全程不开空调</td>
+<td>不达标</td>
+<td>36.3%</td>
+<td>31.4%</td>
+<td>50.8%</td>
+<td>50.8%</td>
+</tr>
+</tbody></table>
+<p><strong>gen4 起&quot;全程开空调 25 °C&quot;达到 0.0% 不达标</strong>，</p>
+<p>说明空调制冷能力与热模型已能自洽复现实测。</p>
+<h3>6.3 显式储能（4 kWh，3 种子）</h3>
+<table>
+<thead><tr>
+<th>场景</th>
+<th>指标</th>
+<th>gen2</th>
+<th>gen3</th>
+<th>gen4</th>
+<th>gen5</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A 规则（无储能）</td>
+<td>电费</td>
+<td>0.971</td>
+<td>0.981</td>
+<td>1.476</td>
+<td>1.508</td>
+</tr>
+<tr>
+<td>B 规则+储能</td>
+<td>电费</td>
+<td>0.901</td>
+<td>0.874</td>
+<td>1.122</td>
+<td>1.140</td>
+</tr>
+<tr>
+<td>C PPO（无储能）</td>
+<td>电费</td>
+<td>2.220</td>
+<td>1.903</td>
+<td>3.575</td>
+<td>3.954</td>
+</tr>
+<tr>
+<td>D PPO+储能</td>
+<td>电费</td>
+<td>2.268</td>
+<td>2.392</td>
+<td>2.627</td>
+<td>3.366</td>
+</tr>
+</tbody></table>
+<p><strong>储能收益</strong></p>
+<table>
+<thead><tr>
+<th>代次</th>
+<th>对规则</th>
+<th>对 PPO</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gen2</td>
+<td>+7.2%</td>
+<td><strong>−2.2%（负收益）</strong></td>
+</tr>
+<tr>
+<td>gen3</td>
+<td>+10.9%</td>
+<td><strong>−25.7%（负收益）</strong></td>
+</tr>
+<tr>
+<td>gen4</td>
+<td>+24.0%</td>
+<td><strong>+26.5%</strong></td>
+</tr>
+<tr>
+<td>gen5</td>
+<td>+24.4%</td>
+<td><strong>+14.9%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>&quot;储能对 RL 负收益&quot;这一早期结论在 gen4 之后被推翻。</strong></p>
+<h3>6.4 循环网络对比（分时电价场景）</h3>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>指标</th>
+<th>gen2</th>
+<th>gen3</th>
+<th>gen4</th>
+<th>gen5</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>规则控制</td>
+<td>电费</td>
+<td>0.971</td>
+<td>0.981</td>
+<td>1.476</td>
+<td>1.508</td>
+</tr>
+<tr>
+<td>规则控制</td>
+<td>不达标</td>
+<td>25.4%</td>
+<td>24.4%</td>
+<td>34.6%</td>
+<td>34.6%</td>
+</tr>
+<tr>
+<td>普通 PPO</td>
+<td>电费</td>
+<td>3.709</td>
+<td>3.087</td>
+<td>3.717</td>
+<td>3.955</td>
+</tr>
+<tr>
+<td>普通 PPO</td>
+<td>不达标</td>
+<td>6.4%</td>
+<td>3.9%</td>
+<td>0.0%</td>
+<td>0.1%</td>
+</tr>
+<tr>
+<td>RecurrentPPO</td>
+<td>电费</td>
+<td>1.433</td>
+<td>1.647</td>
+<td>2.917</td>
+<td>2.996</td>
+</tr>
+<tr>
+<td>RecurrentPPO</td>
+<td>不达标</td>
+<td>15.8%</td>
+<td>6.9%</td>
+<td>3.4%</td>
+<td>2.6%</td>
+</tr>
+</tbody></table>
+<p><strong>规则在电费上始终占优，但舒适度始终明显更差。</strong></p>
+<h3>6.5 能耗权重（<code>energy_scale</code>）的临界值</h3>
+<table>
+<thead><tr>
+<th>代次</th>
+<th>让 RL 追平/超过规则所需的 <code>energy_scale</code></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gen3</td>
+<td>≈ 22 ~ 25</td>
+</tr>
+<tr>
+<td>gen4</td>
+<td>≈ 30 ~ 60</td>
+</tr>
+<tr>
+<td><strong>gen5</strong></td>
+<td><strong>≈ 100</strong></td>
+</tr>
+</tbody></table>
+<p><strong>趋势：模型越真实，RL 需要越大的能耗权重才能追平规则。</strong></p>
+<hr>
+<h2>七、gen5 的最终定论（10 种子置信区间）</h2>
+<p>规则基线（谷 25 / 平 26 / 峰 28 °C，无人关闭）：</p>
+<pre><code>电量  3.095 ± 0.127 kWh/天
+电费  1.445 ± 0.057 元/天
+不达标 35.10% ± 1.95%</code></pre>
+<table>
+<thead><tr>
+<th><code>energy_scale</code></th>
+<th>电量</th>
+<th>电费</th>
+<th>不达标</th>
+<th>显著优于规则？</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>10（默认）</td>
+<td>7.637 ± 0.410</td>
+<td>4.073 ± 0.227</td>
+<td>6.28%</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>30</td>
+<td>5.944 ± 1.020</td>
+<td>3.087 ± 0.629</td>
+<td>9.41%</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>60</td>
+<td>3.152 ± 0.391</td>
+<td>1.513 ± 0.134</td>
+<td>15.11%</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>100</strong></td>
+<td><strong>1.964 ± 0.280</strong></td>
+<td><strong>1.061 ± 0.127</strong></td>
+<td>20.20%</td>
+<td><strong>✅</strong></td>
+</tr>
+</tbody></table>
+<p>判据为 95% 置信区间<strong>不重叠</strong>（比 t 检验更保守）。</p>
+<p><strong>只有 <code>energy_scale = 100</code> 通过</strong>：电量 −36.5%、电费 −26.6%、</p>
+<p>不达标率 20.20% vs 35.10%。</p>
+<p><strong>注意</strong>：<code>energy_scale = 30</code> 处于训练不稳定区</p>
+<p>（10 个种子为 3.821 ~ 7.420 kWh，极差 94%），不可作为推荐值。</p>
+<hr>
+<h2>八、变更的动机分类</h2>
+<p>把 5 代的全部变更按动机归类，可以看出它们并非为了&quot;让结果好看&quot;：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>变更</th>
+<th>触发原因</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Bug 修复</strong></td>
+<td>占用判定字符串包含</td>
+<td>项目所有者核对时段时发现</td>
+</tr>
+<tr>
+<td><strong>Bug 修复</strong></td>
+<td><code>ac_started</code> 恒为 False</td>
+<td>项目所有者询问&quot;启动浪涌&quot;引出</td>
+</tr>
+<tr>
+<td><strong>数据修正</strong></td>
+<td>时段表两处时间</td>
+<td>项目所有者核对回复</td>
+</tr>
+<tr>
+<td><strong>模型扩展</strong></td>
+<td><code>gain_base</code> / <code>solar_coef</code></td>
+<td>修 bug 后原模型标定不出合理参数</td>
+</tr>
+<tr>
+<td><strong>模型扩展</strong></td>
+<td>动作空间扩到 23 °C</td>
+<td>实测空调设为 23 °C，且规则无法降低设定温度</td>
+</tr>
+<tr>
+<td><strong>标定方法</strong></td>
+<td>单窗口解析 → 全时段联合拟合</td>
+<td>单窗口 τ 不可辨识</td>
+</tr>
+</tbody></table>
+<p><strong>其中 3 项的触发原因是项目所有者提出的核对或提问</strong>，</p>
+<p>2 项是在修复过程中连带发现的。</p>
+<p><strong>没有一项是为了提高 RL 的表现而做的改动。</strong></p>
+<hr>
+<h2>九、这份记录能回答的问题</h2>
+<ol>
+<li><strong>&quot;你的结论为什么和中期报告不一样？&quot;</strong></li>
+</ol>
+<p>→ 中期报告写于 gen2 时期，当时空调压不住设定温度</p>
+<p>（&quot;全程开空调 25 °C&quot;仍有 16.8% 不达标），所有以它为基准的</p>
+<p>对比都失真。gen3~gen5 修正后结论改变，过程全部留痕。</p>
+<ol>
+<li><strong>&quot;你怎么保证模型是对的？&quot;</strong></li>
+</ol>
+<p>→ 每一代都有独立的验证：</p>
+<p>gen3 用两种日照驱动方式交叉印证 τ；</p>
+<p>gen4 用 <code>gain_occ ≈ 0</code> 与稳态温差 5.50 °C 验证物理自洽；</p>
+<p>gen5 用实测启停强制驱动仿真验证最低档位（RMSE 改善 19.9%）。</p>
+<ol>
+<li><strong>&quot;结论变化这么多次，还可信吗？&quot;</strong></li>
+</ol>
+<p>→ 跨代真正稳定的结论只有三条（奖励权重是决定性变量、</p>
+<p>权重需足够大、规则在低能耗端更省）；不稳定的是具体数字</p>
+<p>与消融结论。二者已在结题材料中区分对待。</p>
+</div>
+</body>
+</html>

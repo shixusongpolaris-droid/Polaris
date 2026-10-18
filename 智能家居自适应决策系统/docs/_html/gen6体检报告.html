@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gen6 体检报告（全部 9 项实验重跑后）</title>
+<style>
+:root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
+        --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
+* { box-sizing: border-box; }
+body { margin:0; background:#f6f8fa; color:var(--fg);
+       font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei",
+             "PingFang SC", sans-serif; }
+.page { max-width: 1000px; margin: 0 auto; padding: 40px 28px 80px;
+        background: var(--bg); }
+h1,h2,h3,h4,h5 { line-height:1.35; margin: 1.6em 0 .6em; font-weight:600; }
+h1 { font-size: 2em; border-bottom:2px solid var(--bd); padding-bottom:.3em; }
+h2 { font-size: 1.5em; border-bottom:1px solid var(--bd); padding-bottom:.25em; }
+h3 { font-size: 1.22em; }
+h4 { font-size: 1.06em; color:var(--muted); }
+p { margin: .75em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--code); padding: .15em .4em; border-radius: 5px;
+       font: .9em/1.5 "Cascadia Mono", Consolas, monospace; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px;
+      overflow: auto; border: 1px solid var(--bd); }
+pre code { background: none; padding: 0; font-size: .88em; }
+table { border-collapse: collapse; margin: 1.1em 0; width: 100%;
+        font-size: .94em; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--bd); padding: 7px 11px; text-align: left;
+         vertical-align: top; }
+th { background: #eef2f6; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fbfcfd; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid var(--accent);
+             background: #f0f7ff; color: #1f2328; }
+blockquote p { margin: .3em 0; }
+ul, ol { margin: .7em 0; padding-left: 1.8em; }
+li { margin: .25em 0; }
+hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
+.toc { background:#f6f8fa; border:1px solid var(--bd); border-radius:8px;
+       padding: 14px 20px; margin: 1.5em 0 2em; font-size: .94em; }
+.toc div { margin: .2em 0; }
+.toc .l2 { padding-left: 1.2em; color: var(--muted); }
+.toc .l3 { padding-left: 2.4em; color: var(--muted); font-size: .95em; }
+.meta { color: var(--muted); font-size: .86em; margin-bottom: 1.5em; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="meta">源文件：gen6体检报告.md
+　·　由 scripts/md2html.py 生成</div>
+<div class="toc"><strong>目录</strong>
+<div class="l1">gen6 体检报告（全部 9 项实验重跑后）</div>
+<div class="l2">一、消融实验</div>
+<div class="l2">二、显式储能</div>
+<div class="l2">三、循环网络</div>
+<div class="l2">四、统一评估基线（无分时，20 回合）</div>
+<div class="l2">五、能耗权重扫描（分时电价）</div>
+<div class="l2">六、帕累托分析</div>
+<div class="l2">七、哪些结论在 gen6 下收敛了</div>
+</div>
+<h1>gen6 体检报告（全部 9 项实验重跑后）</h1>
+<ul>
+<li>生成：2026-10-18 01:08:00</li>
+<li>gen6 参数：ua=0.15175, gain_base=0.8925, solar=0.215, ac_coef=1.83, ac_max=2.1175</li>
+<li>gen5 结果保存在 <code>models/_gen5_partial/</code>；更早各代在 <code>models/_gen{2,3,4}_backup/</code></li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>数据源说明（由团队复核成员 fix-reviewer 指出，务必注意）</strong></p>
+<p><code>models/_gen5_partial/</code> 是在 gen6 重跑前对当时目录的整体快照，</p>
+<p>因此<strong>它混装了 3 个已经是 gen6 的子目录</strong>：<code>evaluation</code>、</p>
+<p><code>energy_scale_ci</code>、<code>rule_ceiling</code>（这三项在快照前就已被 gen6 覆盖）。</p>
+<p>真正的 gen5 数据在 <code>models/_gen5_evaluation/</code>、</p>
+<p><code>models/_gen5_energy_scale_ci/</code>、<code>models/_gen5_rule_ceiling/</code>。</p>
+<p>本报告的第四节改用 <code>_gen5_evaluation</code>，故数字无误；</p>
+<p>引用上述三个目录时请勿使用 <code>_gen5_partial</code> 里的对应副本。</p>
+</blockquote>
+<h2>一、消融实验</h2>
+<table>
+<thead><tr>
+<th>组别</th>
+<th>gen4 电量/不达标</th>
+<th>gen5</th>
+<th><strong>gen6</strong></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A1 固定权重</td>
+<td>5.675 / 1.50%</td>
+<td>6.041 / 0.39%</td>
+<td><strong>5.662 / 0.34%</strong></td>
+</tr>
+<tr>
+<td>A2 场景化权重(本方法)</td>
+<td>6.067 / 0.16%</td>
+<td>6.439 / 1.62%</td>
+<td><strong>6.267 / 0.19%</strong></td>
+</tr>
+<tr>
+<td>A3 随机变化权重</td>
+<td>5.774 / 0.54%</td>
+<td>5.777 / 0.27%</td>
+<td><strong>5.529 / 0.44%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>跨代稳定的结论（gen4/5/6 三代一致）</strong>：A2（场景化权重）的电量始终高于两个对照组，且舒适度收益极小。</p>
+<h2>二、显式储能</h2>
+<table>
+<thead><tr>
+<th>代次</th>
+<th>对规则的收益</th>
+<th>对 PPO 的收益</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gen2</td>
+<td>+7.2%</td>
+<td>-2.1%</td>
+</tr>
+<tr>
+<td>gen3</td>
+<td>+10.9%</td>
+<td>-25.7%</td>
+</tr>
+<tr>
+<td>gen4</td>
+<td>+24.0%</td>
+<td>+26.5%</td>
+</tr>
+<tr>
+<td>gen5</td>
+<td>+24.4%</td>
+<td>+14.9%</td>
+</tr>
+<tr>
+<td><strong>gen6</strong></td>
+<td>+25.8%</td>
+<td>+14.4%</td>
+</tr>
+</tbody></table>
+<p><strong>结论收敛</strong>：gen2/gen3 的「储能对 RL 负收益」是热参数错误（空调压不住温度）造成的假象；gen4/5/6 连续三代均为正收益。</p>
+<h2>三、循环网络</h2>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>gen5 电费/不达标</th>
+<th><strong>gen6 电费/不达标</strong></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>B1 规则控制</td>
+<td>1.508 / 34.6%</td>
+<td><strong>1.791 / 36.6%</strong></td>
+</tr>
+<tr>
+<td>B2 普通 PPO</td>
+<td>3.955 / 0.1%</td>
+<td><strong>3.636 / 0.1%</strong></td>
+</tr>
+<tr>
+<td>B3 RecurrentPPO</td>
+<td>2.996 / 2.6%</td>
+<td><strong>3.192 / 2.2%</strong></td>
+</tr>
+</tbody></table>
+<p>规则在电费上仍占优，但舒适度明显更差。</p>
+<h2>四、统一评估基线（无分时，20 回合）</h2>
+<blockquote>
+<p>⚠️ 本表的「电费」实为 <strong>kWh×1（price_flat_tariff=1.0）</strong>，即数值等于电量。真实分时电价下的电费见 <code>docs/规则能力上限.md</code>。</p>
+</blockquote>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>gen5 电量/不达标</th>
+<th><strong>gen6 电量/不达标</strong></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>全程开空调25°C</td>
+<td>6.357 / 0.0%</td>
+<td><strong>5.324 / 0.0%</strong></td>
+</tr>
+<tr>
+<td>全程开空调27°C</td>
+<td>5.632 / 31.1%</td>
+<td><strong>5.313 / 31.8%</strong></td>
+</tr>
+<tr>
+<td>规则控制(定温)</td>
+<td>4.300 / 11.9%</td>
+<td><strong>4.691 / 14.8%</strong></td>
+</tr>
+<tr>
+<td>规则控制(按时段)</td>
+<td>3.311 / 28.2%</td>
+<td><strong>3.674 / 33.5%</strong></td>
+</tr>
+<tr>
+<td>全程不开空调</td>
+<td>0.036 / 50.8%</td>
+<td><strong>0.036 / 54.4%</strong></td>
+</tr>
+</tbody></table>
+<h2>五、能耗权重扫描（分时电价）</h2>
+<table>
+<thead><tr>
+<th>energy_scale</th>
+<th>gen5 电费/不达标</th>
+<th><strong>gen6 电费/不达标</strong></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>es=10, la=0.6</td>
+<td>4.077 / 0.3%</td>
+<td><strong>3.691 / 0.0%</strong></td>
+</tr>
+<tr>
+<td>es=30, la=0.6</td>
+<td>2.741 / 5.1%</td>
+<td><strong>2.682 / 8.1%</strong></td>
+</tr>
+<tr>
+<td>es=60, la=0.6</td>
+<td>1.324 / 13.1%</td>
+<td><strong>1.538 / 12.1%</strong></td>
+</tr>
+<tr>
+<td>es=10, la=0.0</td>
+<td>3.864 / 0.0%</td>
+<td><strong>3.646 / 2.5%</strong></td>
+</tr>
+<tr>
+<td>es=30, la=0.0</td>
+<td>3.838 / 0.5%</td>
+<td><strong>2.339 / 9.5%</strong></td>
+</tr>
+<tr>
+<td>es=60, la=0.0</td>
+<td>1.334 / 11.8%</td>
+<td><strong>1.509 / 11.7%</strong></td>
+</tr>
+</tbody></table>
+<h2>六、帕累托分析</h2>
+<ul>
+<li>gen5 无分时电价：规则 3 点，RL 4 点</li>
+<li>gen5 有分时电价：规则 2 点，RL 8 点</li>
+<li><strong>gen6</strong> 无分时电价：规则 3 点，RL 5 点</li>
+<li><strong>gen6</strong> 有分时电价：规则 5 点，RL 8 点</li>
+</ul>
+<h2>七、哪些结论在 gen6 下收敛了</h2>
+<table>
+<thead><tr>
+<th>结论</th>
+<th>跨代表现</th>
+<th>判定</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>场景化权重（A2）不省电</td>
+<td>gen4 +6.9%、gen5 +6.6%、gen6 +10.7% （A2 电量连续三代高于 A1）</td>
+<td>✅ <strong>收敛</strong></td>
+</tr>
+<tr>
+<td>储能对双方都有益（规则/PPO）</td>
+<td>gen4 +24.0%/+26.5%、gen5 +24.4%/+14.9%、gen6 +25.8%/+14.4%</td>
+<td>✅ <strong>收敛</strong></td>
+</tr>
+<tr>
+<td><code>energy_scale</code> 是决定变量</td>
+<td>各代均单调，默认权重下 RL 电量约为规则 2 倍</td>
+<td>✅ <strong>收敛</strong></td>
+</tr>
+<tr>
+<td>规则在低舒适区更省</td>
+<td>各代一致</td>
+<td>✅ <strong>收敛</strong></td>
+</tr>
+<tr>
+<td>规则可达更低不舒适</td>
+<td>各代一致（gen6 达 0.00%）</td>
+<td>✅ <strong>收敛</strong></td>
+</tr>
+<tr>
+<td>循环网络（RecurrentPPO）优于普通 PPO</td>
+<td>gen2/gen3 是、gen4/gen5/gen6 否</td>
+<td>⚠️ <strong>不稳定</strong></td>
+</tr>
+<tr>
+<td>具体电量/电费数字</td>
+<td>每代都变</td>
+<td>❌ 不稳定（勿单独引用）</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>

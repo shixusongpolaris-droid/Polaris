@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目状态总结（gen6）</title>
+<style>
+:root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
+        --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
+* { box-sizing: border-box; }
+body { margin:0; background:#f6f8fa; color:var(--fg);
+       font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei",
+             "PingFang SC", sans-serif; }
+.page { max-width: 1000px; margin: 0 auto; padding: 40px 28px 80px;
+        background: var(--bg); }
+h1,h2,h3,h4,h5 { line-height:1.35; margin: 1.6em 0 .6em; font-weight:600; }
+h1 { font-size: 2em; border-bottom:2px solid var(--bd); padding-bottom:.3em; }
+h2 { font-size: 1.5em; border-bottom:1px solid var(--bd); padding-bottom:.25em; }
+h3 { font-size: 1.22em; }
+h4 { font-size: 1.06em; color:var(--muted); }
+p { margin: .75em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--code); padding: .15em .4em; border-radius: 5px;
+       font: .9em/1.5 "Cascadia Mono", Consolas, monospace; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px;
+      overflow: auto; border: 1px solid var(--bd); }
+pre code { background: none; padding: 0; font-size: .88em; }
+table { border-collapse: collapse; margin: 1.1em 0; width: 100%;
+        font-size: .94em; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--bd); padding: 7px 11px; text-align: left;
+         vertical-align: top; }
+th { background: #eef2f6; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fbfcfd; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid var(--accent);
+             background: #f0f7ff; color: #1f2328; }
+blockquote p { margin: .3em 0; }
+ul, ol { margin: .7em 0; padding-left: 1.8em; }
+li { margin: .25em 0; }
+hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
+.toc { background:#f6f8fa; border:1px solid var(--bd); border-radius:8px;
+       padding: 14px 20px; margin: 1.5em 0 2em; font-size: .94em; }
+.toc div { margin: .2em 0; }
+.toc .l2 { padding-left: 1.2em; color: var(--muted); }
+.toc .l3 { padding-left: 2.4em; color: var(--muted); font-size: .95em; }
+.meta { color: var(--muted); font-size: .86em; margin-bottom: 1.5em; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="meta">源文件：项目状态总结.md
+　·　由 scripts/md2html.py 生成</div>
+<div class="toc"><strong>目录</strong>
+<div class="l1">项目状态总结（gen6）</div>
+<div class="l2">一、硬件状态</div>
+<div class="l2">二、软件环境状态</div>
+<div class="l2">三、环境与模型规格（gen6）</div>
+<div class="l2">四、核心结论（摘要）</div>
+<div class="l2">五、过程中的方法学收获（可写入报告）</div>
+<div class="l3">5.1 标定方法的教训</div>
+<div class="l3">5.2 实验方法的教训</div>
+<div class="l3">5.3 工程实现中修复的 4 类缺陷</div>
+<div class="l2">六、拟写入报告的表述建议</div>
+<div class="l3">建议保留</div>
+<div class="l3">必须避免</div>
+<div class="l2">七、下一步工作</div>
+<div class="l3">7.1 结题材料</div>
+<div class="l3">7.2 若时间允许可做的技术工作</div>
+<div class="l3">7.3 已知的技术债</div>
+<div class="l2">八、文件索引</div>
+<div class="l3">8.1 结论与守则</div>
+<div class="l3">8.2 实验报告</div>
+<div class="l3">8.3 独立复核</div>
+<div class="l3">8.4 关键脚本</div>
+</div>
+<h1>项目状态总结（gen6）</h1>
+<blockquote>
+<p><strong>版本</strong>：2026-10-18，对应模型代次 <strong>gen6</strong></p>
+<p><strong>本文件是状态快照</strong>；结论与数据请看</p>
+<p><a href="项目核心结论.html"><code>项目核心结论.md</code></a>；</p>
+<p>引用数字前必读 <a href="结题引用守则.html"><code>结题引用守则.md</code></a>。</p>
+</blockquote>
+<hr>
+<h2>一、硬件状态</h2>
+<table>
+<thead><tr>
+<th>项目</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ESP32-S3-N16R8 开发板</td>
+<td>✅ 已到货并投入使用</td>
+</tr>
+<tr>
+<td>SHT31 温湿度传感器（串口版）</td>
+<td>✅ 已到货并投入使用</td>
+</tr>
+<tr>
+<td>BH1750 / GY-302 光照传感器</td>
+<td>✅ 已到货并投入使用</td>
+</tr>
+<tr>
+<td>HC-SR501 PIR ×2</td>
+<td>✅ 已到货并投入使用</td>
+</tr>
+<tr>
+<td>LD2410C 毫米波雷达</td>
+<td>✅ 已到货并投入使用</td>
+</tr>
+<tr>
+<td>830 孔面包板套件</td>
+<td>✅ 已到货</td>
+</tr>
+<tr>
+<td>CH343 串口驱动</td>
+<td>✅ 已安装</td>
+</tr>
+<tr>
+<td>Arduino IDE 2.3.8 + ESP32 支持包 3.3.12</td>
+<td>✅ 已安装，编译测试通过</td>
+</tr>
+<tr>
+<td>采购总额</td>
+<td>约 145 元（预算 1000 元）</td>
+</tr>
+</tbody></table>
+<p><strong>已完成的数据采集</strong>：</p>
+<table>
+<thead><tr>
+<th>项目</th>
+<th>数值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>采集时段</td>
+<td>2026-10-14 16:08 ~ 10-16 17:59</td>
+</tr>
+<tr>
+<td>时长</td>
+<td>49.9 小时</td>
+</tr>
+<tr>
+<td>样本数</td>
+<td>17918 条</td>
+</tr>
+<tr>
+<td>采样间隔</td>
+<td>10 秒（中位）</td>
+</tr>
+<tr>
+<td>字段完整率</td>
+<td>温度 / 湿度 / 光照 零缺失</td>
+</tr>
+</tbody></table>
+<p><strong>⚠️ 硬件的一个已知限制</strong>：房间用的是<strong>中央空调</strong>，没有可编程接口，</p>
+<p>因此<strong>未能做闭环控制</strong>，只完成了感知与数据采集。所有控制实验均在</p>
+<p>仿真中进行。这一点在结题材料里必须如实写明。</p>
+<hr>
+<h2>二、软件环境状态</h2>
+<table>
+<thead><tr>
+<th>项目</th>
+<th>位置</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Python 3.13.16</td>
+<td><code>D:\Dev\Python\Python313</code></td>
+<td>✅ 含全部依赖</td>
+</tr>
+<tr>
+<td>项目虚拟环境</td>
+<td><code>&lt;项目&gt;\.venv</code></td>
+<td>✅（torch 2.14.1 CPU 版）</td>
+</tr>
+<tr>
+<td>stable-baselines3</td>
+<td>2.9.0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>gymnasium</td>
+<td>1.4.0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>numpy</td>
+<td>2.5.3</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Arduino IDE 2.3.8</td>
+<td><code>D:\Dev\Tools\ArduinoIDE</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>ESP32 支持包 3.3.12</td>
+<td><code>D:\Dev\Tools\ArduinoData</code></td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<p><strong>环境自检</strong>：<code>python scripts/test_env.py</code> 六项全部通过。</p>
+<hr>
+<h2>三、环境与模型规格（gen6）</h2>
+<table>
+<thead><tr>
+<th>项目</th>
+<th>gen1</th>
+<th>gen2</th>
+<th>gen3</th>
+<th>gen4</th>
+<th>gen5</th>
+<th><strong>gen6</strong></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>状态维度</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td><strong>25</strong></td>
+</tr>
+<tr>
+<td>动作数量</td>
+<td>36</td>
+<td>36</td>
+<td>36</td>
+<td>36</td>
+<td>48</td>
+<td><strong>48</strong></td>
+</tr>
+<tr>
+<td>空调档位</td>
+<td>25~29</td>
+<td>25~29</td>
+<td>25~29</td>
+<td>25~29</td>
+<td><strong>23~29</strong></td>
+<td><strong>23~29</strong></td>
+</tr>
+<tr>
+<td>热模型</td>
+<td>单 gain</td>
+<td>单 gain</td>
+<td>单 gain</td>
+<td><strong>加 gain_base + solar</strong></td>
+<td>同 gen4</td>
+<td>同 gen4</td>
+</tr>
+</tbody></table>
+<p><strong>gen6 关键参数</strong></p>
+<pre><code>ua_coef        = 0.15175   （tau = 99 分钟）
+gain_base      = 0.8925    （基础得热，与人员无关）
+internal_gain  = 0.0       （人员得热，标定结果≈0）
+solar_coef     = 0.215
+ac_coef        = 1.83
+ac_max_cooling = 2.1175    （8.5 °C/小时）
+全时段 RMSE     = 1.7790 °C</code></pre>
+<p><strong>物理自洽性</strong>：各档平衡室温 23.37 / 25.22 / 27.07 / 28.91 °C，</p>
+<p>均可维持；无人时稳态室内外温差 5.88 °C。</p>
+<p><strong>动作空间</strong>：8 档空调（关 + 23~29 °C）× 3 照明 × 2 通风 = 48。</p>
+<hr>
+<h2>四、核心结论（摘要）</h2>
+<blockquote>
+<p><strong>完整结论见 <a href="项目核心结论.html"><code>项目核心结论.md</code></a>。这里只列三条。</strong></p>
+</blockquote>
+<ol>
+<li><strong>在单一房间恒温控制这一设定下，规则控制优于强化学习。</strong></li>
+</ol>
+<p>等&quot;有人时段不舒适率&quot;口径，规则在低不舒适区省 30%~46%，</p>
+<p>且能达到 RL 达不到的 0.00%（RL 最好 6.00%）。</p>
+<ol>
+<li><strong>能耗权重 <code>energy_scale</code> 是决定成败的变量。</strong></li>
+</ol>
+<p>默认值 10 时 RL 电量是规则的 1.98 倍；取 100 时比规则省 28.4%</p>
+<p>（10 种子、95% 置信区间不重叠）。</p>
+<ol>
+<li><strong>两个跨代收敛的结论</strong>：</li>
+</ol>
+<p>场景化权重机制三代一致地不省电（+6.90%/+6.60%/+10.69%）；</p>
+<p>显式储能对规则与 RL 都有益（三代一致）。</p>
+<hr>
+<h2>五、过程中的方法学收获（可写入报告）</h2>
+<h3>5.1 标定方法的教训</h3>
+<ol>
+<li><strong>单窗口解析拟合无法确定时间常数 τ</strong>：同一段数据换窗口可得</li>
+</ol>
+<p>τ = 8~600 分钟。必须用全时段联合拟合，靠多次转折提供独立约束。</p>
+<ol>
+<li><strong>得热必须拆成&quot;基础得热&quot;与&quot;人员得热&quot;</strong>。若只用一个按&quot;有人&quot;生效的</li>
+</ol>
+<p>gain，在占用判定出错（100% 有人）时它会顶替基础得热，让拟合看似良好</p>
+<p>而参数物理荒谬（τ=706 分钟、稳态温差 22.9 °C）。</p>
+<ol>
+<li><strong>不能用&quot;RMSE 更小&quot;证明模型更可信</strong>：本项目 6 个参数变动 1.4%~17.4%，</li>
+</ol>
+<p>RMSE 只改善 0.17%，而下游电量最多变动 32.8%。<strong>参数可辨识性差</strong>。</p>
+<ol>
+<li><strong>验证模型要用&quot;强制驱动&quot;而非只看拟合</strong>：把实测的空调启停序列强制</li>
+</ol>
+<p>输入仿真、比较模拟与实测室温，比单看 RMSE 更能暴露结构缺陷</p>
+<p>（据此发现仿真最低档位应为 23 °C 而非 25 °C，RMSE 改善 19.9%）。</p>
+<h3>5.2 实验方法的教训</h3>
+<ol>
+<li><strong>单种子结论不可靠</strong>：同配置下&quot;有人时段不达标率&quot;在 10 个种子间</li>
+</ol>
+<p>跨度可达 0.1%~20%。本项目因此把关键结论全部改为 10 种子 + 置信区间。</p>
+<ol>
+<li><strong>规则基线必须做到能力上限</strong>：本项目曾用一条未调参的朴素规则当基线，</li>
+</ol>
+<p>得出&quot;RL 支配规则前沿&quot;的错误结论。改为 230 组网格搜索后结论反转。</p>
+<p><strong>基线太弱时，任何方法都会&quot;赢&quot;。</strong></p>
+<ol>
+<li><strong>口径必须统一</strong>：总不达标率（含无人时段）与有人时段不达标率是两个</li>
+</ol>
+<p>不同指标，混用会让结论漂移（同一配置可差 4 个百分点以上）。</p>
+<p>电价与电量在分时场景下也不等价。</p>
+<ol>
+<li><strong>独立复核有效</strong>：本项目后期引入三名独立审计成员（脚本审计、统计盲评、</li>
+</ol>
+<p>实验复现）与两轮代码复核，共发现 4 类建模缺陷与 3 处分析错误，</p>
+<p>其中若干是主负责人此前反复检查仍未发现的。</p>
+<h3>5.3 工程实现中修复的 4 类缺陷</h3>
+<table>
+<thead><tr>
+<th>#</th>
+<th>缺陷</th>
+<th>后果</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>占用判定用 <code>&quot;在房间&quot; in &quot;不在房间&quot;</code>（子串包含）</td>
+<td>在室率被判成 100%（实为 67.5%），污染热参数标定</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>ac_started</code> 恒为 False（先赋值后比较同一字段）</td>
+<td>空调启动损耗从未计入能耗，规则频繁启停的代价被忽略</td>
+</tr>
+<tr>
+<td>3</td>
+<td>观测空间 <code>ac_idx</code> 上界写死 5.0，而动作空间已扩到 7</td>
+<td>环境契约违规，<code>test_env.py</code> 自检失败</td>
+</tr>
+<tr>
+<td>4</td>
+<td>空调档位与实测不符（仿真最低 25 °C，实测设 23 °C）</td>
+<td>规则&quot;降低设定温度&quot;这条路径在仿真中不存在</td>
+</tr>
+</tbody></table>
+<p><strong>另有 2 类同源缺陷</strong>：空调启停判定用 <code>&quot;开&quot; in ac</code>、</p>
+<p>以及 3 个脚本仍写死档位索引（未参与最终结论）。</p>
+<hr>
+<h2>六、拟写入报告的表述建议</h2>
+<h3>建议保留</h3>
+<blockquote>
+<p>本项目建立了完整的&quot;实测数据采集 → 仿真标定 → 强化学习训练 →</p>
+<p>多目标评估 → 独立复核&quot;流程，在<strong>单一房间恒温控制</strong>这一设定下</p>
+<p>定量刻画了强化学习与人工规则控制的能力边界：**规则在实用的低不舒适</p>
+<p>区更省电且能达到 RL 达不到的舒适水平；RL 的价值依赖于奖励权重的</p>
+<p>标定 —— 权重取默认值时其耗电量是规则的近 2 倍，取 100 时比规则省 28%。**</p>
+</blockquote>
+<h3>必须避免</h3>
+<ul>
+<li>❌ &quot;强化学习优于规则控制&quot;（数据不支持）</li>
+<li>❌ &quot;标定大幅提升了模型精度&quot;（真实改善 0.17%）</li>
+<li>❌ &quot;场景化权重是本项目创新点&quot;（三代一致地不省电）</li>
+<li>❌ &quot;储能对强化学习是负收益&quot;（已推翻）</li>
+<li>❌ &quot;实现了闭环控制&quot;（中央空调无接口，只做了采集）</li>
+<li>❌ &quot;结果经实测验证&quot;（实测只用于标定与迁移测试，主实验在仿真中进行）</li>
+</ul>
+<hr>
+<h2>七、下一步工作</h2>
+<h3>7.1 结题材料</h3>
+<table>
+<thead><tr>
+<th>序号</th>
+<th>工作</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>结题报告</td>
+<td>以 <code>项目核心结论.md</code> 为骨架，数字严格按 <code>结题引用守则.md</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>答辩 PPT</td>
+<td>需要：问题定位演进图、MDP 建模框图、帕累托对比图、结论速览</td>
+</tr>
+<tr>
+<td>3</td>
+<td>软件著作权（如时间允许）</td>
+<td>源代码前 30 页 + 后 30 页 + 用户手册</td>
+</tr>
+</tbody></table>
+<h3>7.2 若时间允许可做的技术工作</h3>
+<table>
+<thead><tr>
+<th>优先级</th>
+<th>工作</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>中</td>
+<td>双区 + 占用不确定场景</td>
+<td>唯一可能体现 RL 优势的方向；需新增多区环境</td>
+</tr>
+<tr>
+<td>中</td>
+<td>实测驱动场景上的规则 vs RL</td>
+<td>让结论有实测场景支撑，而不只是合成场景</td>
+</tr>
+<tr>
+<td>低</td>
+<td>双质量热模型</td>
+<td>表征压缩机循环（±4.5 °C / 40 分钟），提升仿真真实度</td>
+</tr>
+<tr>
+<td>低</td>
+<td>修 3 个写死档位的脚本</td>
+<td><code>key_experiments.py</code>、<code>tariff_change_experiment.py</code>、<code>verify_markov.py</code></td>
+</tr>
+</tbody></table>
+<h3>7.3 已知的技术债</h3>
+<ul>
+<li><code>docs/实验结果报告.md</code> 已按 gen6 重写，但其中的详细分节仍以</li>
+</ul>
+<p>&quot;当前结果&quot;呈现，未逐条标注代次</p>
+<ul>
+<li><code>models/</code> 下 <code>_gen2_backup</code> ~ <code>_gen6</code> 各代备份并存，约 300 MB，</li>
+</ul>
+<p>结题后可清理</p>
+<ul>
+<li><code>scripts/</code> 下约 90 个脚本，其中约 20 个是诊断性/一次性的，</li>
+</ul>
+<p>可考虑归档</p>
+<hr>
+<h2>八、文件索引</h2>
+<h3>8.1 结论与守则</h3>
+<table>
+<thead><tr>
+<th>文件</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>docs/项目核心结论.md</code></td>
+<td><strong>主结论文档</strong>（gen6 定稿）</td>
+</tr>
+<tr>
+<td><code>docs/结题引用守则.md</code></td>
+<td><strong>写材料前必读</strong>：风险数字清单</td>
+</tr>
+<tr>
+<td><code>docs/模型代次变更记录.md</code></td>
+<td>gen1~gen6 全部变更、依据与影响</td>
+</tr>
+<tr>
+<td><code>docs/gen6体检报告.md</code></td>
+<td>9 项实验的 gen5/gen6 对照与收敛性判定</td>
+</tr>
+</tbody></table>
+<h3>8.2 实验报告</h3>
+<table>
+<thead><tr>
+<th>文件</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>docs/全时段联合标定.md</code></td>
+<td>标定方法与结果</td>
+</tr>
+<tr>
+<td><code>docs/规则能力上限.md</code></td>
+<td>230 组网格、双前沿、支配关系</td>
+</tr>
+<tr>
+<td><code>docs/能耗权重置信区间.md</code></td>
+<td>10 种子 × 4 档</td>
+</tr>
+<tr>
+<td><code>docs/多种子等舒适度对比.md</code></td>
+<td>等舒适度分析与插值口径</td>
+</tr>
+<tr>
+<td><code>docs/真实工况复演验证.md</code></td>
+<td>迁移测试</td>
+</tr>
+<tr>
+<td><code>docs/真实工况重训验证.md</code></td>
+<td>迁移后重训</td>
+</tr>
+<tr>
+<td><code>docs/启动损耗敏感性.md</code></td>
+<td>启动浪涌建模与敏感性</td>
+</tr>
+<tr>
+<td><code>docs/空调最低档位验证.md</code></td>
+<td>23 °C vs 25 °C 的判据</td>
+</tr>
+<tr>
+<td><code>docs/不舒适率状态分解.md</code></td>
+<td>不舒适发生在有人还是无人时段</td>
+</tr>
+<tr>
+<td><code>docs/为何比全开更费电.md</code></td>
+<td>空房间制冷机制</td>
+</tr>
+</tbody></table>
+<h3>8.3 独立复核</h3>
+<table>
+<thead><tr>
+<th>文件</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>docs/团队审计_脚本.md</code></td>
+<td>88 个脚本的缺陷审计（688 行）</td>
+</tr>
+<tr>
+<td><code>docs/团队审计_统计复核.md</code></td>
+<td>统计盲评（482 行）</td>
+</tr>
+<tr>
+<td><code>docs/团队审计_实验复现.md</code></td>
+<td>4/4 逐字节可复现</td>
+</tr>
+<tr>
+<td><code>docs/团队复核_修复验证.md</code></td>
+<td>4 处修复的复核（391 行）</td>
+</tr>
+<tr>
+<td><code>docs/团队复核_gen6.md</code></td>
+<td>gen6 参数与首批实验的复核（456 行）</td>
+</tr>
+<tr>
+<td><code>docs/团队复核_gen6_re_run.md</code></td>
+<td>gen6 全量重跑的复核</td>
+</tr>
+</tbody></table>
+<h3>8.4 关键脚本</h3>
+<table>
+<thead><tr>
+<th>脚本</th>
+<th>用途</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>scripts/test_env.py</code></td>
+<td>环境六项自检</td>
+</tr>
+<tr>
+<td><code>scripts/_timeline_util.py</code></td>
+<td>空调启停权威表（6 段）</td>
+</tr>
+<tr>
+<td><code>scripts/compare_gen5_gen6_rmse.py</code></td>
+<td>同口径 RMSE 对照</td>
+</tr>
+<tr>
+<td><code>scripts/smoke_test_policies.py</code></td>
+<td>各规则策略实际下发温度校验</td>
+</tr>
+<tr>
+<td><code>scripts/energy_scale_ci.py</code></td>
+<td>置信区间实验（40 次训练）</td>
+</tr>
+<tr>
+<td><code>scripts/rule_ceiling.py</code></td>
+<td>规则能力上限（230 组）</td>
+</tr>
+<tr>
+<td><code>scripts/multiseed_equal_comfort.py</code></td>
+<td>等舒适度对比</td>
+</tr>
+<tr>
+<td><code>scripts/gen6_health_report.py</code></td>
+<td>生成 gen6 体检报告</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>

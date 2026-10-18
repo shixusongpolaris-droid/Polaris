@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目核心结论（gen6 定稿）</title>
+<style>
+:root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
+        --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
+* { box-sizing: border-box; }
+body { margin:0; background:#f6f8fa; color:var(--fg);
+       font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei",
+             "PingFang SC", sans-serif; }
+.page { max-width: 1000px; margin: 0 auto; padding: 40px 28px 80px;
+        background: var(--bg); }
+h1,h2,h3,h4,h5 { line-height:1.35; margin: 1.6em 0 .6em; font-weight:600; }
+h1 { font-size: 2em; border-bottom:2px solid var(--bd); padding-bottom:.3em; }
+h2 { font-size: 1.5em; border-bottom:1px solid var(--bd); padding-bottom:.25em; }
+h3 { font-size: 1.22em; }
+h4 { font-size: 1.06em; color:var(--muted); }
+p { margin: .75em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--code); padding: .15em .4em; border-radius: 5px;
+       font: .9em/1.5 "Cascadia Mono", Consolas, monospace; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px;
+      overflow: auto; border: 1px solid var(--bd); }
+pre code { background: none; padding: 0; font-size: .88em; }
+table { border-collapse: collapse; margin: 1.1em 0; width: 100%;
+        font-size: .94em; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--bd); padding: 7px 11px; text-align: left;
+         vertical-align: top; }
+th { background: #eef2f6; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fbfcfd; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid var(--accent);
+             background: #f0f7ff; color: #1f2328; }
+blockquote p { margin: .3em 0; }
+ul, ol { margin: .7em 0; padding-left: 1.8em; }
+li { margin: .25em 0; }
+hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
+.toc { background:#f6f8fa; border:1px solid var(--bd); border-radius:8px;
+       padding: 14px 20px; margin: 1.5em 0 2em; font-size: .94em; }
+.toc div { margin: .2em 0; }
+.toc .l2 { padding-left: 1.2em; color: var(--muted); }
+.toc .l3 { padding-left: 2.4em; color: var(--muted); font-size: .95em; }
+.meta { color: var(--muted); font-size: .86em; margin-bottom: 1.5em; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="meta">源文件：项目核心结论.md
+　·　由 scripts/md2html.py 生成</div>
+<div class="toc"><strong>目录</strong>
+<div class="l1">项目核心结论（gen6 定稿）</div>
+<div class="l2">一、一句话结论</div>
+<div class="l2">二、模型标定：让仿真逼近实测</div>
+<div class="l3">2.1 最终参数（gen6）</div>
+<div class="l3">2.2 ⚠️ 必须如实说明的一点</div>
+<div class="l3">2.3 标定方法本身的三条教训</div>
+<div class="l2">三、规则的帕累托前沿：两个端点与一个空档</div>
+<div class="l3">3.1 前沿（230 组网格搜索，分时电价）</div>
+<div class="l3">3.2 三个关键事实</div>
+<div class="l3">3.3 电价与电量不等价</div>
+<div class="l2">四、能耗权重是结论的决定因素（核心发现）</div>
+<div class="l3">4.1 实验设计</div>
+<div class="l3">4.2 结果</div>
+<div class="l3">4.3 这个发现的意义</div>
+<div class="l2">五、等舒适度对比（最严谨的评判口径）</div>
+<div class="l3">5.1 一个被忽略但重要的现象：RL 在给空房间制冷</div>
+<div class="l2">六、其他实验结论</div>
+<div class="l3">6.1 消融实验：场景化权重机制<strong>未获支持</strong></div>
+<div class="l3">6.2 显式储能：对双方都有益</div>
+<div class="l3">6.3 循环网络：结论不稳定</div>
+<div class="l3">6.4 能耗权重扫描（另一种扫描口径，与 4.2 对照）</div>
+<div class="l3">6.5 统一评估基线（无分时，20 回合）</div>
+<div class="l3">6.6 帕累托分析（有分时电价）</div>
+<div class="l2">七、跨代收敛的结论 vs 不稳定的结论</div>
+<div class="l3">7.1 收敛（可作为结论写入报告）</div>
+<div class="l3">7.2 不稳定（不可单独引用）</div>
+<div class="l2">八、结论的修正轨迹（如实记录）</div>
+<div class="l2">九、方法学贡献（建议作为结题的核心亮点）</div>
+<div class="l2">十、如实列出的局限</div>
+<div class="l2">十一、结题建议</div>
+<div class="l3">建议保留的表述</div>
+<div class="l3">建议避免的表述</div>
+<div class="l2">十二、相关文件索引</div>
+</div>
+<h1>项目核心结论（gen6 定稿）</h1>
+<blockquote>
+<p><strong>写结题材料前请同时阅读 <a href="结题引用守则.html"><code>结题引用守则.md</code></a></strong> ——</p>
+<p>该文档列出了 10 个&quot;照抄会出问题&quot;的数字与正确说法。</p>
+<p></p>
+<p>本文件的所有数字均为 <strong>gen6</strong> 参数、<strong>全部实验已重跑</strong> 后的结果</p>
+<p>（2026-10-18）。模型变更历史见 <a href="模型代次变更记录.html"><code>模型代次变更记录.md</code></a>。</p>
+</blockquote>
+<hr>
+<h2>一、一句话结论</h2>
+<blockquote>
+<p>**在单一房间、单一空调、一阶热动态、电价已知的设定下，一个经过参数</p>
+<p>网格搜索的分时恒温规则控制器，在实用的低不舒适区（0~12%）全面优于</p>
+<p>PPO 强化学习；强化学习仅在刻意接受高不舒适率（&gt;20%）的高能耗权重</p>
+<p>区间才更省电。**</p>
+<p></p>
+<p>**而能耗权重（<code>energy_scale</code>）的取值，是决定强化学习方法成败的</p>
+<p>单一最重要变量：同一算法、同一环境，权重取默认值 10 时耗电量是规则的</p>
+<p>1.98 倍，取 100 时比规则省 28.4%。**</p>
+</blockquote>
+<hr>
+<h2>二、模型标定：让仿真逼近实测</h2>
+<h3>2.1 最终参数（gen6）</h3>
+<table>
+<thead><tr>
+<th>参数</th>
+<th>值</th>
+<th>物理含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ua_coef</code></td>
+<td>0.15175 /步</td>
+<td>围护传热（时间常数 τ = 99 分钟）</td>
+</tr>
+<tr>
+<td><code>gain_base</code></td>
+<td>0.8925 /步</td>
+<td>基础得热（楼板/邻户传热、电器待机），与人员无关</td>
+</tr>
+<tr>
+<td><code>internal_gain</code></td>
+<td>0.0</td>
+<td>人员得热（标定结果 ≈0，可忽略）</td>
+</tr>
+<tr>
+<td><code>solar_coef</code></td>
+<td>0.215 /步</td>
+<td>日照得热</td>
+</tr>
+<tr>
+<td><code>ac_coef</code></td>
+<td>1.83 /步</td>
+<td>空调等效降温系数</td>
+</tr>
+<tr>
+<td><code>ac_max_cooling</code></td>
+<td>2.1175 /步</td>
+<td>单步最大降温能力（8.5 °C/小时）</td>
+</tr>
+<tr>
+<td>动作空间</td>
+<td>48</td>
+<td>8 档空调（关 + 23~29 °C）× 3 照明 × 2 通风</td>
+</tr>
+</tbody></table>
+<p><strong>自洽性验证</strong>：各档位平衡室温为 23.37 / 25.22 / 27.07 / 28.91 °C</p>
+<p>（均能维持设定温度）；无人时稳态室内外温差 5.88 °C；</p>
+<p>全时段 RMSE <strong>1.7790 °C</strong>；环境六项自检全部通过。</p>
+<p><strong>实测数据</strong>：17918 条 / 49.9 小时（2026-10-14 16:08 ~ 10-16 17:59），</p>
+<p>采样间隔 10 秒，温度/湿度/光照零缺失；室外温度在 10-14 段缺失，</p>
+<p>用 Open-Meteo 历史数据回填（与实测对比 MAE 1.96 °C）。</p>
+<h3>2.2 ⚠️ 必须如实说明的一点</h3>
+<p><strong>gen6 并不比 gen5「拟合得更好」。</strong> 同口径比较：</p>
+<table>
+<thead><tr>
+<th>参数组</th>
+<th>全时段 RMSE</th>
+<th>空调开</th>
+<th>空调关</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gen5</td>
+<td>1.7821</td>
+<td>1.8431</td>
+<td>1.6925</td>
+</tr>
+<tr>
+<td>gen6</td>
+<td><strong>1.7790</strong></td>
+<td>1.8722</td>
+<td>1.6388</td>
+</tr>
+</tbody></table>
+<p><strong>仅改善 0.17%。</strong> 参数变动 1.4%~17.4%，拟合只提高 0.17%，而下游电量</p>
+<p>结果最多变动 32.8% —— <strong>说明这 6 个参数在现有数据上可辨识性差</strong>。</p>
+<blockquote>
+<p><strong>正确的表述</strong>：gen6 的意义在于<strong>使用了更完整的空调启停数据</strong></p>
+<p>（补入此前遗漏的第 6 段，约 69 分钟）；而两代参数下结论完全一致，</p>
+<p>本身构成一次<strong>参数不确定性下的稳健性检验</strong>。</p>
+<p></p>
+<p><strong>不要写&quot;标定大幅提升了拟合精度&quot;。</strong> 复算入口：</p>
+<p><code>scripts/compare_gen5_gen6_rmse.py</code></p>
+</blockquote>
+<h3>2.3 标定方法本身的三条教训</h3>
+<ol>
+<li><strong>单窗口解析拟合无法确定 τ。</strong> 同一段数据换个窗口起止，可得</li>
+</ol>
+<p>τ = 8 / 23 / 25 / 26 / 80 / 170 / 600 分钟。原因是 <code>(T∞, τ)</code> 在该</p>
+<p>公式里退化：短窗口内温度尚未接近平衡，数据只提供&quot;初始斜率&quot;</p>
+<p>= (T∞−T₀)/τ 一个信息，无法拆出两个参数。<strong>必须用全时段联合拟合</strong>，</p>
+<p>利用多次转折（空调启停、日出日落、人员进出）分别提供约束。</p>
+<ol>
+<li><strong>得热必须拆成&quot;基础得热&quot;与&quot;人员得热&quot;。</strong> 初版只有一个按&quot;有人&quot;生效的</li>
+</ol>
+<p>gain。当占用判定因字符串匹配缺陷被误判为 100% 时，该 gain 实际充当了</p>
+<p>常开热源、恰好补偿了缺失的基础得热，拟合看似良好；修正占用后同一模型</p>
+<p>必须靠&quot;极慢响应（τ=706 分钟）+ 极大增益（稳态温差 22.9 °C）&quot;硬凑，</p>
+<p>参数在物理上不可能。拆开之后 τ=99 分钟、稳态温差 5.88 °C，物理自洽。</p>
+<ol>
+<li><strong>参数对结果的影响远大于拟合精度的差异。</strong> 见 2.2 —— 这是本项目的</li>
+</ol>
+<p>一次重要教训：<strong>不能把&quot;RMSE 更小&quot;当作模型更可信的依据</strong>。</p>
+<hr>
+<h2>三、规则的帕累托前沿：两个端点与一个空档</h2>
+<h3>3.1 前沿（230 组网格搜索，分时电价）</h3>
+<p>规则族：谷/平/峰三个设定温度 × 预冷 0~2 °C × 无人时关机/不停机，</p>
+<p>外加常设定温度族。取帕累托非支配点后（按电费）：</p>
+<table>
+<thead><tr>
+<th>谷</th>
+<th>平</th>
+<th>峰</th>
+<th>无人时</th>
+<th>电量(kWh/天)</th>
+<th>电费(元/天)</th>
+<th>不达标率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td><strong>不停机</strong></td>
+<td>5.549</td>
+<td>2.820</td>
+<td><strong>0.00%</strong></td>
+</tr>
+<tr>
+<td>24</td>
+<td>24</td>
+<td>24</td>
+<td>不停机</td>
+<td>5.535</td>
+<td>2.815</td>
+<td>0.81%</td>
+</tr>
+<tr>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>关机</td>
+<td>4.514</td>
+<td>2.353</td>
+<td>14.77%</td>
+</tr>
+<tr>
+<td>26</td>
+<td>25</td>
+<td>27</td>
+<td>不停机</td>
+<td>3.212</td>
+<td>1.815</td>
+<td>30.92%</td>
+</tr>
+<tr>
+<td>26</td>
+<td>25</td>
+<td>27</td>
+<td>关机</td>
+<td>2.893</td>
+<td>1.625</td>
+<td>36.45%</td>
+</tr>
+<tr>
+<td>28</td>
+<td>28</td>
+<td>28</td>
+<td>关机</td>
+<td>2.228</td>
+<td>1.290</td>
+<td>43.44%</td>
+</tr>
+<tr>
+<td>29</td>
+<td>29</td>
+<td>29</td>
+<td>关机</td>
+<td>1.512</td>
+<td>0.886</td>
+<td>45.32%</td>
+</tr>
+</tbody></table>
+<h3>3.2 三个关键事实</h3>
+<ol>
+<li><strong>规则能达到 0.00% 不达标</strong>（25 °C 永不停机，5.549 kWh / 2.820 元）。</li>
+</ol>
+<p><strong>这是 RL 达不到的</strong> —— RL 最好也只有 6.00%（有人时段口径）。</p>
+<ol>
+<li><strong>规则前沿在 0.81%~14.77% 之间没有工作点。</strong> 这是规则族的<strong>能力空档</strong>，</li>
+</ol>
+<p>宽约 14 个百分点。任何在该区间做插值的对比都必须标注为外推。</p>
+<ol>
+<li><strong>规则的帕累托前沿只有 9~11 个点</strong>，说明人工规则的可调空间很有限。</li>
+</ol>
+<h3>3.3 电价与电量不等价</h3>
+<p>分时电价下把用电从峰段挪到谷段会<strong>抬高总电量而降低电费</strong>。因此</p>
+<p><code>rule_ceiling</code> 同时输出两条前沿：<code>front_cost</code>（11 点，按电费）</p>
+<p>与 <code>front_energy</code>（9 点，按电量）。<strong>讨论&quot;谁更省电&quot;必须用后者。</strong></p>
+<hr>
+<h2>四、能耗权重是结论的决定因素（核心发现）</h2>
+<h3>4.1 实验设计</h3>
+<p>10 个随机种子 × 4 档 <code>energy_scale</code> × 300,000 训练步，</p>
+<p>评估各 8 回合，场景启用上海居民分时电价（一户一表）、</p>
+<p><code>lookahead_weight=0.6</code>。判据为 <strong>95% 置信区间不重叠</strong></p>
+<p>（比 t 检验更保守）。</p>
+<p><strong>规则基线</strong>：谷 25 / 平 26 / 峰 28 °C，无人关闭。</p>
+<p>电量 3.642 ± 0.076 kWh/天，电费 1.728 ± 0.047 元/天，</p>
+<p>不达标 37.26% ± 1.73%。</p>
+<h3>4.2 结果</h3>
+<table>
+<thead><tr>
+<th><code>energy_scale</code></th>
+<th>电量(kWh/天)</th>
+<th>CI 上界</th>
+<th>比规则省电？</th>
+<th>电费(元/天)</th>
+<th>不达标率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>10（默认）</strong></td>
+<td>7.214 ± 0.230</td>
+<td>7.444</td>
+<td>❌ 多用 <strong>98%</strong></td>
+<td>3.813</td>
+<td>3.74%</td>
+</tr>
+<tr>
+<td><strong>30</strong></td>
+<td>6.974 ± 0.238</td>
+<td>7.211</td>
+<td>❌ 多用 <strong>91%</strong></td>
+<td>3.664</td>
+<td>6.23%</td>
+</tr>
+<tr>
+<td><strong>60</strong></td>
+<td>3.575 ± 0.547</td>
+<td>4.123</td>
+<td>❌ 未通过（电量与规则持平）</td>
+<td>1.720</td>
+<td>14.02%</td>
+</tr>
+<tr>
+<td><strong>100</strong></td>
+<td>2.608 ± 0.472</td>
+<td><strong>3.081</strong></td>
+<td>✅ <strong>省 28.4%</strong></td>
+<td>1.319</td>
+<td>19.00%</td>
+</tr>
+</tbody></table>
+<p><strong>只有 <code>energy_scale = 100</code> 通过&quot;区间不重叠&quot;判据。</strong></p>
+<h3>4.3 这个发现的意义</h3>
+<pre><code>es=10（出厂默认）  →  RL 电量是规则的 1.98 倍
+es=100（需标定）   →  RL 电量是规则的 0.72 倍</code></pre>
+<p>**同一个算法、同一个环境、同一条规则基线，只改一个权重系数，</p>
+<p>结论从&quot;惨败&quot;变成&quot;胜出&quot;。**</p>
+<p><strong>本项目认为这是它最重要的方法学发现</strong>：它解释了为什么很多智能家居</p>
+<p>强化学习落地效果不如预期 —— **奖励权重的标定被当成了&quot;量纲归一化&quot;，</p>
+<p>实际上它是决定策略行为的主导变量。**</p>
+<hr>
+<h2>五、等舒适度对比（最严谨的评判口径）</h2>
+<p>用 10 个种子的 RL 模型，与规则前沿在<strong>有人时段不达标率</strong>这一口径上</p>
+<p>做等舒适度插值：</p>
+<table>
+<thead><tr>
+<th><code>energy_scale</code></th>
+<th>RL 有人不达标</th>
+<th>RL 电费</th>
+<th>规则同水平电费</th>
+<th>差值</th>
+<th>谁更省</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>6.00%</td>
+<td>3.813</td>
+<td><strong>2.620</strong></td>
+<td>+45.5%</td>
+<td><strong>规则</strong></td>
+</tr>
+<tr>
+<td>30</td>
+<td>9.97%</td>
+<td>3.664</td>
+<td><strong>2.454</strong></td>
+<td>+49.3%</td>
+<td><strong>规则</strong></td>
+</tr>
+<tr>
+<td>60</td>
+<td>22.46%</td>
+<td>1.720</td>
+<td>2.218</td>
+<td>−22.5%</td>
+<td>RL</td>
+</tr>
+<tr>
+<td>100</td>
+<td>30.44%</td>
+<td>1.319</td>
+<td>2.101</td>
+<td>−37.2%</td>
+<td>RL</td>
+</tr>
+</tbody></table>
+<p><strong>分界线约在 12%~15% 有人时不达标率。</strong></p>
+<p>⚠️ <strong>口径提示</strong>：es=10 与 es=30 对应的规则同水平点落在规则前沿的</p>
+<p>0.81%~14.77% 空档内，属<strong>跨 14 个百分点的线性外推</strong>。若改用保守的</p>
+<p>规则工作点（2.815 元，对应 0.81%），则&quot;规则省 45.5%/49.3%&quot;变为</p>
+<p><strong>35.5%/30.2%</strong>。引用时应注明。</p>
+<p><code>rule_ceiling</code> 的支配关系（不依赖插值，最硬的论证）：</p>
+<table>
+<thead><tr>
+<th>RL 工作点</th>
+<th>支配的规则前沿点数</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>es=10 / es=30</td>
+<td>0</td>
+</tr>
+<tr>
+<td>es=60</td>
+<td>3</td>
+</tr>
+<tr>
+<td>es=100</td>
+<td>6</td>
+</tr>
+</tbody></table>
+<p><strong>规则前沿 11 点中，4 点不被任何 RL 工作点覆盖</strong>，其中包括低不舒适端的</p>
+<p>两点（0.81% 与 0.00%）。</p>
+<h3>5.1 一个被忽略但重要的现象：RL 在给空房间制冷</h3>
+<table>
+<thead><tr>
+<th><code>energy_scale</code></th>
+<th>无人时段耗电</th>
+<th>无人时空调开机率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>10</td>
+<td><strong>2.899 kWh/天</strong></td>
+<td><strong>97.4%</strong></td>
+</tr>
+<tr>
+<td>30</td>
+<td>2.708</td>
+<td>99.7%</td>
+</tr>
+<tr>
+<td>60</td>
+<td>0.767</td>
+<td>17.8%</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0.592</td>
+<td>6.5%</td>
+</tr>
+</tbody></table>
+<p><code>es=10</code> 的 PPO 在<strong>没人的时候仍然 97.4% 的时间开着空调</strong>，为此每天多耗</p>
+<p>约 2.9 kWh。原因是奖励函数在舒适区间<strong>内部</strong>也施加了&quot;趋向区间中心&quot;</p>
+<p>的梯度，而无人区间（16~30 °C）的中心是 23 °C。</p>
+<p><strong>该梯度本意是辅助学习的 shaping，不是真实的舒适度代价。</strong></p>
+<p>现已改为无人时不施加（<code>src/env/reward.py</code>）。但需注意：该修改只影响训练，</p>
+<p>对既有的评估指标是惰性的（团队复核已实证：带该修改复跑四个评估实验，</p>
+<p>结果逐字节相同）。</p>
+<hr>
+<h2>六、其他实验结论</h2>
+<h3>6.1 消融实验：场景化权重机制<strong>未获支持</strong></h3>
+<p>5 种子 × 15 回合，同一环境与训练预算，仅改变能耗权重的生成方式：</p>
+<table>
+<thead><tr>
+<th>组别</th>
+<th>电量(kWh/天)</th>
+<th>不达标率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A1 固定权重</td>
+<td>5.662 ± 0.130</td>
+<td>0.34%</td>
+</tr>
+<tr>
+<td><strong>A2 场景化权重（本方法）</strong></td>
+<td><strong>6.267 ± 0.119</strong></td>
+<td>0.19%</td>
+</tr>
+<tr>
+<td>A3 随机变化权重</td>
+<td>5.529 ± 0.047</td>
+<td>0.44%</td>
+</tr>
+</tbody></table>
+<p><strong>A2 相对 A1</strong>：电量 <strong>+10.69%</strong>（t=+6.74，显著）、不达标 <strong>−43.93%</strong></p>
+<p>（t=−2.15，显著）。</p>
+<p><strong>A2 相对 A3</strong>：电量 <strong>+13.36%</strong>（t=+11.32，显著）、不达标 <strong>−56.50%</strong></p>
+<p>（t=−3.37，显著）。</p>
+<p><strong>跨代稳定性</strong>：A2 的电量劣势为 gen4 +6.90%、gen5 +6.60%、gen6 +10.69%</p>
+<p>—— <strong>连续三代为正</strong>，且 A2 三代都同时高于 A1 与 A3。</p>
+<blockquote>
+<p>**结论：场景化权重这一创新点三代一致地不省电，而舒适度收益极小</p>
+<p>（gen6 仅 0.15 个百分点）。不建议在结题材料中把它作为核心创新点。**</p>
+<p></p>
+<p>建议改为把&quot;奖励权重的标定及其决定性影响&quot;（第四节）作为核心贡献。</p>
+</blockquote>
+<h3>6.2 显式储能：对双方都有益</h3>
+<table>
+<thead><tr>
+<th>场景</th>
+<th>电费(元/天)</th>
+<th>不达标率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A 规则（无储能）</td>
+<td>1.791</td>
+<td>36.6%</td>
+</tr>
+<tr>
+<td>B 规则 + 储能 4 kWh</td>
+<td>1.329</td>
+<td>36.6%</td>
+</tr>
+<tr>
+<td>C PPO（无储能）</td>
+<td>3.585</td>
+<td>0.5%</td>
+</tr>
+<tr>
+<td>D PPO + 储能 4 kWh</td>
+<td>3.071</td>
+<td>3.4%</td>
+</tr>
+</tbody></table>
+<p><strong>收益：规则 +25.8%，PPO +14.4%。</strong></p>
+<p><strong>跨代稳定性</strong>：gen4 +24.0%/+26.5%、gen5 +24.4%/+14.9%、gen6 +25.8%/+14.4%</p>
+<p>—— <strong>连续三代为正</strong>。</p>
+<blockquote>
+<p>⚠️ <strong>早期结论已推翻</strong>：gen2/gen3 曾得出&quot;储能对 RL 是负收益&quot;</p>
+<p>（−2.1% / −25.7%），那是热参数错误（空调压不住设定温度）时期的产物。</p>
+</blockquote>
+<h3>6.3 循环网络：结论不稳定</h3>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>电费(元/天)</th>
+<th>不达标率</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>B1 规则控制</td>
+<td><strong>1.791</strong></td>
+<td>36.6%</td>
+</tr>
+<tr>
+<td>B2 普通 PPO</td>
+<td>3.636</td>
+<td>0.1%</td>
+</tr>
+<tr>
+<td>B3 RecurrentPPO</td>
+<td>3.192</td>
+<td>2.2%</td>
+</tr>
+</tbody></table>
+<p>RecurrentPPO 比普通 PPO 便宜 12.2%，<strong>但仍比规则贵 78%</strong>。</p>
+<p><strong>跨代结论</strong>：gen2、gen3 时 RecurrentPPO 优于普通 PPO；gen4、gen5、gen6</p>
+<p>均不如。<strong>因此&quot;循环网络有优势&quot;这一结论不稳定，不建议作为成果。</strong></p>
+<h3>6.4 能耗权重扫描（另一种扫描口径，与 4.2 对照）</h3>
+<p>2 种子 × 8 回合，<code>energy_scale</code> × <code>lookahead_weight</code> 二维扫描：</p>
+<table>
+<thead><tr>
+<th>配置</th>
+<th>电量</th>
+<th>电费</th>
+<th>不达标</th>
+<th>谷段占比</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>es=10, la=0.6</td>
+<td>7.017</td>
+<td>3.691</td>
+<td>0.0%</td>
+<td>29.3%</td>
+</tr>
+<tr>
+<td>es=30, la=0.6</td>
+<td>5.222</td>
+<td>2.682</td>
+<td>8.1%</td>
+<td>35.0%</td>
+</tr>
+<tr>
+<td>es=60, la=0.6</td>
+<td>3.060</td>
+<td>1.538</td>
+<td>12.1%</td>
+<td>36.8%</td>
+</tr>
+<tr>
+<td>es=10, la=0.0</td>
+<td>6.749</td>
+<td>3.646</td>
+<td>2.5%</td>
+<td>24.3%</td>
+</tr>
+<tr>
+<td>es=30, la=0.0</td>
+<td>4.440</td>
+<td>2.339</td>
+<td>9.5%</td>
+<td>28.1%</td>
+</tr>
+<tr>
+<td>es=60, la=0.0</td>
+<td>2.985</td>
+<td>1.509</td>
+<td>11.7%</td>
+<td>36.0%</td>
+</tr>
+</tbody></table>
+<p>规则基线：3.813 kWh / 1.793 元 / 36.78%。</p>
+<p><strong>观察</strong>：<code>lookahead_weight</code>（前视电价）的作用被 <code>energy_scale</code> 掩盖 ——</p>
+<p>权重小时它无意义，权重足够大时算法自己就能学会跨时段调度。</p>
+<p><strong>因此前视电价不宜单独作为创新点。</strong></p>
+<h3>6.5 统一评估基线（无分时，20 回合）</h3>
+<table>
+<thead><tr>
+<th>策略</th>
+<th>电量(kWh/天)</th>
+<th>不达标率</th>
+<th>切换(次/天)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>全程开空调 25 °C</td>
+<td>5.324</td>
+<td><strong>0.00%</strong></td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>全程开空调 27 °C</td>
+<td>5.313</td>
+<td>31.8%</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>规则控制（定温）</td>
+<td>4.691</td>
+<td>14.8%</td>
+<td>23.8</td>
+</tr>
+<tr>
+<td>规则控制（按时段）</td>
+<td>3.674</td>
+<td>33.5%</td>
+<td>21.7</td>
+</tr>
+<tr>
+<td>全程不开空调</td>
+<td>0.036</td>
+<td>54.4%</td>
+<td>0.0</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ 该表中&quot;电费&quot;栏实为 <strong>kWh × 1</strong>（<code>tou_enabled=False</code>，</p>
+<p><code>price_flat_tariff=1.0</code>），即数值等于电量。真实分时电价下</p>
+<p>&quot;全程开空调 25 °C&quot;约 <strong>2.820 元/天</strong>。<strong>不要与第四节的电费并表。</strong></p>
+</blockquote>
+<h3>6.6 帕累托分析（有分时电价）</h3>
+<table>
+<thead><tr>
+<th>来源</th>
+<th>前沿点数</th>
+<th>不达标率范围</th>
+<th>电费范围(元/天)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>规则</td>
+<td>5</td>
+<td>27.9% ~ 35.2%</td>
+<td>1.59 ~ 1.88</td>
+</tr>
+<tr>
+<td>强化学习</td>
+<td>8</td>
+<td>0.1% ~ 43.3%</td>
+<td>2.14 ~ 3.64</td>
+</tr>
+</tbody></table>
+<p><strong>规则的舒适度只能到 27.9%；RL 能到 0.1%。</strong> 但 RL 在低不舒适端更贵。</p>
+<hr>
+<h2>七、跨代收敛的结论 vs 不稳定的结论</h2>
+<h3>7.1 收敛（可作为结论写入报告）</h3>
+<table>
+<thead><tr>
+<th>结论</th>
+<th>跨代证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong><code>energy_scale</code> 是决定变量</strong></td>
+<td>各代均单调；默认权重下 RL 电量约为规则 2 倍</td>
+</tr>
+<tr>
+<td><strong>规则在低舒适区更省电</strong></td>
+<td>各代一致（gen6：省 30%~46%）</td>
+</tr>
+<tr>
+<td><strong>规则可达更低不舒适</strong></td>
+<td>各代一致（gen6 达 0.00%，RL 最好 6.00%）</td>
+</tr>
+<tr>
+<td><strong>场景化权重不省电</strong></td>
+<td>gen4/5/6 三代为正（+6.90% / +6.60% / +10.69%）</td>
+</tr>
+<tr>
+<td><strong>储能对双方都有益</strong></td>
+<td>gen4/5/6 三代一致（规则 +24~26%，PPO +14~27%）</td>
+</tr>
+</tbody></table>
+<h3>7.2 不稳定（不可单独引用）</h3>
+<table>
+<thead><tr>
+<th>内容</th>
+<th>表现</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>循环网络是否优于普通 PPO</td>
+<td>gen2/gen3 是，gen4/5/6 否</td>
+</tr>
+<tr>
+<td>具体电量/电费数字</td>
+<td>每代都变</td>
+</tr>
+<tr>
+<td>规则的舒适度空档宽度</td>
+<td>gen5 12.0pp，gen6 14.0pp</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>八、结论的修正轨迹（如实记录）</h2>
+<p>本项目在推进中共修正模型 6 次。**每次修正都曾改变过具体数字，</p>
+<p>两次曾改变过定性结论。** 完整记录见 <a href="模型代次变更记录.html"><code>模型代次变更记录.md</code></a>。</p>
+<table>
+<thead><tr>
+<th>代次</th>
+<th>关键变更</th>
+<th>触发原因</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gen1</td>
+<td>项目初版（未标定）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>gen2</td>
+<td>首次热参数标定</td>
+<td>仿真与实测偏差过大</td>
+</tr>
+<tr>
+<td>gen3</td>
+<td>全时段联合标定</td>
+<td>单窗口 τ 不可辨识</td>
+</tr>
+<tr>
+<td>gen4</td>
+<td>修占用判定 bug + 热模型扩展</td>
+<td>项目所有者核对时段时发现</td>
+</tr>
+<tr>
+<td>gen5</td>
+<td>动作空间扩到 23 °C + 修启动损耗</td>
+<td>实测空调设 23 °C；项目所有者询问启动浪涌</td>
+</tr>
+<tr>
+<td>gen6</td>
+<td>补入第 6 段空调开机</td>
+<td>团队复核发现</td>
+</tr>
+</tbody></table>
+<p><strong>结论翻转的两次</strong>：</p>
+<ol>
+<li>&quot;储能对 RL 负收益&quot; → &quot;储能对双方都有益&quot;（gen4 修正热参数后）</li>
+<li>&quot;场景化权重双赢&quot; → &quot;场景化权重不省电&quot;（gen4 修正热参数后稳定下来）</li>
+</ol>
+<p><strong>其中 3 项缺陷由项目所有者发现或提问引出，2 项由独立团队复核发现。</strong></p>
+<hr>
+<h2>九、方法学贡献（建议作为结题的核心亮点）</h2>
+<ol>
+<li><strong>奖励权重的标定是决定性的</strong>（第四节）。这是本项目最主要的贡献：</li>
+</ol>
+<p>用 10 种子 + 置信区间证明了 <code>energy_scale</code> 从 10 到 100 会让结论反转，</p>
+<p>并给出了该参数的合理取值区间（≈100）。</p>
+<ol>
+<li><strong>给出了一套可复用的&quot;建模—标定—验证&quot;流程</strong>。包括：</li>
+</ol>
+<p>单窗口 τ 不可辨识的诊断、全时段联合拟合、得热项拆分、</p>
+<p>用实测启停强制驱动仿真来验证模型（而非只看 RMSE）。</p>
+<ol>
+<li><strong>量化了 RL 与规则控制的能力边界</strong>。规则能到 0.00% 不舒适、</li>
+</ol>
+<p>RL 最好 6.00%；规则的舒适度空档为 14 个百分点。</p>
+<p>这为&quot;什么时候该用 RL、什么时候用规则就够&quot;提供了具体判据。</p>
+<ol>
+<li><strong>真实工况迁移实验</strong>：合成场景训练的策略迁移到实测工况后，</li>
+</ol>
+<p>等舒适度优势由 +21.4% 反转为 −16.5%；在实测工况重训后恢复为 +3.5%。</p>
+<p><strong>说明策略对训练工况分布敏感，部署前必须用目标工况数据重训。</strong></p>
+<ol>
+<li><strong>修复了 4 类建模缺陷并全部留痕</strong>（占用判定字符串匹配、</li>
+</ol>
+<p>空调启动损耗恒不生效、观测空间上界与动作空间脱节、</p>
+<p>空调档位与实测不符）。</p>
+<hr>
+<h2>十、如实列出的局限</h2>
+<table>
+<thead><tr>
+<th>局限</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>参数可辨识性差</strong></td>
+<td>6 个参数变动 1.4%~17.4%，拟合只改善 0.17%，而下游电量最多变 32.8%</td>
+</tr>
+<tr>
+<td><strong>规则能力上限未穷尽</strong></td>
+<td>230 组网格是&quot;规则族内的上限&quot;，不能排除存在更好的规则结构</td>
+</tr>
+<tr>
+<td><strong>规则前沿有空档</strong></td>
+<td>0.81%~14.77% 无工作点，等舒适度对比在该区间属外推</td>
+</tr>
+<tr>
+<td><strong>舒适度定义敏感</strong></td>
+<td>无人区间 16~30 °C 的上限（30 °C）显著影响规则的不达标率</td>
+</tr>
+<tr>
+<td><strong>仅 50 小时实测数据</strong></td>
+<td>2 天、1 人、1 个季节，只能标定 6 个参数，做不了统计推断</td>
+</tr>
+<tr>
+<td><strong>压缩机循环未建模</strong></td>
+<td>实测有 ±4.5 °C / 约 40 分钟的震荡，15 分钟单质量模型无法表示</td>
+</tr>
+<tr>
+<td><strong>仅单一场景</strong></td>
+<td>单房间、单空调；多区耦合、占用不确定等更能体现 RL 优势的场景未覆盖</td>
+</tr>
+<tr>
+<td><strong>三个脚本仍写死档位索引</strong></td>
+<td>未参与最终结论，但重新运行前需修</td>
+</tr>
+<tr>
+<td><strong>RL 训练不稳定</strong></td>
+<td>同配置下&quot;有人时段不达标率&quot;在 10 个种子间跨度可达 0.1%~20%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>十一、结题建议</h2>
+<h3>建议保留的表述</h3>
+<blockquote>
+<p>本项目建立了完整的&quot;实测数据采集 → 仿真标定 → 强化学习训练 →</p>
+<p>多目标评估 → 独立复核&quot;流程，并在<strong>单一房间恒温控制</strong>这一设定下，</p>
+<p>定量刻画了强化学习与人工规则控制的能力边界：**规则在实用的低不舒适</p>
+<p>区更省电，且能达到强化学习达不到的舒适水平；强化学习的价值依赖于</p>
+<p>奖励权重的标定 —— 权重取默认值时其耗电量是规则的近 2 倍，</p>
+<p>取 100 时比规则省 28%。**</p>
+</blockquote>
+<h3>建议避免的表述</h3>
+<ul>
+<li>❌ &quot;强化学习优于规则控制&quot;（数据不支持）</li>
+<li>❌ &quot;标定大幅提升了模型精度&quot;（真实改善 0.17%）</li>
+<li>❌ &quot;场景化权重是本项目的创新点&quot;（三代一致地不省电）</li>
+<li>❌ &quot;储能对强化学习有负收益&quot;（已推翻）</li>
+</ul>
+<hr>
+<h2>十二、相关文件索引</h2>
+<table>
+<thead><tr>
+<th>文件</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="模型代次变更记录.html"><code>模型代次变更记录.md</code></a></td>
+<td>gen1~gen6 全部变更、依据与影响</td>
+</tr>
+<tr>
+<td><a href="结题引用守则.html"><code>结题引用守则.md</code></a></td>
+<td><strong>写材料前必读</strong>：风险数字清单</td>
+</tr>
+<tr>
+<td><a href="gen6体检报告.html"><code>gen6体检报告.md</code></a></td>
+<td>9 项实验的 gen5/gen6 对照与收敛性判定</td>
+</tr>
+<tr>
+<td><a href="全时段联合标定.html"><code>全时段联合标定.md</code></a></td>
+<td>标定方法、结果与物理自洽性验证</td>
+</tr>
+<tr>
+<td><a href="规则能力上限.html"><code>规则能力上限.md</code></a></td>
+<td>230 组网格、双前沿、支配关系</td>
+</tr>
+<tr>
+<td><a href="能耗权重置信区间.html"><code>能耗权重置信区间.md</code></a></td>
+<td>10 种子 × 4 档置信区间实验</td>
+</tr>
+<tr>
+<td><a href="多种子等舒适度对比.html"><code>多种子等舒适度对比.md</code></a></td>
+<td>等舒适度分析与插值口径</td>
+</tr>
+<tr>
+<td><a href="真实工况复演验证.html"><code>真实工况复演验证.md</code></a></td>
+<td>迁移测试</td>
+</tr>
+<tr>
+<td><a href="团队审计_脚本.html"><code>团队审计_脚本.md</code></a> / <a href="团队审计_统计复核.html"><code>团队审计_统计复核.md</code></a> / <a href="团队审计_实验复现.html"><code>团队审计_实验复现.md</code></a></td>
+<td>三轮独立复核</td>
+</tr>
+<tr>
+<td><a href="团队复核_gen6.html"><code>团队复核_gen6.md</code></a> / <a href="团队复核_gen6_re_run.html"><code>团队复核_gen6_re_run.md</code></a></td>
+<td>gen6 的两轮复核</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>
