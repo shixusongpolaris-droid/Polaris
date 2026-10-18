@@ -227,8 +227,11 @@ def main():
         dd = r["occ_discomfort"] - base["occ_discomfort"]
         verdict = "改善" if (dc < -0.01 and dd <= 0.005) else (
             "变差" if (dc > 0.01 or dd > 0.02) else "基本持平")
+        # ⚠️ dd 是**比例差**（如 0.03 表示 3 个百分点），打印必须乘 100。
+        # 2026-10-18 团队审计（t8，P1）指出原写法少乘 100 倍，
+        # 会把真实的 +3.00pp 印成 +0.03pp，与 verdict 阈值自相矛盾。
         print(f"   gradient={r['gradient']:.2f}: "
-              f"电费 {dc:>+7.1%}  不达标 {dd:>+7.2f}pp  -> {verdict}")
+              f"电费 {dc:>+7.1%}  不达标 {dd * 100:>+7.2f}pp  -> {verdict}")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump({"scale": SCALE, "gradients": GRADIENTS,
@@ -268,8 +271,8 @@ def main():
         dd = r["occ_discomfort"] - base["occ_discomfort"]
         verdict = "改善" if (dc < -0.01 and dd <= 0.005) else (
             "变差" if (dc > 0.01 or dd > 0.02) else "基本持平")
-        md.append(f"| {r['gradient']:.2f} | {dc:+.1%} | {dd:+.2f}pp "
-                  f"| {verdict} |")
+        md.append(f"| {r['gradient']:.2f} | {dc:+.1%} "
+                  f"| {dd * 100:+.2f}pp | {verdict} |")
     with open(OUT_MD, "w", encoding="utf-8") as f:
         f.write("\n".join(md) + "\n")
     print(f"  报告已保存: {OUT_MD}")
