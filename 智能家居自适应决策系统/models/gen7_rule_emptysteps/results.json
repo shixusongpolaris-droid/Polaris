@@ -1,0 +1,4762 @@
+{
+  "episodes": 8,
+  "results": [
+    {
+      "energy": 5.402986899956921,
+      "cost": 2.9809216203126097,
+      "discomfort": 0.02659970238095238,
+      "occ_discomfort": 0.038975197601526304,
+      "name": "空步>=1 预冷23 维持25",
+      "family": "empty",
+      "T": 1,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 4.697860705215785,
+      "cost": 2.6651229128455975,
+      "discomfort": 0.21075148809523808,
+      "occ_discomfort": 0.3088034886890161,
+      "name": "空步>=1 预冷23 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.946034483893011,
+      "cost": 2.6919237025247136,
+      "discomfort": 0.06491815476190477,
+      "occ_discomfort": 0.03679476696647588,
+      "name": "空步>=1 预冷24 维持25",
+      "family": "empty",
+      "T": 1,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 4.454135998373585,
+      "cost": 2.5252836171132356,
+      "discomfort": 0.22079613095238096,
+      "occ_discomfort": 0.3218860724993186,
+      "name": "空步>=1 预冷24 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "空步>=1 预冷25 维持25",
+      "family": "empty",
+      "T": 1,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "空步>=1 预冷25 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "空步>=1 预冷26 维持25",
+      "family": "empty",
+      "T": 1,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 4.010861776350468,
+      "cost": 2.1355395731510907,
+      "discomfort": 0.39955357142857145,
+      "occ_discomfort": 0.5418370128100299,
+      "name": "空步>=1 预冷26 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.63925751799852,
+      "cost": 2.450309109836584,
+      "discomfort": 0.13225446428571427,
+      "occ_discomfort": 0.08231125647315345,
+      "name": "空步>=1 预冷27 维持25",
+      "family": "empty",
+      "T": 1,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.265772984140097,
+      "cost": 1.8396951113866027,
+      "discomfort": 0.3997395833333333,
+      "occ_discomfort": 0.47315344780594165,
+      "name": "空步>=1 预冷27 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.695883294175365,
+      "cost": 2.4695770798978063,
+      "discomfort": 0.1324404761904762,
+      "occ_discomfort": 0.08231125647315345,
+      "name": "空步>=2 预冷23 维持25",
+      "family": "empty",
+      "T": 2,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.339772387680023,
+      "cost": 1.8857478883820498,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.46797492504769694,
+      "name": "空步>=2 预冷23 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.63103727811483,
+      "cost": 2.4424039089035467,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "空步>=2 预冷24 维持25",
+      "family": "empty",
+      "T": 2,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.265866299749658,
+      "cost": 1.8530078609568505,
+      "discomfort": 0.39676339285714285,
+      "occ_discomfort": 0.4690651403652221,
+      "name": "空步>=2 预冷24 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=2 预冷25 维持25",
+      "family": "empty",
+      "T": 2,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "空步>=2 预冷25 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=2 预冷26 维持25",
+      "family": "empty",
+      "T": 2,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "空步>=2 预冷26 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.6251227947372495,
+      "cost": 2.441618799360197,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=2 预冷27 维持25",
+      "family": "empty",
+      "T": 2,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2659468948221284,
+      "cost": 1.8544263180382698,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=2 预冷27 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.616065676033432,
+      "cost": 2.436630439384992,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=3 预冷23 维持25",
+      "family": "empty",
+      "T": 3,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.253483212588334,
+      "cost": 1.8488557633013527,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=3 预冷23 维持26",
+      "family": "empty",
+      "T": 3,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.616065649675646,
+      "cost": 2.4366303568500625,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=3 预冷24 维持25",
+      "family": "empty",
+      "T": 3,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.253483212588334,
+      "cost": 1.8488557633013527,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=3 预冷24 维持26",
+      "family": "empty",
+      "T": 3,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=3 预冷25 维持25",
+      "family": "empty",
+      "T": 3,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=3 预冷25 维持26",
+      "family": "empty",
+      "T": 3,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=3 预冷26 维持25",
+      "family": "empty",
+      "T": 3,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=3 预冷26 维持26",
+      "family": "empty",
+      "T": 3,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.619906276880107,
+      "cost": 2.438823689985197,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=3 预冷27 维持25",
+      "family": "empty",
+      "T": 3,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2610518055364146,
+      "cost": 1.8518295300918415,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=3 预冷27 维持26",
+      "family": "empty",
+      "T": 3,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.612931747462003,
+      "cost": 2.435269751884992,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=4 预冷23 维持25",
+      "family": "empty",
+      "T": 4,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2509117840169055,
+      "cost": 1.8478421383013528,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=4 预冷23 维持26",
+      "family": "empty",
+      "T": 4,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.612931721104217,
+      "cost": 2.435269669350063,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=4 预冷24 维持25",
+      "family": "empty",
+      "T": 4,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2509117840169055,
+      "cost": 1.8478421383013528,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=4 预冷24 维持26",
+      "family": "empty",
+      "T": 4,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.612511970318364,
+      "cost": 2.43488926404792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=4 预冷25 维持25",
+      "family": "empty",
+      "T": 4,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2473933371364474,
+      "cost": 1.845502245199106,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=4 预冷25 维持26",
+      "family": "empty",
+      "T": 4,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.611616272209988,
+      "cost": 2.4345917011825366,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=4 预冷26 维持25",
+      "family": "empty",
+      "T": 4,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2636025247751057,
+      "cost": 1.8537388373278008,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=4 预冷26 维持26",
+      "family": "empty",
+      "T": 4,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.616772348308678,
+      "cost": 2.4374630024851975,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=4 预冷27 维持25",
+      "family": "empty",
+      "T": 4,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.258480376964986,
+      "cost": 1.8508159050918416,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=4 预冷27 维持26",
+      "family": "empty",
+      "T": 4,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.611244247462003,
+      "cost": 2.4345773143849923,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=5 预冷23 维持25",
+      "family": "empty",
+      "T": 5,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.249626069731191,
+      "cost": 1.8473976025870673,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=5 预冷23 维持26",
+      "family": "empty",
+      "T": 5,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.611244221104217,
+      "cost": 2.4345772318500627,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=5 预冷24 维持25",
+      "family": "empty",
+      "T": 5,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.249626069731191,
+      "cost": 1.8473976025870673,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=5 预冷24 维持26",
+      "family": "empty",
+      "T": 5,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=5 预冷25 维持25",
+      "family": "empty",
+      "T": 5,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=5 预冷25 维持26",
+      "family": "empty",
+      "T": 5,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=5 预冷26 维持25",
+      "family": "empty",
+      "T": 5,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=5 预冷26 维持26",
+      "family": "empty",
+      "T": 5,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.615084848308678,
+      "cost": 2.4367705649851974,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=5 预冷27 维持25",
+      "family": "empty",
+      "T": 5,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2571946626792716,
+      "cost": 1.850371369377556,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=5 预冷27 维持26",
+      "family": "empty",
+      "T": 5,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.610681747462003,
+      "cost": 2.4343797161707066,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=6 预冷23 维持25",
+      "family": "empty",
+      "T": 6,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2491439268740483,
+      "cost": 1.8472495847299244,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=6 预冷23 维持26",
+      "family": "empty",
+      "T": 6,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.610681721104218,
+      "cost": 2.4343796336357775,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=6 预冷24 维持25",
+      "family": "empty",
+      "T": 6,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2491439268740483,
+      "cost": 1.8472495847299244,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=6 预冷24 维持26",
+      "family": "empty",
+      "T": 6,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.610261970318364,
+      "cost": 2.4339992283336342,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=6 预冷25 维持25",
+      "family": "empty",
+      "T": 6,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.24562547999359,
+      "cost": 1.8449096916276775,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=6 预冷25 维持26",
+      "family": "empty",
+      "T": 6,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.6093662722099875,
+      "cost": 2.4337016654682513,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=6 预冷26 维持25",
+      "family": "empty",
+      "T": 6,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2618346676322485,
+      "cost": 1.8531462837563724,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=6 预冷26 维持26",
+      "family": "empty",
+      "T": 6,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.614522348308678,
+      "cost": 2.4365729667709117,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=6 预冷27 维持25",
+      "family": "empty",
+      "T": 6,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2567125198221287,
+      "cost": 1.8502233515204132,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=6 预冷27 维持26",
+      "family": "empty",
+      "T": 6,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.609717461747717,
+      "cost": 2.4340836804564208,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=8 预冷23 维持25",
+      "family": "empty",
+      "T": 8,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2481796411597625,
+      "cost": 1.8469535490156388,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=8 预冷23 维持26",
+      "family": "empty",
+      "T": 8,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.609717435389932,
+      "cost": 2.4340835979214916,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=8 预冷24 维持25",
+      "family": "empty",
+      "T": 8,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2481796411597625,
+      "cost": 1.8469535490156388,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=8 预冷24 维持26",
+      "family": "empty",
+      "T": 8,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.609297684604078,
+      "cost": 2.433703192619349,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=8 预冷25 维持25",
+      "family": "empty",
+      "T": 8,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2446611942793044,
+      "cost": 1.8446136559133919,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=8 预冷25 维持26",
+      "family": "empty",
+      "T": 8,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.608401986495702,
+      "cost": 2.4334056297539655,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=8 预冷26 维持25",
+      "family": "empty",
+      "T": 8,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2608703819179627,
+      "cost": 1.8528502480420865,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=8 预冷26 维持26",
+      "family": "empty",
+      "T": 8,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.613558062594392,
+      "cost": 2.4362769310566263,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=8 预冷27 维持25",
+      "family": "empty",
+      "T": 8,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2557482341078434,
+      "cost": 1.8499273158061276,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=8 预冷27 维持26",
+      "family": "empty",
+      "T": 8,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.6087531760334315,
+      "cost": 2.4337876447421354,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=10 预冷23 维持25",
+      "family": "empty",
+      "T": 10,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.247215355445477,
+      "cost": 1.846657513301353,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=10 预冷23 维持26",
+      "family": "empty",
+      "T": 10,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.608753149675646,
+      "cost": 2.433787562207206,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=10 预冷24 维持25",
+      "family": "empty",
+      "T": 10,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.247215355445477,
+      "cost": 1.846657513301353,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=10 预冷24 维持26",
+      "family": "empty",
+      "T": 10,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.608333398889792,
+      "cost": 2.433407156905063,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=10 预冷25 维持25",
+      "family": "empty",
+      "T": 10,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2436969085650187,
+      "cost": 1.844317620199106,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=10 预冷25 维持26",
+      "family": "empty",
+      "T": 10,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.607437700781416,
+      "cost": 2.4331095940396796,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=10 预冷26 维持25",
+      "family": "empty",
+      "T": 10,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.259906096203677,
+      "cost": 1.852554212327801,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=10 预冷26 维持26",
+      "family": "empty",
+      "T": 10,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.612593776880106,
+      "cost": 2.4359808953423405,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=10 预冷27 维持25",
+      "family": "empty",
+      "T": 10,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2547839483935577,
+      "cost": 1.8496312800918417,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=10 预冷27 维持26",
+      "family": "empty",
+      "T": 10,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.607788890319146,
+      "cost": 2.4334916090278496,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=12 预冷23 维持25",
+      "family": "empty",
+      "T": 12,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.246251069731191,
+      "cost": 1.8463614775870674,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=12 预冷23 维持26",
+      "family": "empty",
+      "T": 12,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.6077888639613604,
+      "cost": 2.4334915264929204,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=12 预冷24 维持25",
+      "family": "empty",
+      "T": 12,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.246251069731191,
+      "cost": 1.8463614775870674,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=12 预冷24 维持26",
+      "family": "empty",
+      "T": 12,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.607369113175507,
+      "cost": 2.433111121190777,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=12 预冷25 维持25",
+      "family": "empty",
+      "T": 12,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.242732622850733,
+      "cost": 1.8440215844848205,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=12 预冷25 维持26",
+      "family": "empty",
+      "T": 12,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.60647341506713,
+      "cost": 2.4328135583253943,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=12 预冷26 维持25",
+      "family": "empty",
+      "T": 12,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2589418104893917,
+      "cost": 1.8522581766135153,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=12 预冷26 维持26",
+      "family": "empty",
+      "T": 12,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.611629491165821,
+      "cost": 2.435684859628055,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=12 预冷27 维持25",
+      "family": "empty",
+      "T": 12,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.253819662679272,
+      "cost": 1.8493352443775564,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=12 预冷27 维持26",
+      "family": "empty",
+      "T": 12,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.606342461747717,
+      "cost": 2.433047555456421,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=15 预冷23 维持25",
+      "family": "empty",
+      "T": 15,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2448046411597624,
+      "cost": 1.8459174240156389,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=15 预冷23 维持26",
+      "family": "empty",
+      "T": 15,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.606342435389932,
+      "cost": 2.4330474729214915,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=15 预冷24 维持25",
+      "family": "empty",
+      "T": 15,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2448046411597624,
+      "cost": 1.8459174240156389,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=15 预冷24 维持26",
+      "family": "empty",
+      "T": 15,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.605922684604078,
+      "cost": 2.4326670676193487,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=15 预冷25 维持25",
+      "family": "empty",
+      "T": 15,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2412861942793043,
+      "cost": 1.843577530913392,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=15 预冷25 维持26",
+      "family": "empty",
+      "T": 15,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.605026986495702,
+      "cost": 2.4323695047539657,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=15 预冷26 维持25",
+      "family": "empty",
+      "T": 15,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.257495381917963,
+      "cost": 1.8518141230420868,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=15 预冷26 维持26",
+      "family": "empty",
+      "T": 15,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.610183062594392,
+      "cost": 2.435240806056626,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=15 预冷27 维持25",
+      "family": "empty",
+      "T": 15,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2523732341078433,
+      "cost": 1.8488911908061276,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=15 预冷27 维持26",
+      "family": "empty",
+      "T": 15,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.603690676033431,
+      "cost": 2.4321836358135642,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=20 预冷23 维持25",
+      "family": "empty",
+      "T": 20,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2422332125883337,
+      "cost": 1.845078174015639,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=20 预冷23 维持26",
+      "family": "empty",
+      "T": 20,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.603690649675645,
+      "cost": 2.4321835532786347,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=20 预冷24 维持25",
+      "family": "empty",
+      "T": 20,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2422332125883337,
+      "cost": 1.845078174015639,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=20 预冷24 维持26",
+      "family": "empty",
+      "T": 20,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.603270898889792,
+      "cost": 2.431803147976492,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=20 预冷25 维持25",
+      "family": "empty",
+      "T": 20,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2387147657078756,
+      "cost": 1.842738280913392,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=20 预冷25 维持26",
+      "family": "empty",
+      "T": 20,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.602375200781417,
+      "cost": 2.431505585111109,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=20 预冷26 维持25",
+      "family": "empty",
+      "T": 20,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.254923953346535,
+      "cost": 1.850974873042087,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=20 预冷26 维持26",
+      "family": "empty",
+      "T": 20,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.607531276880106,
+      "cost": 2.4343768864137694,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=20 预冷27 维持25",
+      "family": "empty",
+      "T": 20,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2498018055364146,
+      "cost": 1.8480519408061278,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=20 预冷27 维持26",
+      "family": "empty",
+      "T": 20,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.601279961747718,
+      "cost": 2.431318992956421,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=25 预冷23 维持25",
+      "family": "empty",
+      "T": 25,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2398224983026194,
+      "cost": 1.8442135311584962,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=25 预冷23 维持26",
+      "family": "empty",
+      "T": 25,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.601279935389932,
+      "cost": 2.431318910421492,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=25 预冷24 维持25",
+      "family": "empty",
+      "T": 25,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2398224983026194,
+      "cost": 1.8442135311584962,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=25 预冷24 维持26",
+      "family": "empty",
+      "T": 25,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.600860184604079,
+      "cost": 2.4309385051193493,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=25 预冷25 维持25",
+      "family": "empty",
+      "T": 25,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2363040514221613,
+      "cost": 1.8418736380562493,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=25 预冷25 维持26",
+      "family": "empty",
+      "T": 25,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.599964486495702,
+      "cost": 2.430640942253966,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=25 预冷26 维持25",
+      "family": "empty",
+      "T": 25,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2525132390608205,
+      "cost": 1.8501102301849441,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=25 预冷26 维持26",
+      "family": "empty",
+      "T": 25,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.605120562594393,
+      "cost": 2.4335122435566268,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=25 预冷27 维持25",
+      "family": "empty",
+      "T": 25,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2473910912507002,
+      "cost": 1.847187297948985,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=25 预冷27 维持26",
+      "family": "empty",
+      "T": 25,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.599833533176289,
+      "cost": 2.4308002072421355,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=30 预冷23 维持25",
+      "family": "empty",
+      "T": 30,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2383760697311907,
+      "cost": 1.8436947454442105,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=30 预冷23 维持26",
+      "family": "empty",
+      "T": 30,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.599833506818503,
+      "cost": 2.4308001247072064,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=30 预冷24 维持25",
+      "family": "empty",
+      "T": 30,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2383760697311907,
+      "cost": 1.8436947454442105,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=30 预冷24 维持26",
+      "family": "empty",
+      "T": 30,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.59941375603265,
+      "cost": 2.430419719405063,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=30 预冷25 维持25",
+      "family": "empty",
+      "T": 30,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2348576228507326,
+      "cost": 1.8413548523419636,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=30 预冷25 维持26",
+      "family": "empty",
+      "T": 30,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.598518057924274,
+      "cost": 2.4301221565396802,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=30 预冷26 维持25",
+      "family": "empty",
+      "T": 30,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.251066810489392,
+      "cost": 1.8495914444706583,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=30 预冷26 维持26",
+      "family": "empty",
+      "T": 30,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.603674134022964,
+      "cost": 2.432993457842341,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=30 预冷27 维持25",
+      "family": "empty",
+      "T": 30,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2459446626792716,
+      "cost": 1.8466685122346993,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=30 预冷27 维持26",
+      "family": "empty",
+      "T": 30,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.598708533176289,
+      "cost": 2.430405010813564,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=35 预冷23 维持25",
+      "family": "empty",
+      "T": 35,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2372510697311907,
+      "cost": 1.843299549015639,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=35 预冷23 维持26",
+      "family": "empty",
+      "T": 35,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.598708506818503,
+      "cost": 2.430404928278635,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=35 预冷24 维持25",
+      "family": "empty",
+      "T": 35,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2372510697311907,
+      "cost": 1.843299549015639,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=35 预冷24 维持26",
+      "family": "empty",
+      "T": 35,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.59828875603265,
+      "cost": 2.430024522976492,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=35 预冷25 维持25",
+      "family": "empty",
+      "T": 35,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2337326228507326,
+      "cost": 1.840959655913392,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=35 预冷25 维持26",
+      "family": "empty",
+      "T": 35,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.597393057924274,
+      "cost": 2.429726960111109,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=35 预冷26 维持25",
+      "family": "empty",
+      "T": 35,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.249941810489392,
+      "cost": 1.849196248042087,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=35 预冷26 维持26",
+      "family": "empty",
+      "T": 35,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.602549134022964,
+      "cost": 2.43259826141377,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=35 预冷27 维持25",
+      "family": "empty",
+      "T": 35,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.244819662679272,
+      "cost": 1.8462733158061277,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=35 预冷27 维持26",
+      "family": "empty",
+      "T": 35,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.597904961747718,
+      "cost": 2.4301583143849927,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=40 预冷23 维持25",
+      "family": "empty",
+      "T": 40,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2364474983026192,
+      "cost": 1.8430528525870677,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=40 预冷23 维持26",
+      "family": "empty",
+      "T": 40,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.5979049353899315,
+      "cost": 2.4301582318500636,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=40 预冷24 维持25",
+      "family": "empty",
+      "T": 40,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2364474983026192,
+      "cost": 1.8430528525870677,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=40 预冷24 维持26",
+      "family": "empty",
+      "T": 40,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.5974851846040785,
+      "cost": 2.429777826547921,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=40 预冷25 维持25",
+      "family": "empty",
+      "T": 40,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.232929051422161,
+      "cost": 1.8407129594848208,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=40 预冷25 维持26",
+      "family": "empty",
+      "T": 40,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596589486495702,
+      "cost": 2.4294802636825374,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=40 预冷26 维持25",
+      "family": "empty",
+      "T": 40,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2491382390608203,
+      "cost": 1.8489495516135155,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=40 预冷26 维持26",
+      "family": "empty",
+      "T": 40,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.601745562594393,
+      "cost": 2.4323515649851983,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=40 预冷27 维持25",
+      "family": "empty",
+      "T": 40,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2440160912507,
+      "cost": 1.8460266193775565,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=40 预冷27 维持26",
+      "family": "empty",
+      "T": 40,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.597021033176289,
+      "cost": 2.4298620375992788,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=44 预冷23 维持25",
+      "family": "empty",
+      "T": 44,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2355635697311906,
+      "cost": 1.8427565758013533,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=44 预冷23 维持26",
+      "family": "empty",
+      "T": 44,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.597021006818503,
+      "cost": 2.429861955064349,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=44 预冷24 维持25",
+      "family": "empty",
+      "T": 44,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2355635697311906,
+      "cost": 1.8427565758013533,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=44 预冷24 维持26",
+      "family": "empty",
+      "T": 44,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.59660125603265,
+      "cost": 2.4294815497622064,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=44 预冷25 维持25",
+      "family": "empty",
+      "T": 44,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2320451228507325,
+      "cost": 1.8404166826991064,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=44 预冷25 维持26",
+      "family": "empty",
+      "T": 44,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.595705557924274,
+      "cost": 2.4291839868968235,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=44 预冷26 维持25",
+      "family": "empty",
+      "T": 44,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2482543104893917,
+      "cost": 1.848653274827801,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=44 预冷26 维持26",
+      "family": "empty",
+      "T": 44,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.600861634022964,
+      "cost": 2.432055288199484,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=44 预冷27 维持25",
+      "family": "empty",
+      "T": 44,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2431321626792715,
+      "cost": 1.845730342591842,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=44 预冷27 维持26",
+      "family": "empty",
+      "T": 44,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596779961747718,
+      "cost": 2.4297631179564214,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=45 预冷23 维持25",
+      "family": "empty",
+      "T": 45,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.235322498302619,
+      "cost": 1.8426576561584962,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=45 预冷23 维持26",
+      "family": "empty",
+      "T": 45,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.5967799353899315,
+      "cost": 2.4297630354214923,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=45 预冷24 维持25",
+      "family": "empty",
+      "T": 45,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.235322498302619,
+      "cost": 1.8426576561584962,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=45 预冷24 维持26",
+      "family": "empty",
+      "T": 45,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.5963601846040785,
+      "cost": 2.4293826301193495,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=45 预冷25 维持25",
+      "family": "empty",
+      "T": 45,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.231804051422161,
+      "cost": 1.8403177630562493,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=45 预冷25 维持26",
+      "family": "empty",
+      "T": 45,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.595464486495702,
+      "cost": 2.429085067253966,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=45 预冷26 维持25",
+      "family": "empty",
+      "T": 45,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2480132390608203,
+      "cost": 1.8485543551849442,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=45 预冷26 维持26",
+      "family": "empty",
+      "T": 45,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.600620562594393,
+      "cost": 2.431956368556627,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=45 预冷27 维持25",
+      "family": "empty",
+      "T": 45,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2428910912507,
+      "cost": 1.845631422948985,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=45 预冷27 维持26",
+      "family": "empty",
+      "T": 45,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596619247462003,
+      "cost": 2.429713778670707,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=46 预冷23 维持25",
+      "family": "empty",
+      "T": 46,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.235161784016905,
+      "cost": 1.8426083168727818,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=46 预冷23 维持26",
+      "family": "empty",
+      "T": 46,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596619221104217,
+      "cost": 2.429713696135778,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=46 预冷24 维持25",
+      "family": "empty",
+      "T": 46,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.235161784016905,
+      "cost": 1.8426083168727818,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=46 预冷24 维持26",
+      "family": "empty",
+      "T": 46,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596199470318364,
+      "cost": 2.429333290833635,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=46 预冷25 维持25",
+      "family": "empty",
+      "T": 46,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.231643337136447,
+      "cost": 1.8402684237705351,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=46 预冷25 维持26",
+      "family": "empty",
+      "T": 46,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.595303772209988,
+      "cost": 2.4290357279682517,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=46 预冷26 维持25",
+      "family": "empty",
+      "T": 46,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.247852524775106,
+      "cost": 1.8485050158992298,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=46 预冷26 维持26",
+      "family": "empty",
+      "T": 46,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.600459848308678,
+      "cost": 2.4319070292709126,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=46 预冷27 维持25",
+      "family": "empty",
+      "T": 46,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.242730376964986,
+      "cost": 1.8455820836632706,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=46 预冷27 维持26",
+      "family": "empty",
+      "T": 46,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596458533176289,
+      "cost": 2.429639528670707,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=47 预冷23 维持25",
+      "family": "empty",
+      "T": 47,
+      "precool": 23.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2350010697311906,
+      "cost": 1.8425340668727819,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=47 预冷23 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.596458506818503,
+      "cost": 2.429639446135778,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=47 预冷24 维持25",
+      "family": "empty",
+      "T": 47,
+      "precool": 24.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2350010697311906,
+      "cost": 1.8425340668727819,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=47 预冷24 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.59603875603265,
+      "cost": 2.429259040833635,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=47 预冷25 维持25",
+      "family": "empty",
+      "T": 47,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2314826228507325,
+      "cost": 1.840194173770535,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=47 预冷25 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.595143057924274,
+      "cost": 2.428961477968252,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "空步>=47 预冷26 维持25",
+      "family": "empty",
+      "T": 47,
+      "precool": 26.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2476918104893917,
+      "cost": 1.8484307658992298,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "空步>=47 预冷26 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 26.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.600299134022964,
+      "cost": 2.4318327792709127,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "空步>=47 预冷27 维持25",
+      "family": "empty",
+      "T": 47,
+      "precool": 27.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 3.2425696626792715,
+      "cost": 1.8455078336632706,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "空步>=47 预冷27 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 27.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.870186490867561,
+      "cost": 2.4940128903501617,
+      "discomfort": 0.09188988095238096,
+      "occ_discomfort": 0.026437721449986372,
+      "name": "分级 近>=3远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.57066084735116,
+      "cost": 2.0401447905016523,
+      "discomfort": 0.3255208333333333,
+      "occ_discomfort": 0.369037884982284,
+      "name": "分级 近>=3远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.673829628585401,
+      "cost": 2.463965871848561,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=3远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.524960800408125,
+      "cost": 1.9132036745038445,
+      "discomfort": 0.42410714285714285,
+      "occ_discomfort": 0.5107658762605615,
+      "name": "分级 近>=3远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.870186490867561,
+      "cost": 2.4940128903501617,
+      "discomfort": 0.09188988095238096,
+      "occ_discomfort": 0.026437721449986372,
+      "name": "分级 近>=3远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.57066084735116,
+      "cost": 2.0401447905016523,
+      "discomfort": 0.3255208333333333,
+      "occ_discomfort": 0.369037884982284,
+      "name": "分级 近>=3远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.673829628585401,
+      "cost": 2.463965871848561,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=3远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.524960800408125,
+      "cost": 1.9132036745038445,
+      "discomfort": 0.42410714285714285,
+      "occ_discomfort": 0.5107658762605615,
+      "name": "分级 近>=3远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=3远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=3远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.695567500169287,
+      "cost": 2.4695219626989755,
+      "discomfort": 0.11830357142857142,
+      "occ_discomfort": 0.061869719269555735,
+      "name": "分级 近>=3远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.524960800408125,
+      "cost": 1.9132036745038445,
+      "discomfort": 0.42410714285714285,
+      "occ_discomfort": 0.5107658762605615,
+      "name": "分级 近>=3远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.627132587978884,
+      "cost": 2.4414229711594073,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=3远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2733413990974936,
+      "cost": 1.8553336772634064,
+      "discomfort": 0.39880952380952384,
+      "occ_discomfort": 0.4720632324884165,
+      "name": "分级 近>=3远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6177497181305265,
+      "cost": 2.4367748289548574,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=3远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.272764230978672,
+      "cost": 1.857789393480867,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=3远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.627132587978884,
+      "cost": 2.4414229711594073,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=3远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2733413990974936,
+      "cost": 1.8553336772634064,
+      "discomfort": 0.39880952380952384,
+      "occ_discomfort": 0.4720632324884165,
+      "name": "分级 近>=3远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6177497181305265,
+      "cost": 2.4367748289548574,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=3远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.272764230978672,
+      "cost": 1.857789393480867,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=3远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=3远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=3远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6177497181305265,
+      "cost": 2.4367748289548574,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=3远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.272764230978672,
+      "cost": 1.857789393480867,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=3远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.804289351815104,
+      "cost": 2.4208781217855817,
+      "discomfort": 0.07738095238095238,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=5远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.6293615256020777,
+      "cost": 2.073458410535897,
+      "discomfort": 0.30673363095238093,
+      "occ_discomfort": 0.34396293267920414,
+      "name": "分级 近>=5远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.677731414299687,
+      "cost": 2.4651637200628462,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=5远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.571467750316181,
+      "cost": 1.8962195044801209,
+      "discomfort": 0.43917410714285715,
+      "occ_discomfort": 0.5361133823930226,
+      "name": "分级 近>=5远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.804289351815104,
+      "cost": 2.4208781217855817,
+      "discomfort": 0.07738095238095238,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=5远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.6293615256020777,
+      "cost": 2.073458410535897,
+      "discomfort": 0.30673363095238093,
+      "occ_discomfort": 0.34396293267920414,
+      "name": "分级 近>=5远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.677731414299687,
+      "cost": 2.4651637200628462,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=5远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.571467750316181,
+      "cost": 1.8962195044801209,
+      "discomfort": 0.43917410714285715,
+      "occ_discomfort": 0.5361133823930226,
+      "name": "分级 近>=5远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=5远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=5远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.677731414299687,
+      "cost": 2.4651637200628462,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=5远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.571467750316181,
+      "cost": 1.8962195044801209,
+      "discomfort": 0.43917410714285715,
+      "occ_discomfort": 0.5361133823930226,
+      "name": "分级 近>=5远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.631034373693169,
+      "cost": 2.442620819373693,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=5远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2766749141916054,
+      "cost": 1.8561585605383446,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=5远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.621651503844812,
+      "cost": 2.4379726771691432,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2761572795861054,
+      "cost": 1.858675687202115,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=5远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.631034373693169,
+      "cost": 2.442620819373693,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=5远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2766749141916054,
+      "cost": 1.8561585605383446,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=5远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.621651503844812,
+      "cost": 2.4379726771691432,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2761572795861054,
+      "cost": 1.858675687202115,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=5远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=5远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.621651503844812,
+      "cost": 2.4379726771691432,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2761572795861054,
+      "cost": 1.858675687202115,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=5远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=3 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=5远>=3 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=3 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=5远>=3 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=3 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=5远>=3 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=3 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=5远>=3 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=3 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=5远>=3 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=5远>=3 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=5远>=3 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.8685910201770355,
+      "cost": 2.4551180763118845,
+      "discomfort": 0.07421875,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=8远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.670607127505823,
+      "cost": 2.0970966747303854,
+      "discomfort": 0.30375744047619047,
+      "occ_discomfort": 0.34423548650858543,
+      "name": "分级 近>=8远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=8远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.612374847643126,
+      "cost": 1.918742541405152,
+      "discomfort": 0.43563988095238093,
+      "occ_discomfort": 0.5361133823930226,
+      "name": "分级 近>=8远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.8685910201770355,
+      "cost": 2.4551180763118845,
+      "discomfort": 0.07421875,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=8远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.670607127505823,
+      "cost": 2.0970966747303854,
+      "discomfort": 0.30375744047619047,
+      "occ_discomfort": 0.34423548650858543,
+      "name": "分级 近>=8远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=8远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.612374847643126,
+      "cost": 1.918742541405152,
+      "discomfort": 0.43563988095238093,
+      "occ_discomfort": 0.5361133823930226,
+      "name": "分级 近>=8远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=8远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=8远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=8远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.6309083297859837,
+      "cost": 1.9256418739944376,
+      "discomfort": 0.43563988095238093,
+      "occ_discomfort": 0.5361133823930226,
+      "name": "分级 近>=8远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.636887052264598,
+      "cost": 2.444417591695122,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=8远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2825275927630337,
+      "cost": 1.857955332859773,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=8远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=8远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.636887052264598,
+      "cost": 2.444417591695122,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=8远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2825275927630337,
+      "cost": 1.857955332859773,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=8远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=8远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=8远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=8远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=3 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=8远>=3 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=3 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=8远>=3 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=3 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=8远>=3 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=3 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=8远>=3 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=3 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=8远>=3 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=3 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=8远>=3 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=5 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=8远>=5 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=5 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=8远>=5 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=5 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=8远>=5 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=5 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=8远>=5 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=5 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=8远>=5 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=8远>=5 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=8远>=5 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.018306069592241,
+      "cost": 2.53302650653924,
+      "discomfort": 0.060825892857142856,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=15远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.7630257858642056,
+      "cost": 2.1480970083101227,
+      "discomfort": 0.2955729166666667,
+      "occ_discomfort": 0.34423548650858543,
+      "name": "分级 近>=15远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=15远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.711447112587801,
+      "cost": 1.970831639830036,
+      "discomfort": 0.42801339285714285,
+      "occ_discomfort": 0.5363859362224039,
+      "name": "分级 近>=15远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.018306069592241,
+      "cost": 2.53302650653924,
+      "discomfort": 0.060825892857142856,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=15远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.7630257858642056,
+      "cost": 2.1480970083101227,
+      "discomfort": 0.2955729166666667,
+      "occ_discomfort": 0.34423548650858543,
+      "name": "分级 近>=15远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=15远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.711447112587801,
+      "cost": 1.970831639830036,
+      "discomfort": 0.42801339285714285,
+      "occ_discomfort": 0.5363859362224039,
+      "name": "分级 近>=15远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=15远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=15远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=15远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.711447112587801,
+      "cost": 1.970831639830036,
+      "discomfort": 0.42801339285714285,
+      "occ_discomfort": 0.5363859362224039,
+      "name": "分级 近>=15远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.650543302264596,
+      "cost": 2.4486100604451217,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=15远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2961838427630337,
+      "cost": 1.8621478016097732,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=15远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=15远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.650543302264596,
+      "cost": 2.4486100604451217,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=15远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2961838427630337,
+      "cost": 1.8621478016097732,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=15远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=15远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=15远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=15远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=3 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=15远>=3 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=3 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=15远>=3 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=3 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=15远>=3 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=3 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=15远>=3 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=3 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=15远>=3 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=3 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=15远>=3 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=5 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=15远>=5 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=5 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=15远>=5 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=5 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=15远>=5 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=5 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=15远>=5 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=5 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=15远>=5 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=15远>=5 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=15远>=5 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.326925131839365,
+      "cost": 2.700315717862243,
+      "discomfort": 0.010416666666666666,
+      "occ_discomfort": 0.009266830198964295,
+      "name": "分级 近>=30远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.954323303964767,
+      "cost": 2.2517182846450376,
+      "discomfort": 0.2658110119047619,
+      "occ_discomfort": 0.34587080948487325,
+      "name": "分级 近>=30远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=30远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.8882770339043513,
+      "cost": 2.0653789443505817,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.5366584900517852,
+      "name": "分级 近>=30远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.326925131839365,
+      "cost": 2.700315717862243,
+      "discomfort": 0.010416666666666666,
+      "occ_discomfort": 0.009266830198964295,
+      "name": "分级 近>=30远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.954323303964767,
+      "cost": 2.2517182846450376,
+      "discomfort": 0.2658110119047619,
+      "occ_discomfort": 0.34587080948487325,
+      "name": "分级 近>=30远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=30远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.8882770339043513,
+      "cost": 2.0653789443505817,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.5366584900517852,
+      "name": "分级 近>=30远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=30远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=30远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=30远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.8882770339043513,
+      "cost": 2.0653789443505817,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.5366584900517852,
+      "name": "分级 近>=30远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.67867710689031,
+      "cost": 2.4605264984792425,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=30远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.324894118248763,
+      "cost": 1.8744228331213282,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=30远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=30远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.67867710689031,
+      "cost": 2.4605264984792425,
+      "discomfort": 0.13262648809523808,
+      "occ_discomfort": 0.08258381030253475,
+      "name": "分级 近>=30远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.324894118248763,
+      "cost": 1.8744228331213282,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=30远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=30远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=30远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=30远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=3 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=30远>=3 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=3 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=30远>=3 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=3 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=30远>=3 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=3 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=30远>=3 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=3 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=30远>=3 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=3 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=30远>=3 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=5 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=30远>=5 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=5 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=30远>=5 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=5 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=30远>=5 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=5 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=30远>=5 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=5 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=30远>=5 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=30远>=5 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=30远>=5 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.5572437813176565,
+      "cost": 2.8311997651704717,
+      "discomfort": 0.003720238095238095,
+      "occ_discomfort": 0.005451076587626056,
+      "name": "分级 近>=44远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.094751789422777,
+      "cost": 2.3263324826473446,
+      "discomfort": 0.2643229166666667,
+      "occ_discomfort": 0.34532570182611066,
+      "name": "分级 近>=44远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=44远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.950669149637232,
+      "cost": 2.1124986244077624,
+      "discomfort": 0.39546130952380953,
+      "occ_discomfort": 0.5358408285636413,
+      "name": "分级 近>=44远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.5572437813176565,
+      "cost": 2.8311997651704717,
+      "discomfort": 0.003720238095238095,
+      "occ_discomfort": 0.005451076587626056,
+      "name": "分级 近>=44远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.094751789422777,
+      "cost": 2.3263324826473446,
+      "discomfort": 0.2643229166666667,
+      "occ_discomfort": 0.34532570182611066,
+      "name": "分级 近>=44远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=44远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.950669149637232,
+      "cost": 2.1124986244077624,
+      "discomfort": 0.39546130952380953,
+      "occ_discomfort": 0.5358408285636413,
+      "name": "分级 近>=44远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=44远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=44远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=44远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.950669149637232,
+      "cost": 2.1124986244077624,
+      "discomfort": 0.39546130952380953,
+      "occ_discomfort": 0.5358408285636413,
+      "name": "分级 近>=44远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.704612485247543,
+      "cost": 2.476522836044256,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "分级 近>=44远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.34755682537305,
+      "cost": 1.8884350129752459,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "分级 近>=44远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=44远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.704612485247543,
+      "cost": 2.476522836044256,
+      "discomfort": 0.13374255952380953,
+      "occ_discomfort": 0.08421913327882256,
+      "name": "分级 近>=44远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.34755682537305,
+      "cost": 1.8884350129752459,
+      "discomfort": 0.3991815476190476,
+      "occ_discomfort": 0.47260834014717906,
+      "name": "分级 近>=44远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=44远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=44远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=44远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=3 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=44远>=3 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=3 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=44远>=3 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=3 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=44远>=3 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=3 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=44远>=3 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=3 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=44远>=3 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=3 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=44远>=3 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=5 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=44远>=5 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=5 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=44远>=5 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=5 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=44远>=5 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=5 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=44远>=5 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=5 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=44远>=5 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=44远>=5 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=44远>=5 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.5612435802316345,
+      "cost": 2.8326789020981935,
+      "discomfort": 0.003162202380952381,
+      "occ_discomfort": 0.0046334150994821474,
+      "name": "分级 近>=46远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.094372436819508,
+      "cost": 2.3259062566648607,
+      "discomfort": 0.26339285714285715,
+      "occ_discomfort": 0.34396293267920414,
+      "name": "分级 近>=46远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=46远>=1 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.004650043712358,
+      "cost": 2.1314115021069435,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.5366584900517852,
+      "name": "分级 近>=46远>=1 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.5612435802316345,
+      "cost": 2.8326789020981935,
+      "discomfort": 0.003162202380952381,
+      "occ_discomfort": 0.0046334150994821474,
+      "name": "分级 近>=46远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.094372436819508,
+      "cost": 2.3259062566648607,
+      "discomfort": 0.26339285714285715,
+      "occ_discomfort": 0.34396293267920414,
+      "name": "分级 近>=46远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=46远>=1 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.004650043712358,
+      "cost": 2.1314115021069435,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.5366584900517852,
+      "name": "分级 近>=46远>=1 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=46远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=46远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.679682307156829,
+      "cost": 2.465762644169989,
+      "discomfort": 0.11848958333333333,
+      "occ_discomfort": 0.06214227309893704,
+      "name": "分级 近>=46远>=1 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.004650043712358,
+      "cost": 2.1314115021069435,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.5366584900517852,
+      "name": "分级 近>=46远>=1 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.697363901463329,
+      "cost": 2.4720520803211667,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=2 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.342048246614176,
+      "cost": 1.8850445866121095,
+      "discomfort": 0.39806547619047616,
+      "occ_discomfort": 0.47097301717089124,
+      "name": "分级 近>=46远>=2 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=2 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=46远>=2 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.697363901463329,
+      "cost": 2.4720520803211667,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=2 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.342048246614176,
+      "cost": 1.8850445866121095,
+      "discomfort": 0.39806547619047616,
+      "occ_discomfort": 0.47097301717089124,
+      "name": "分级 近>=46远>=2 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=2 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=46远>=2 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.701718790605161,
+      "cost": 2.474737873570156,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=2 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.3419175973086337,
+      "cost": 1.8849789348035495,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=46远>=2 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.623602396701955,
+      "cost": 2.438571601276286,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=2 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2781081724432486,
+      "cost": 1.859274611309258,
+      "discomfort": 0.3989955357142857,
+      "occ_discomfort": 0.47233578631779777,
+      "name": "分级 近>=46远>=2 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=3 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=46远>=3 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=3 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=46远>=3 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=3 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=46远>=3 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=3 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=46远>=3 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.615645898889793,
+      "cost": 2.4362499515479197,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=3 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.249964765707876,
+      "cost": 1.8465158701991058,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=46远>=3 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.614750200781416,
+      "cost": 2.4359523886825363,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=3 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2661739533465344,
+      "cost": 1.8547524623278004,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=46远>=3 25/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=5 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=46远>=5 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=5 23/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=46远>=5 23/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=5 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=46远>=5 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=5 24/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=46远>=5 24/26 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.610824470318364,
+      "cost": 2.43419682654792,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=5 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.246107622850733,
+      "cost": 1.8450577094848204,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "分级 近>=46远>=5 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.6099287722099875,
+      "cost": 2.433899263682537,
+      "discomfort": 0.1328125,
+      "occ_discomfort": 0.08285636413191605,
+      "name": "分级 近>=46远>=5 25/26 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 3.2623168104893914,
+      "cost": 1.853294301613515,
+      "discomfort": 0.3986235119047619,
+      "occ_discomfort": 0.4717906786590352,
+      "name": "分级 近>=46远>=5 25/26 维持26",
+      "family": "graded"
+    }
+  ],
+  "front": [
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "空步>=1 预冷25 维持25",
+      "family": "empty",
+      "T": 1,
+      "precool": 25.0,
+      "maintain": 25.0
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=3远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=5远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=8远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=15远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=30远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=44远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.549289690814495,
+      "cost": 2.8199419350800183,
+      "discomfort": 0.0,
+      "occ_discomfort": 0.0,
+      "name": "分级 近>=46远>=1 25/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.326925131839365,
+      "cost": 2.700315717862243,
+      "discomfort": 0.010416666666666666,
+      "occ_discomfort": 0.009266830198964295,
+      "name": "分级 近>=30远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 5.326925131839365,
+      "cost": 2.700315717862243,
+      "discomfort": 0.010416666666666666,
+      "occ_discomfort": 0.009266830198964295,
+      "name": "分级 近>=30远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.804289351815104,
+      "cost": 2.4208781217855817,
+      "discomfort": 0.07738095238095238,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=5远>=1 23/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.804289351815104,
+      "cost": 2.4208781217855817,
+      "discomfort": 0.07738095238095238,
+      "occ_discomfort": 0.009811937857726901,
+      "name": "分级 近>=5远>=1 24/25 维持25",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "空步>=1 预冷25 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=3远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=5远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=8远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=15远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=30远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=44远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 4.101926138914186,
+      "cost": 2.3321469038418257,
+      "discomfort": 0.2615327380952381,
+      "occ_discomfort": 0.34123739438539114,
+      "name": "分级 近>=46远>=1 25/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 3.6293615256020777,
+      "cost": 2.073458410535897,
+      "discomfort": 0.30673363095238093,
+      "occ_discomfort": 0.34396293267920414,
+      "name": "分级 近>=5远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 3.6293615256020777,
+      "cost": 2.073458410535897,
+      "discomfort": 0.30673363095238093,
+      "occ_discomfort": 0.34396293267920414,
+      "name": "分级 近>=5远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 3.57066084735116,
+      "cost": 2.0401447905016523,
+      "discomfort": 0.3255208333333333,
+      "occ_discomfort": 0.369037884982284,
+      "name": "分级 近>=3远>=1 23/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 3.57066084735116,
+      "cost": 2.0401447905016523,
+      "discomfort": 0.3255208333333333,
+      "occ_discomfort": 0.369037884982284,
+      "name": "分级 近>=3远>=1 24/25 维持26",
+      "family": "graded"
+    },
+    {
+      "energy": 3.339772387680023,
+      "cost": 1.8857478883820498,
+      "discomfort": 0.39601934523809523,
+      "occ_discomfort": 0.46797492504769694,
+      "name": "空步>=2 预冷23 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 3.265866299749658,
+      "cost": 1.8530078609568505,
+      "discomfort": 0.39676339285714285,
+      "occ_discomfort": 0.4690651403652221,
+      "name": "空步>=2 预冷24 维持26",
+      "family": "empty",
+      "T": 2,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 3.2350010697311906,
+      "cost": 1.8425340668727819,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=47 预冷23 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 23.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 3.2350010697311906,
+      "cost": 1.8425340668727819,
+      "discomfort": 0.3971354166666667,
+      "occ_discomfort": 0.4696102480239847,
+      "name": "空步>=47 预冷24 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 24.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 3.2314826228507325,
+      "cost": 1.840194173770535,
+      "discomfort": 0.39936755952380953,
+      "occ_discomfort": 0.47288089397656036,
+      "name": "空步>=47 预冷25 维持26",
+      "family": "empty",
+      "T": 47,
+      "precool": 25.0,
+      "maintain": 26.0
+    },
+    {
+      "energy": 3.265772984140097,
+      "cost": 1.8396951113866027,
+      "discomfort": 0.3997395833333333,
+      "occ_discomfort": 0.47315344780594165,
+      "name": "空步>=1 预冷27 维持26",
+      "family": "empty",
+      "T": 1,
+      "precool": 27.0,
+      "maintain": 26.0
+    }
+  ],
+  "in_band_2_15": []
+}
