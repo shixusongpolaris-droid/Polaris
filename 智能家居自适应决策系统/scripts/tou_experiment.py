@@ -215,8 +215,17 @@ def train_and_eval(rew_cfg, state_has_price: bool, n_seeds, n_episodes,
             v = np.array(env.sim.to_vector(env.get_obs_dict()),
                          dtype=np.float32)
             if not state_has_price:
-                # B3：屏蔽电价信息（置零），其余状态保留
-                v[-2:] = 0.0
+                # B3：屏蔽电价信息（置零），其余状态保留。
+                # ⚠️ 2026-10-18 两处修正：
+                # 1) 观测扩到 27 维后，负索引会切到 gen7 的两个新特征，
+                #    必须按名称定位。
+                # 2) 原先的 v[-2:] 在 25 维下只覆盖 price_tier 与
+                #    elec_price_forward，**漏掉了 elec_price 本身**，
+                #    与"屏蔽电价信息"的实验意图不符；现一并置零。
+                names = env.sim.active_obs_names()
+                for nm in ("elec_price", "price_tier", "elec_price_forward"):
+                    if nm in names:
+                        v[names.index(nm)] = 0.0
             return int(model.predict(v, deterministic=True)[0])
 
         r = run_episodes(lambda: SmartHomeEnv(rew_cfg=rew_cfg), act,

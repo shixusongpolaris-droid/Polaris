@@ -394,26 +394,26 @@ class HomeSimulator:
                                  else self._sm_draw_away_steps())
         return self._sm_occupied
 
-    def _hazard_30(self, away_minutes: float) -> float:
-        """由风险表查"未来 30 分钟内回归的概率"（线性插值）。
+    def _hazard_30(self, away_steps: int) -> float:
+        """查"未来 30 分钟内回归的概率"（按已离开步数索引）。
 
-        风险表来自 scripts/fit_occupancy_hazard.py 用实测数据拟合的
-        双分量对数正态混合（短途中位 20.8 分、长途中位 712.4 分）。
+        表由 `scripts/measure_hazard_from_env.py` **从生成器本身实测**得到，
+        因此与仿真里真正的回归过程一致。早先用连续分布拟合的表与生成器
+        不符（60 分钟处低估 32pp、705 分钟处低估 92pp），会误导策略，
+        也会骗到按该值做阈值判断的规则基线。
+
+        表以步为单位（1 步 = 15 分钟，30 分钟 = 2 步），超出表长时
+        返回表尾值。
         """
-        cfg = self.sim_cfg
-        ts = cfg.sm_hazard_t
-        ps = cfg.sm_hazard_h30
-        if not ts or not ps:
+        tab = self.sim_cfg.sm_hazard_by_step
+        if not tab:
             return 0.0
-        if away_minutes <= ts[0]:
-            return ps[0]
-        if away_minutes >= ts[-1]:
-            return ps[-1]
-        for i in range(len(ts) - 1):
-            if ts[i] <= away_minutes < ts[i + 1]:
-                w = ((away_minutes - ts[i]) / (ts[i + 1] - ts[i]))
-                return ps[i] + w * (ps[i + 1] - ps[i])
-        return ps[-1]
+        k = int(away_steps)
+        if k <= 0:
+            return 0.0
+        if k >= len(tab):
+            return float(tab[-1])
+        return float(tab[k - 1])
 
     def _update_occupancy(self, is_weekend: bool) -> None:
         """更新人员占用状态，并分配人员所在区域。
@@ -829,9 +829,7 @@ class HomeSimulator:
             # 有人时 p_arrive_soon 记 0（不需要预测回来）。
             "empty_steps": float(self._empty_steps),
             "p_arrive_soon": (0.0 if s.occupied else
-                              float(self._hazard_30(
-                                  self._empty_steps
-                                  * self.sim_cfg.dt_minutes))),
+                              float(self._hazard_30(self._empty_steps))),
             # 电价（分时电价场景下的决策依据）
             "elec_price": float(self.rew_cfg.get_price(self.sim_time.hour)),
             "price_tier": float(

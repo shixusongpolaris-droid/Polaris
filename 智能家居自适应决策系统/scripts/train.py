@@ -54,7 +54,8 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv
 
-from src.env import RewardConfig, SmartHomeEnv, encode_action, ActionConfig
+from src.env import (RewardConfig, SmartHomeEnv, encode_action,
+                     ActionConfig, SimConfig)
 
 _avail = {f.name for f in font_manager.fontManager.ttflist}
 for _c in ["Microsoft YaHei", "SimHei", "DengXian"]:
@@ -228,6 +229,10 @@ def main():
     ap.add_argument("--gamma", type=float, default=0.99, help="折扣因子")
     ap.add_argument("--skip-baselines", action="store_true",
                     help="跳过基线评估（加速调试）")
+    ap.add_argument("--occupancy-mode", type=str, default="iid",
+                    choices=["iid", "semi_markov"],
+                    help="占用模型：iid（25 维观测，旧行为）或 "
+                         "semi_markov（27 维，含回归预测特征）")
     args = ap.parse_args()
 
     tag = args.tag or f"ppo_{args.weight_mode}"
@@ -286,8 +291,14 @@ def main():
     if args.temp_scale is not None:
         rew_cfg.temp_scale = args.temp_scale
 
+    # ---------- 占用模型（gen7）----------
+    # iid         每步独立抽样（旧行为，25 维观测，兼容 gen5/gen6 模型）
+    # semi_markov 半马尔可夫过程（27 维观测，含 empty_steps 与
+    #             p_arrive_soon 两个回归预测特征）
+    sim_cfg = SimConfig(occupancy_mode=args.occupancy_mode)
+
     def make_env(seed=0):
-        env = SmartHomeEnv(rew_cfg=rew_cfg, seed=seed)
+        env = SmartHomeEnv(rew_cfg=rew_cfg, sim_cfg=sim_cfg, seed=seed)
         return Monitor(env)
 
     print("=" * 72)
@@ -301,13 +312,26 @@ def main():
     elif args.tariff == "shanghai_flat":
         print(f"     全天统一      : {rew_cfg.price_flat_tariff} 元/度（未选分时）")
     print(f"  能耗权重模式 : {args.weight_mode}")
+    print(f"  占用模型     : {args.occupancy_mode}")
     print(f"  总训练步数   : {args.timesteps:,}")
     print(f"  并行环境数   : {args.n_envs}")
     print(f"  折扣因子 γ   : {args.gamma}")
     print(f"  随机种子     : {args.seed}")
     print(f"  输出目录     : models/{tag}")
-    print(f"  回合长度     : {SmartHomeEnv().episode_steps} 步 "
-          f"({SmartHomeEnv().episode_steps / 96:.0f} 天)")
+    _ep_env = SmartHomeEnv(rew_cfg=rew_cfg, sim_cfg=sim_cfg)
+    print(f"  回合长度     : {_ep_env.episode_steps} 步 "
+          f"({_ep_env.episode_steps / 96:.0f} 天)")
+    print(f"  观测维度     : {_ep_env.observation_space.shape[0]}"
+          f"（semi_markov 应为 27，iid 应为 25）")
+    _ep_env.close()
+    # 一致性护栏：semi_markov 模式下观测必须是 27 维，否则说明
+    # sim_cfg 没传进去（2026-10-18 曾因此差点白跑一轮训练）
+    _expect = 27 if args.occupancy_mode == "semi_markov" else 25
+    _got = SmartHomeEnv(rew_cfg=rew_cfg, sim_cfg=sim_cfg).observation_space.shape[0]
+    if _got != _expect:
+        raise SystemExit(
+            f"观测维度 {_got} 与预期的 {_expect} 不符（occupancy_mode="
+            f"{args.occupancy_mode}）。请检查 sim_cfg 是否正确传入。")
 
     # ---------- 基线评估 ----------
     baseline_results = {}
@@ -317,8 +341,9 @@ def main():
               f"{args.eval_episodes} 回合）")
         print("-" * 72)
         for name, fn in BASELINES.items():
-            res = evaluate_policy_fn(lambda: SmartHomeEnv(rew_cfg=rew_cfg),
-                                     fn, args.eval_episodes)
+            res = evaluate_policy_fn(
+                lambda: SmartHomeEnv(rew_cfg=rew_cfg, sim_cfg=sim_cfg),
+                fn, args.eval_episodes)
             baseline_results[name] = res
             print(f"  {name:<16} 能耗 {res['energy_per_day_kwh'][0]:6.3f} kWh/天   "
                   f"不达标 {res['discomfort_ratio'][0]:6.1%}   "
@@ -371,8 +396,9 @@ def main():
     print("\n" + "-" * 72)
     print(" 步骤 3/3：评估训练后的策略")
     print("-" * 72)
-    rl_res = evaluate_model(model, lambda: SmartHomeEnv(rew_cfg=rew_cfg),
-                            args.eval_episodes, deterministic=True)
+    rl_res = evaluate_model(
+        model, lambda: SmartHomeEnv(rew_cfg=rew_cfg, sim_cfg=sim_cfg),
+        args.eval_episodes, deterministic=True)
     print(f"  PPO（本方法）    能耗 {rl_res['energy_per_day_kwh'][0]:6.3f} kWh/天   "
           f"不达标 {rl_res['discomfort_ratio'][0]:6.1%}   "
           f"切换 {rl_res['switch_per_day'][0]:6.1f} 次/天")

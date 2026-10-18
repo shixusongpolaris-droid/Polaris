@@ -158,7 +158,14 @@ def make_model_policy(model_path, block_price=False):
     def fn(env):
         v = np.array(env.sim.to_vector(env.get_obs_dict()), dtype=np.float32)
         if block_price:
-            v[-3:] = 0.0
+            # 按**名称**定位电价特征，不要用负索引。
+            # 2026-10-18：观测从 25 维扩到 27 维后（gen7 的 empty_steps /
+            # p_arrive_soon 追加在末尾），原先的 v[-3:] 会切到这两个新
+            # 特征而不是电价，导致"屏蔽电价"的对照实验失效。
+            names = env.sim.active_obs_names()
+            for nm in ("elec_price", "price_tier", "elec_price_forward"):
+                if nm in names:
+                    v[names.index(nm)] = 0.0
         return int(model.predict(v, deterministic=True)[0])
     return fn
 
