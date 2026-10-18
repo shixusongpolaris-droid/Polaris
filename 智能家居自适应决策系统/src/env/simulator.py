@@ -104,6 +104,11 @@ class HomeSimulator:
     """
 
     # 观测向量的特征名（顺序固定，务必与 to_observation 保持一致）
+    #
+    # ⚠️ 两组"条件特征"必须放在列表**末尾**，且顺序为：
+    #        ... battery_soc, battery_power, empty_steps, p_arrive_soon
+    #    因为 HomeEnv._obs_low()/_obs_high() 是按位置追加条件边界的，
+    #    放在中间会让边界数组与向量错位。
     OBS_NAMES = [
         # 室内环境（3）
         "temp_in", "hum_in", "light_in",
@@ -123,6 +128,10 @@ class HomeSimulator:
         "elec_price_forward",
         # 储能状态（2）—— v4 新增：使策略能感知储能水平并据此调度
         "battery_soc", "battery_power",
+        # 回归预测（2）—— gen7 新增：仅 semi_markov 模式下进入观测
+        #   empty_steps     已连续无人多少步（0 = 有人）
+        #   p_arrive_soon   由风险表算出的未来 30 分钟内回归概率
+        "empty_steps", "p_arrive_soon",
     ]
     OBS_DIM = len(OBS_NAMES)
 
@@ -325,12 +334,102 @@ class HomeSimulator:
             base = min(1.0, base + self.sim_cfg.weekend_boost)
         return base
 
-    def _update_occupancy(self, is_weekend: bool) -> None:
-        """按概率更新人员占用状态，并分配人员所在区域。"""
+    # ------------------------------------------------------------
+    # 占用：i.i.d. 模式 与 半马尔可夫模式（gen7）
+    # ------------------------------------------------------------
+    def _reset_semi_markov(self) -> None:
+        """初始化半马尔可夫占用过程的内部状态。
+
+        初始占用状态从周表按该时刻的概率抽取，而不是固定为"无人"——
+        否则每个回合都从"人不在家"开始，会系统性偏离真实分布。
+        """
         hour = self.sim_time.hour
         dow = self.sim_time.weekday()
-        p = self._occupancy_prob(hour, dow, is_weekend)
-        occupied = 1 if self._rng.random() < p else 0
+        p = self._occupancy_prob(hour, dow, self._is_weekend())
+        self._sm_occupied = 1 if self._rng.random() < p else 0
+        self._sm_elapsed = 0
+        self._sm_duration = (self._sm_draw_stay_steps() if self._sm_occupied
+                             else self._sm_draw_away_steps())
+
+    def _sm_draw_away_steps(self) -> int:
+        """抽一个"本次外出会持续多少步"。
+
+        分支选择依据：实测数据里，10 点前的那次外出（09:16）是全天外出，
+        其余 9 次都是在其他时段发生的短途。因此以出发时刻为条件：
+
+            出发时刻 < 10:00  -> 以 p_long_before_10 的概率进入长途分支
+            其余时刻          -> 以 p_long_other  的概率进入长途分支
+        """
+        cfg = self.sim_cfg
+        hour = self.sim_time.hour
+        p_long = (cfg.sm_p_long_before_10 if hour < 10
+                  else cfg.sm_p_long_other)
+        pool = (cfg.sm_long_pool if self._rng.random() < p_long
+                else cfg.sm_short_pool)
+        minutes = float(self._rng.choice(pool))
+        return max(1, int(round(minutes / cfg.dt_minutes)))
+
+    def _sm_draw_stay_steps(self) -> int:
+        """抽一个"本次在室会持续多少步"。
+
+        夜间（22:00~06:00）用长时间池（对应睡眠），其余时段用一般池。
+        这样保留了实测中"夜里长时间在室、白天频繁进出"的结构。
+        """
+        cfg = self.sim_cfg
+        hour = self.sim_time.hour
+        pool = (cfg.sm_stay_long_pool if (hour >= 22 or hour < 6)
+                else cfg.sm_stay_pool)
+        minutes = float(self._rng.choice(pool))
+        return max(1, int(round(minutes / cfg.dt_minutes)))
+
+    def _advance_semi_markov(self) -> int:
+        """推进半马尔可夫占用一步，返回是否有人（0/1）。"""
+        self._sm_elapsed += 1
+        if self._sm_elapsed >= self._sm_duration:
+            # 切换状态并抽新的持续时间
+            self._sm_occupied = 1 - self._sm_occupied
+            self._sm_elapsed = 0
+            self._sm_duration = (self._sm_draw_stay_steps()
+                                 if self._sm_occupied
+                                 else self._sm_draw_away_steps())
+        return self._sm_occupied
+
+    def _hazard_30(self, away_minutes: float) -> float:
+        """由风险表查"未来 30 分钟内回归的概率"（线性插值）。
+
+        风险表来自 scripts/fit_occupancy_hazard.py 用实测数据拟合的
+        双分量对数正态混合（短途中位 20.8 分、长途中位 712.4 分）。
+        """
+        cfg = self.sim_cfg
+        ts = cfg.sm_hazard_t
+        ps = cfg.sm_hazard_h30
+        if not ts or not ps:
+            return 0.0
+        if away_minutes <= ts[0]:
+            return ps[0]
+        if away_minutes >= ts[-1]:
+            return ps[-1]
+        for i in range(len(ts) - 1):
+            if ts[i] <= away_minutes < ts[i + 1]:
+                w = ((away_minutes - ts[i]) / (ts[i + 1] - ts[i]))
+                return ps[i] + w * (ps[i + 1] - ps[i])
+        return ps[-1]
+
+    def _update_occupancy(self, is_weekend: bool) -> None:
+        """更新人员占用状态，并分配人员所在区域。
+
+        两种模式：
+          i.i.d.（默认，兼容旧模型）—— 每步按周表独立抽样
+          semi_markov（gen7）—— 按"已停留时长"切换，时长由实测分布抽
+        """
+        cfg = self.sim_cfg
+        if cfg.occupancy_mode == "semi_markov":
+            occupied = self._advance_semi_markov()
+        else:
+            hour = self.sim_time.hour
+            dow = self.sim_time.weekday()
+            p = self._occupancy_prob(hour, dow, is_weekend)
+            occupied = 1 if self._rng.random() < p else 0
 
         if occupied:
             # 进入后以较高概率停留在 A 区（主要活动区）
@@ -506,10 +605,21 @@ class HomeSimulator:
         self._empty_steps = 0
         self.metrics = self._new_metrics()
         self._reset_battery()          # v4：初始化储能状态
+        self._reset_semi_markov()      # gen7：初始化半马尔可夫占用状态
 
         self._update_outdoor()
         self._update_occupancy(self._is_weekend())
         self._update_light()
+
+        # 与 step() 保持一致地更新派生特征。否则 reset 后若初始为"无人"，
+        # empty_steps 仍为 0，观测会自相矛盾（无人却显示刚离开）。
+        if self.state.occupied:
+            self._dur_occ_steps = 1
+            self._empty_steps = 0
+        else:
+            self._dur_occ_steps = 0
+            self._empty_steps = 1
+
         return self.get_observation()
 
     # ------------------------------------------------------------
@@ -713,6 +823,15 @@ class HomeSimulator:
             "dur_occ": float(min(self._dur_occ_steps * self.sim_cfg.dt_minutes,
                                  480)),
             "p_occ_slot": float(self._p_occ_slot()),
+            # 回归预测（gen7）：仅在 semi_markov 模式下进入观测向量
+            #   empty_steps    已连续无人多少步（0 = 有人）
+            #   p_arrive_soon  由风险表算出的未来 30 分钟内回归概率
+            # 有人时 p_arrive_soon 记 0（不需要预测回来）。
+            "empty_steps": float(self._empty_steps),
+            "p_arrive_soon": (0.0 if s.occupied else
+                              float(self._hazard_30(
+                                  self._empty_steps
+                                  * self.sim_cfg.dt_minutes))),
             # 电价（分时电价场景下的决策依据）
             "elec_price": float(self.rew_cfg.get_price(self.sim_time.hour)),
             "price_tier": float(
@@ -739,8 +858,16 @@ class HomeSimulator:
         return [obs[name] for name in names]
 
     def active_obs_names(self) -> list:
-        """当前生效的观测特征名列表（根据是否启用储能决定）。"""
-        if self._battery_active():
-            return list(self.OBS_NAMES)
-        skip = {"battery_soc", "battery_power"}
+        """当前生效的观测特征名列表。
+
+        两组特征按需启用，以保持向后兼容：
+          · 储能状态：仅在启用储能时加入（否则 25 维）
+          · 回归预测：仅在 semi_markov 占用模式下加入（否则 25 维）
+        两者都关闭时观测为 25 维，与 gen5/gen6 的模型兼容。
+        """
+        skip = set()
+        if not self._battery_active():
+            skip |= {"battery_soc", "battery_power"}
+        if self.sim_cfg.occupancy_mode != "semi_markov":
+            skip |= {"empty_steps", "p_arrive_soon"}
         return [n for n in self.OBS_NAMES if n not in skip]

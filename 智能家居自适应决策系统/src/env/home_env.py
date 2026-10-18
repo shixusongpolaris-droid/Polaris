@@ -118,6 +118,9 @@ class SmartHomeEnv(gym.Env):
         # v4 储能状态：电量比例与归一化功率（未启用储能时恒为 0）
         if self._storage_in_obs():
             low += [0.0, -1.0]      # battery_soc, battery_power
+        # gen7 回归预测（仅 semi_markov 模式）：需与 OBS_NAMES 的末尾顺序一致
+        if self._arrival_in_obs():
+            low += [0.0, 0.0]       # empty_steps, p_arrive_soon
         return low
 
     def _obs_high(self) -> list:
@@ -141,6 +144,10 @@ class SmartHomeEnv(gym.Env):
         ]
         if self._storage_in_obs():
             high += [1.0, 1.0]
+        # gen7 回归预测（仅 semi_markov 模式）：需与 OBS_NAMES 末尾顺序一致
+        if self._arrival_in_obs():
+            # empty_steps 的上界取一个回合的总步数（实际远小于它）
+            high += [float(self.episode_steps), 1.0]
         return high
 
     def _storage_in_obs(self) -> bool:
@@ -150,6 +157,15 @@ class SmartHomeEnv(gym.Env):
         未启用储能时观测维度仍为 25，已训练的模型仍可加载。
         """
         return bool(getattr(self.rew_cfg, "battery_enabled", False))
+
+    def _arrival_in_obs(self) -> bool:
+        """回归预测特征是否进入观测空间。
+
+        仅在占用模型为 semi_markov 时加入。iid 模式下"已离开多久"对
+        下一步的人口分布没有信息量，加进去反而误导策略；因此该模式
+        保持 25 维，与 gen5/gen6 的模型兼容。
+        """
+        return self.sim_cfg.occupancy_mode == "semi_markov"
 
     # ------------------------------------------------------------
     # Gymnasium 接口
