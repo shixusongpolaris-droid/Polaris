@@ -112,7 +112,8 @@ class RewardCalculator:
             return 0.0, 0.0
 
         center = (T_low + T_high) / 2.0
-        return 0.05 * c.alpha_hot * abs(temp_in - center), 0.0
+        return (c.in_band_gradient * c.alpha_hot * abs(temp_in - center),
+                0.0)
 
     def humidity_cost(self, hum_in: float) -> float:
         """湿度代价（文档 3.1 节 (2)）。"""
