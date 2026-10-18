@@ -46,7 +46,7 @@ sys.path.insert(0, PROJ)
 
 import numpy as np                                     # noqa: E402
 from src.env import RewardConfig, SmartHomeEnv, encode_action  # noqa: E402
-from src.env.config import ActionConfig                # noqa: E402
+from src.env.config import ActionConfig, SimConfig      # noqa: E402
 from stable_baselines3 import PPO                      # noqa: E402
 from stable_baselines3.common.monitor import Monitor   # noqa: E402
 from stable_baselines3.common.vec_env import DummyVecEnv  # noqa: E402
@@ -60,6 +60,10 @@ TIMESTEPS = 300_000
 EVAL_EPISODES = 8
 EVAL_SEED0 = 9100
 LOOKAHEAD = 0.6
+
+# 占用模型（gen7）：加 --semi-markov 则启用半马尔可夫 + 27 维观测
+_OCC = "semi_markov" if "--semi-markov" in sys.argv else "iid"
+SIM_CFG = SimConfig(occupancy_mode=_OCC)
 
 AC_OFF = 0
 _AC = ActionConfig()
@@ -121,7 +125,7 @@ def evaluate(action_fn, scale, n=EVAL_EPISODES):
     rc = rew_for(scale)
     E, C, D = [], [], []
     for ep in range(n):
-        env = SmartHomeEnv(rew_cfg=rc, seed=EVAL_SEED0 + ep)
+        env = SmartHomeEnv(rew_cfg=rc, sim_cfg=SIM_CFG, seed=EVAL_SEED0 + ep)
         env.reset(seed=EVAL_SEED0 + ep)
         cost = 0.0
         while True:
@@ -148,7 +152,7 @@ def train(scale, seed):
     if os.path.exists(ck):
         return ck
     venv = DummyVecEnv([lambda: Monitor(
-        SmartHomeEnv(rew_cfg=rew_for(scale), seed=seed))])
+        SmartHomeEnv(rew_cfg=rew_for(scale), sim_cfg=SIM_CFG, seed=seed))])
     model = PPO("MlpPolicy", venv, verbose=0, seed=seed, n_steps=1024,
                 batch_size=256, learning_rate=3e-4, gamma=0.99,
                 gae_lambda=0.95, ent_coef=0.01, device="cpu")
