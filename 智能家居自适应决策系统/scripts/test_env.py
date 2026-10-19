@@ -391,35 +391,79 @@ def check_constraints(env: SmartHomeEnv) -> bool:
         print(f"  {PASS} precool 模式只允许有预测的预冷")
     env.con_cfg.c4_mode = saved_c4
 
-    # ---- 场景 D：C3 室内温度安全区间（S9b 回归）----
-    print(f"\n  场景 D：C3 温度安全区间（16~30°C）")
+    # ---- 场景 D：C3 预测式安全区间（S9c 回归）----
+    print(f"\n  场景 D：C3 预测式安全区间（16~30°C）")
     saved_c3 = getattr(env.con_cfg, "c3_enforce", True)
+    saved_int_d = env.con_cfg.ac_min_switch_interval
     env.con_cfg.c3_enforce = True
     env.con_cfg.c4_mode = "off"
-    env.reset(seed=11)
-    env.sim.state.temp_in = 31.0
-    _, _, _, _, info_hot = env.step(encode_action(0, 0, 0, env.act_cfg))
+    env.con_cfg.ac_min_switch_interval = 10
+
+    def c3_case(temp, out, ac, vent):
+        env.reset(seed=11)
+        env.sim.state.temp_in = float(temp)
+        env.sim._temp_out = float(out)
+        _, _, _, _, inf = env.step(encode_action(ac, 0, vent, env.act_cfg))
+        return inf
+
+    info_hot = c3_case(31.0, 22.0, 0, 0)
     hot_ok = (int(env.sim.state.ac_idx) == 1
               and bool(info_hot.get("c3_override")))
-    env.reset(seed=11)
-    env.sim.state.temp_in = 15.0
-    _, _, _, _, info_cold = env.step(encode_action(ac_25, 0, 0, env.act_cfg))
+    info_pred = c3_case(29.9, 25.0, 0, 0)
+    pred_ok = (int(env.sim.state.ac_idx) == 1
+               and bool(info_pred.get("c3_override"))
+               and not bool(info_pred.get("c3_violation")))
+    info_cold = c3_case(15.0, 22.0, ac_25, 0)
     cold_ok = (int(env.sim.state.ac_idx) == 0
                and bool(info_cold.get("c3_override")))
-    env.reset(seed=11)
-    env.sim.state.temp_in = 25.0
-    _, _, _, _, info_ok = env.step(encode_action(0, 0, 0, env.act_cfg))
+    info_vent = c3_case(16.1, 10.0, 0, 1)
+    vent_ok = (int(env.sim.state.vent_idx) == 0
+               and not bool(info_vent.get("c3_violation")))
+    info_normal = c3_case(25.0, 22.0, 0, 0)
     normal_ok = (int(env.sim.state.ac_idx) == 0
-                 and not bool(info_ok.get("c3_override")))
+                 and not bool(info_normal.get("c3_override")))
+    # 40°C 起步、最大制冷也压不到 30°C：必须如实记 violation，不伪造 clamp
+    info_extreme = c3_case(40.0, 35.0, 0, 0)
+    extreme_ok = (int(env.sim.state.ac_idx) == 1
+                  and bool(info_extreme.get("c3_violation")))
     env.con_cfg.c3_enforce = saved_c3
     env.con_cfg.c4_mode = saved_c4
-    print(f"    T=31°C 强制制冷: {hot_ok}；"
-          f"T=15°C 强制关机: {cold_ok}；T=25°C 不干预: {normal_ok}")
-    if not (hot_ok and cold_ok and normal_ok):
-        print(f"  {FAIL} C3 温度安全区间未按预期执行")
+    env.con_cfg.ac_min_switch_interval = saved_int_d
+    print(f"    T=31 强制制冷: {hot_ok}；T=29.9 预测拦截: {pred_ok}；"
+          f"T=15 强制关机: {cold_ok}；T=16.1 关窗: {vent_ok}；"
+          f"T=25 不干预: {normal_ok}；T=40 记 violation: {extreme_ok}")
+    if not (hot_ok and pred_ok and cold_ok and vent_ok
+            and normal_ok and extreme_ok):
+        print(f"  {FAIL} C3 预测式安全区间未按预期执行")
         ok = False
     else:
-        print(f"  {PASS} C3 温度安全区间生效")
+        print(f"  {PASS} C3 预测式安全区间生效")
+
+    # ---- 场景 E：C4 请求关机 + interval>dt（t8 high #1）----
+    print(f"\n  场景 E：C4 请求关机 + interval>dt")
+    saved_c4_e = env.con_cfg.c4_mode
+    saved_c3_e = env.con_cfg.c3_enforce
+    saved_int_e = env.con_cfg.ac_min_switch_interval
+    env.con_cfg.c4_mode = "hard"
+    env.con_cfg.c3_enforce = False
+    env.con_cfg.ac_min_switch_interval = 60
+    env.reset(seed=12)
+    env.sim.state.ac_idx = 1
+    env.sim._last_ac_change_step = env.sim.step_count
+    env.sim._empty_steps = 3
+    env.sim.state.occ_a, env.sim.state.occ_b = 0, 0
+    _, _, _, _, info_e = env.step(encode_action(0, 0, 0, env.act_cfg))
+    req_off_ok = int(env.sim.state.ac_idx) == 0
+    env.con_cfg.c4_mode = saved_c4_e
+    env.con_cfg.c3_enforce = saved_c3_e
+    env.con_cfg.ac_min_switch_interval = saved_int_e
+    print(f"    请求关机 + 当前开着 + 无人3步 + interval=60："
+          f"执行后 ac_idx={int(env.sim.state.ac_idx)}（应为 0）")
+    if not req_off_ok:
+        print(f"  {FAIL} C4 请求关机被最小间隔回滚")
+        ok = False
+    else:
+        print(f"  {PASS} C4 请求关机不被最小间隔回滚")
 
     print(f"  {PASS if ok else FAIL} 约束检查")
     return ok

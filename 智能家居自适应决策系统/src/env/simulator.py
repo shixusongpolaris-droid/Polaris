@@ -189,6 +189,8 @@ class HomeSimulator:
             "response_delays": [],     # 每次越界事件的响应延迟（步）
             "recovery_times": [],      # 每次动作后的恢复时间（步）
             "ac_blocked_count": 0,     # 空调动作被约束屏蔽的次数
+            "c3_override_count": 0,    # C3 预测式安全覆盖次数
+            "c3_violation_count": 0,   # C3 尽力后仍越界的步数（能力不足）
             # 以下为内部统计用的临时状态，不对外输出
             "_pending_delay": None,
             "_pending_recovery": None,
@@ -416,22 +418,8 @@ class HomeSimulator:
             return float(tab[-1])
         return float(tab[k - 1])
 
-    def _update_occupancy(self, is_weekend: bool) -> None:
-        """更新人员占用状态，并分配人员所在区域。
-
-        两种模式：
-          i.i.d.（默认，兼容旧模型）—— 每步按周表独立抽样
-          semi_markov（gen7）—— 按"已停留时长"切换，时长由实测分布抽
-        """
-        cfg = self.sim_cfg
-        if cfg.occupancy_mode == "semi_markov":
-            occupied = self._advance_semi_markov()
-        else:
-            hour = self.sim_time.hour
-            dow = self.sim_time.weekday()
-            p = self._occupancy_prob(hour, dow, is_weekend)
-            occupied = 1 if self._rng.random() < p else 0
-
+    def _apply_occupancy_state(self, occupied: bool) -> None:
+        """把 occupied 布尔写进 occ_a/occ_b/occ_dist，不推进半马尔可夫。"""
         if occupied:
             # 进入后以较高概率停留在 A 区（主要活动区）
             if self._rng.random() < 0.75:
@@ -443,6 +431,29 @@ class HomeSimulator:
         else:
             self.state.occ_a, self.state.occ_b = 0, 0
             self.state.occ_dist = 0
+
+    def _update_occupancy(self, is_weekend: bool,
+                          advance: bool = True) -> None:
+        """更新人员占用状态，并分配人员所在区域。
+
+        两种模式：
+          i.i.d.（默认，兼容旧模型）—— 每步按周表独立抽样
+          semi_markov（gen7）—— 按"已停留时长"切换，时长由实测分布抽
+
+        advance=False 仅用于 reset：`_reset_semi_markov` 已经抽好了
+        初始状态，不能再推进一步，否则初始占用会被多走一步
+        （t8 medium：节假日初始概率 0.61 vs 0.30 的来源之一）。
+        """
+        cfg = self.sim_cfg
+        if cfg.occupancy_mode == "semi_markov":
+            occupied = (self._advance_semi_markov() if advance
+                        else bool(self._sm_occupied))
+        else:
+            hour = self.sim_time.hour
+            dow = self.sim_time.weekday()
+            p = self._occupancy_prob(hour, dow, is_weekend)
+            occupied = 1 if self._rng.random() < p else 0
+        self._apply_occupancy_state(occupied)
 
     # ------------------------------------------------------------
     # 物理演变
@@ -458,6 +469,28 @@ class HomeSimulator:
         if 6.0 <= hf <= 18.0:
             return math.sin(math.pi * (hf - 6.0) / 12.0)
         return 0.0
+
+    def _predict_next_temp(self, ac_idx: int, vent_idx: int) -> float:
+        """预测给定动作下的下一步室温（不改状态），用于 C3 预测式屏蔽。
+
+        与 `_update_temperature` 使用同一组公式；不含安全上限裁剪，
+        这样预测值能反映"会不会越界"，而不是被 clip 掩盖。
+        """
+        cfg = self.sim_cfg
+        T = self.state.temp_in
+        dT = -cfg.ua_coef * (T - self._temp_out)
+        dT += cfg.gain_base
+        dT += cfg.solar_coef * self._solar_factor()
+        if ac_idx > 0:
+            sp = self.act_cfg.ac_setpoints[ac_idx - 1]
+            demand = cfg.ac_coef * (T - sp)
+            cooling = min(max(demand, 0.0), cfg.ac_max_cooling)
+            dT -= cooling
+        if vent_idx == 1:
+            dT -= cfg.vent_coef * (T - self._temp_out)
+        if self.state.occupied:
+            dT += cfg.internal_gain
+        return T + dT
 
     def _update_temperature(
         self, ac_cooling_cmd: float, ac_on: bool, vent_on: bool
@@ -631,13 +664,15 @@ class HomeSimulator:
         self._dur_occ_steps = 0
         self._last_ac_change_step = -999
         self._prev_ac_idx = 0
+        self._prev_compressor_on = False   # S9c：压缩机 0→1 启动跟踪
         self._empty_steps = 0
         self.metrics = self._new_metrics()
         self._reset_battery()          # v4：初始化储能状态
         self._reset_semi_markov()      # gen7：初始化半马尔可夫占用状态
 
         self._update_outdoor()
-        self._update_occupancy(self._is_weekend() or self._is_holiday())
+        self._update_occupancy(self._is_weekend() or self._is_holiday(),
+                               advance=False)
         self._update_light()
 
         # 与 step() 保持一致地更新派生特征。否则 reset 后若初始为"无人"，
@@ -698,7 +733,11 @@ class HomeSimulator:
         if force_off and not allow_precool and c4_mode != "off":
             # 安全/节能强制关机不受最小切换间隔约束；否则 interval>dt 时
             # 会出现"刚开机 → 强制关机被最小间隔挡住"的绕过（团队审计 F1）。
-            if ac_idx != 0:
+            #
+            # S2c 修复（2026-10-20，t8 high #1）：必须同时覆盖
+            # "请求动作=0、当前开着"的情况。原条件只看 ac_idx != 0，
+            # 请求关机时 forced 不置位，随后被最小间隔回滚成开机。
+            if ac_idx != 0 or self.state.ac_idx != 0:
                 ac_idx = 0
                 ac_blocked = True
                 forced = True
@@ -708,19 +747,35 @@ class HomeSimulator:
             ac_idx = self.state.ac_idx
             ac_blocked = True
 
-        # ---------- C3：室内温度安全区间（最高优先级，S9b）----------
-        # 安全优先于 C4：即使无人超时，T>30°C 也要强制制冷；T<16°C 强制关机。
+        # ---------- C3：室内温度安全区间（最高优先级，S9c 预测式）----------
+        # 安全优先于 C4：即使无人超时，T_next>30°C 也要强制制冷；
+        # T_next<16°C 强制关机/关窗。
+        #
+        # t8 high #2：原来只看步首 T，29.9°C 关空调一步后仍可到 30.2°C。
+        # 现在先预测候选动作的下一步温度，提前一步拦截。
         c3_override = False
+        c3_violation = False
         if getattr(self.con_cfg, "c3_enforce", True):
             T_now = self.state.temp_in
-            if T_now > self.con_cfg.temp_safe_max:
+            T_next = self._predict_next_temp(ac_idx, vent_idx)
+            hot = (T_now > self.con_cfg.temp_safe_max
+                   or T_next > self.con_cfg.temp_safe_max)
+            cold = (T_now < self.con_cfg.temp_safe_min
+                    or T_next < self.con_cfg.temp_safe_min)
+            if hot:
                 # ac_idx=1 对应最低设定温度档（23°C，最大制冷）
                 if ac_idx != 1:
                     ac_idx = 1
                     c3_override = True
-            elif T_now < self.con_cfg.temp_safe_min:
+                if vent_idx != 0:
+                    vent_idx = 0
+                    c3_override = True
+            elif cold:
                 if ac_idx != 0:
                     ac_idx = 0
+                    c3_override = True
+                if vent_idx != 0:
+                    vent_idx = 0
                     c3_override = True
         if c3_override:
             ac_blocked = False
@@ -759,11 +814,21 @@ class HomeSimulator:
         gross_cooling = self._update_temperature(ac_setpoint, ac_on, vent_on)
         self._update_humidity(ac_on, vent_on)
 
+        # C3 事后越界计数：预测式屏蔽尽力拦截；若设备能力不足仍越界，
+        # 如实记 c3_violation，不伪造 clamp（t8 high #2）。
+        if getattr(self.con_cfg, "c3_enforce", True):
+            if (self.state.temp_in > self.con_cfg.temp_safe_max
+                    or self.state.temp_in < self.con_cfg.temp_safe_min):
+                c3_violation = True
+                self.metrics["c3_violation_count"] = \
+                    self.metrics.get("c3_violation_count", 0) + 1
+
         # ---------- 计算并累加能耗 ----------
-        # 本步是否发生"压缩机启动"：上一步关闭、本步开启，且真的在制冷
-        # （S9b：gross=0 时只开风机、压缩机不启动，不计启动损耗）
-        ac_started = (ac_idx > 0 and prev_ac_idx == 0
-                      and gross_cooling > 1e-9)
+        # 本步是否发生"压缩机启动"：上一步压缩机没在制冷、本步在制冷。
+        # S9c：不只看 AC 关→开；AC 已开但降档使 gross 0→1 也算启动。
+        compressor_on = gross_cooling > 1e-9
+        ac_started = compressor_on and not self._prev_compressor_on
+        self._prev_compressor_on = compressor_on
         e_load_only = self._step_energy_kwh(ac_idx, light_idx, vent_idx,
                                             gross_cooling,
                                             ac_started=ac_started)
@@ -820,6 +885,7 @@ class HomeSimulator:
             "energy_kwh_cum": self.state.energy_kwh,
             "ac_blocked": ac_blocked,
             "c3_override": c3_override,
+            "c3_violation": c3_violation,
             "ac_setpoint": ac_setpoint,
             "sim_time": self.sim_time,
         }
