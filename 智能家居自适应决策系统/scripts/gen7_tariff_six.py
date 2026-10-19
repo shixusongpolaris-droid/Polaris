@@ -40,6 +40,7 @@ models/gen7_tariff_six/results.json
 docs/gen7六格电价实验.md
 """
 
+import argparse
 import json
 import math
 import os
@@ -89,6 +90,9 @@ TIMESTEPS = 300_000
 EVAL_EPISODES = 8
 EVAL_SEED0 = 9100
 ENERGY_SCALE = 30.0        # 与现有主结论一致的中档
+# S3 验证：RL 奖励里的电价前视权重。默认 0.6 与旧实验一致；
+# 设为 0.0 即让 RL 与规则/评估一样只看当前电价。
+LOOKAHEAD_WEIGHT = 0.6
 
 OUT_DIR = os.path.join(PROJ, "models", "gen7_tariff_six")
 OUT = os.path.join(OUT_DIR, "results.json")
@@ -107,7 +111,8 @@ def ci95(v):
 def rew_for(flat, peak, valley, tou):
     """按某一格电价构造 RewardConfig。"""
     rc = RewardConfig(weight_mode="scenario", tou_enabled=bool(tou),
-                      energy_scale=ENERGY_SCALE, lookahead_weight=0.6)
+                      energy_scale=ENERGY_SCALE,
+                      lookahead_weight=LOOKAHEAD_WEIGHT)
     rc.price_flat = float(flat)
     rc.price_peak = float(peak)
     rc.price_valley = float(valley)
@@ -154,12 +159,14 @@ def train_one(rc, seed, tag):
 def measure_metrics(rc, action_fn, n=EVAL_EPISODES):
     """统一度量口径（与 gen7_unified_protocol.py 一致）。"""
     sc = sim_cfg()
-    E, C = [], []
+    E, C, V = [], [], []
     tot = bad = occ_steps = occ_bad = 0
     for ep in range(n):
         env = SmartHomeEnv(rew_cfg=rc, sim_cfg=sc, seed=EVAL_SEED0 + ep)
         env.reset(seed=EVAL_SEED0 + ep)
         cost = 0.0
+        e_valley = 0.0
+        e_total = 0.0
         while True:
             a = action_fn(env)
             _, _, term, trunc, info = env.step(a)
@@ -182,16 +189,21 @@ def measure_metrics(rc, action_fn, n=EVAL_EPISODES):
                 if occ:
                     occ_bad += 1
             cost += info["components"]["elec_price"] * e
+            e_total += e
+            if rc.get_tier_name(hour) == "valley":
+                e_valley += e
             if term or trunc:
                 m = info["episode_metrics"]
                 days = max(env.episode_steps * env.sim_cfg.dt_minutes
                            / 60 / 24, 1e-9)
                 E.append(float(m.get("energy_per_day_kwh", 0.0)))
                 C.append(cost / days)
+                V.append(e_valley / max(e_total, 1e-9))
                 break
         env.close()
     return {"energy": mean(E), "energy_all": E, "cost": mean(C),
             "cost_all": C,
+            "valley_share": mean(V) if V else 0.0,
             "discomfort": bad / max(tot, 1),
             "occ_discomfort": occ_bad / max(occ_steps, 1)}
 
@@ -206,19 +218,48 @@ def model_fn(model, stats):
 
 
 def main():
+    global TIMESTEPS, LOOKAHEAD_WEIGHT, OUT_DIR, OUT, OUT_MD
+    parser = argparse.ArgumentParser(description="上海电价六格实验（支持单格/前视消融）")
+    parser.add_argument("--tags", default="",
+                        help="逗号分隔的 tag，如 t1_tou；空=全部六格")
+    parser.add_argument("--seeds", default="42,66,2026,7,123")
+    parser.add_argument("--timesteps", type=int, default=TIMESTEPS)
+    parser.add_argument("--lookahead", type=float, default=LOOKAHEAD_WEIGHT,
+                        help="RL 奖励的前视电价权重；0=只看当前电价")
+    parser.add_argument("--suffix", default="",
+                        help="输出后缀；非空时写到 gen7_tariff_six_<suffix>")
+    args = parser.parse_args()
+
+    TIMESTEPS = int(args.timesteps)
+    LOOKAHEAD_WEIGHT = float(args.lookahead)
+    seeds = [int(s) for s in args.seeds.split(",") if s.strip()]
+    tags = {s.strip() for s in args.tags.split(",") if s.strip()}
+    selected = [t for t in TARIFFS if (not tags or t[0] in tags)]
+    if not selected:
+        print(f"没有匹配的 tag：{args.tags}")
+        return 2
+
+    if args.suffix:
+        OUT_DIR = os.path.join(PROJ, "models",
+                               f"gen7_tariff_six_{args.suffix}")
+        OUT = os.path.join(OUT_DIR, "results.json")
+        OUT_MD = os.path.join(PROJ, "docs",
+                              f"gen7六格电价实验_{args.suffix}.md")
+
     os.makedirs(OUT_DIR, exist_ok=True)
     all_out = {}
 
-    # ---------- 规则族（6 档各评一遍）----------
+    # ---------- 规则族（选中档各评一遍）----------
     specs = _up.build_specs()
     print("=" * 90)
     print(" 实验 3：上海电价六格敏感性（3 档 × 2 计费方式）")
     print("=" * 90)
-    print(f"  RL：6 组合 × {len(SEEDS)} 种子 × {TIMESTEPS:,} 步")
-    print(f"  规则：6 档 × {len(specs)} 条，同一批评估回合")
+    print(f"  RL：{len(selected)} 组合 × {len(seeds)} 种子 × {TIMESTEPS:,} 步")
+    print(f"  规则：{len(selected)} 档 × {len(specs)} 条，同一批评估回合")
+    print(f"  前视电价权重：{LOOKAHEAD_WEIGHT}")
     print()
 
-    for tag, tier, tou, (flat, peak, valley) in TARIFFS:
+    for tag, tier, tou, (flat, peak, valley) in selected:
         rc = rew_for(flat, peak, valley, tou)
         print(f"\n{'='*90}")
         print(f"  {tag}  第{tier}档  {'分时' if tou else '未分时'}  "
@@ -241,7 +282,7 @@ def main():
 
         # --- RL ---
         rl_rows = []
-        for sd in SEEDS:
+        for sd in seeds:
             model, stats, dt = train_one(rc, sd, tag)
             r = measure_metrics(rc, model_fn(model, stats))
             r["seed"] = sd
@@ -249,18 +290,21 @@ def main():
             rl_rows.append(r)
             print(f"    seed={sd:<5} 电量 {r['energy']:>6.3f} "
                   f"电费 {r['cost']:>6.3f} "
+                  f"谷占比 {r['valley_share']:>6.2%} "
                   f"有人不达标 {r['occ_discomfort']:>7.2%}")
         agg = {
             "energy": mean([r["energy"] for r in rl_rows]),
             "energy_ci": ci95([r["energy"] for r in rl_rows]),
             "cost": mean([r["cost"] for r in rl_rows]),
             "cost_ci": ci95([r["cost"] for r in rl_rows]),
+            "valley_share": mean([r["valley_share"] for r in rl_rows]),
             "occ_discomfort": mean([r["occ_discomfort"] for r in rl_rows]),
             "occ_ci": ci95([r["occ_discomfort"] for r in rl_rows]),
             "per_seed": rl_rows,
         }
         print(f"  RL 均值: 电量 {agg['energy']:.3f}  "
               f"电费 {agg['cost']:.3f}±{agg['cost_ci']:.3f}  "
+              f"谷占比 {agg['valley_share']:.2%}  "
               f"有人不达标 {agg['occ_discomfort']:.2%}")
 
         # --- 与规则对比（占优判据）---
@@ -297,7 +341,7 @@ def main():
     print(f"  {'配置':<10}{'平/峰':>12}{'谷':>8}{'RL电量':>9}{'RL电费':>10}"
           f"{'规则参照':>10}{'差值':>9}")
     print("  " + "-" * 70)
-    for tag, tier, tou, (flat, peak, valley) in TARIFFS:
+    for tag, tier, tou, (flat, peak, valley) in selected:
         o = all_out[tag]
         rc_ = o["rule_ref_cost"]
         dd = o["diff"]
@@ -307,16 +351,17 @@ def main():
               f"{(f'{dd:+.1%}' if dd is not None else '-'):>9}")
 
     with open(OUT, "w", encoding="utf-8") as f:
-        json.dump({"tiers": all_out, "seeds": SEEDS,
+        json.dump({"tiers": all_out, "seeds": seeds,
                    "timesteps": TIMESTEPS,
-                   "energy_scale": ENERGY_SCALE},
+                   "energy_scale": ENERGY_SCALE,
+                   "lookahead_weight": LOOKAHEAD_WEIGHT},
                   f, ensure_ascii=False, indent=2)
     print(f"\n  已保存: {OUT}")
 
     md = ["# gen7：上海电价六格敏感性实验", "",
-          f"- 生成：2026-10-19",
-          f"- 6 组合 × {len(SEEDS)} 种子 × {TIMESTEPS:,} 步，VecNormalize 开启",
-          f"- energy_scale 固定为 {ENERGY_SCALE:.0f}",
+          f"- 生成：2026-10-20",
+          f"- {len(selected)} 组合 × {len(seeds)} 种子 × {TIMESTEPS:,} 步，VecNormalize 开启",
+          f"- energy_scale 固定为 {ENERGY_SCALE:.0f}；前视电价权重 {LOOKAHEAD_WEIGHT}",
           f"- 规则族 {len(specs)} 条，每档重评（价格感知规则的行为随电价变化）",
           f"- 评估：种子 {EVAL_SEED0}~{EVAL_SEED0+EVAL_EPISODES-1}", "",
           "## 一、六格结果", "",
