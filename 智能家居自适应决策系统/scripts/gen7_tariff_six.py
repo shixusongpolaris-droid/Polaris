@@ -238,6 +238,10 @@ def main():
     if not selected:
         print(f"没有匹配的 tag：{args.tags}")
         return 2
+    if len(selected) != len(TARIFFS) and not args.suffix:
+        print("错误：只跑部分 tag 时必须带 --suffix，"
+              "否则会覆盖旧六格 results.json。")
+        return 2
 
     if args.suffix:
         OUT_DIR = os.path.join(PROJ, "models",
@@ -368,7 +372,7 @@ def main():
           "| 配置 | 档位 | 计费 | 平/峰 | 谷 | RL 电量 | RL 电费 "
           "| 规则参照 | 差值 |",
           "|---|---|---|---|---|---|---|---|---|"]
-    for tag, tier, tou, (flat, peak, valley) in TARIFFS:
+    for tag, tier, tou, (flat, peak, valley) in selected:
         o = all_out[tag]
         ref_s = (f"{o['rule_ref_cost']:.3f}"
                  if o["rule_ref_cost"] is not None else "-")
