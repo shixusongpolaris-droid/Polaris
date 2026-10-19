@@ -276,7 +276,13 @@ def check_constraints(env: SmartHomeEnv) -> bool:
     # ---- 场景 A：放松约束，验证屏蔽机制本身有效 ----
     print(f"\n  场景 A：临时把约束设为 60 分钟，检验屏蔽机制")
     saved = env.con_cfg.ac_min_switch_interval
+    saved_c4_a = getattr(env.con_cfg, "c4_mode", "precool")
+    saved_c3_a = getattr(env.con_cfg, "c3_enforce", True)
     env.con_cfg.ac_min_switch_interval = 60
+    # 本场景只测 C1/C2；C4/C3 的安全强制切换不受最小间隔约束，
+    # 必须关掉，否则会把安全覆盖误判成"屏蔽失败"。
+    env.con_cfg.c4_mode = "off"
+    env.con_cfg.c3_enforce = False
     env.reset(seed=5)
 
     changes, last_change = [], None
@@ -297,6 +303,8 @@ def check_constraints(env: SmartHomeEnv) -> bool:
             ac_prev = ac_now
 
     env.con_cfg.ac_min_switch_interval = saved
+    env.con_cfg.c4_mode = saved_c4_a
+    env.con_cfg.c3_enforce = saved_c3_a
 
     interval_steps = 60 / dt          # = 4 步
     print(f"    被屏蔽的步数: {blocked_total}")
@@ -326,19 +334,23 @@ def check_constraints(env: SmartHomeEnv) -> bool:
     env.con_cfg.c4_mode = "hard"
     env.reset(seed=7)
     a = encode_action(ac_25, 0, 0, env.act_cfg)
-    checked, violations = 0, 0
+    checked, violations, c3_hot = 0, 0, 0
     for _ in range(env.episode_steps):
         od0 = env.get_obs_dict()
         empty0 = int(od0.get("empty_steps", 0))
-        _, _, term, trunc, _ = env.step(a)
+        _, _, term, trunc, info_b = env.step(a)
         od = env.get_obs_dict()
         if empty0 >= 2:
             checked += 1
             if int(od["ac_idx"]) > 0:
-                violations += 1
+                if info_b.get("c3_override"):
+                    c3_hot += 1
+                else:
+                    violations += 1
         if term or trunc:
             break
-    print(f"    无人≥30min 的步数: {checked}；仍开机: {violations}")
+    print(f"    无人≥30min 的步数: {checked}；仍开机: {violations}；"
+          f"C3 安全强制制冷: {c3_hot}")
     if checked == 0:
         print(f"  {WARN} 本回合没有无人≥30min 的窗口，C4 未验证")
     elif violations:
@@ -352,22 +364,24 @@ def check_constraints(env: SmartHomeEnv) -> bool:
     env.con_cfg.c4_mode = "precool"
     threshold = getattr(env.con_cfg, "c4_precool_threshold", 0.02)
     env.reset(seed=7)
-    bad_pre, allowed_pre = 0, 0
+    bad_pre, allowed_pre, c3_pre = 0, 0, 0
     for _ in range(env.episode_steps):
         od0 = env.get_obs_dict()
         empty0 = int(od0.get("empty_steps", 0))
         p_arrive = float(od0.get("p_arrive_soon", 0.0))
-        _, _, term, trunc, _ = env.step(a)
+        _, _, term, trunc, info_c = env.step(a)
         od = env.get_obs_dict()
         if empty0 >= 2 and int(od["ac_idx"]) > 0:
-            if p_arrive < threshold:
+            if info_c.get("c3_override"):
+                c3_pre += 1
+            elif p_arrive < threshold:
                 bad_pre += 1
             else:
                 allowed_pre += 1
         if term or trunc:
             break
     print(f"    无预测时仍开机（不应有）: {bad_pre}；"
-          f"有预测时允许预冷: {allowed_pre}")
+          f"有预测时允许预冷: {allowed_pre}；C3 安全强制: {c3_pre}")
     if bad_pre:
         print(f"  {FAIL} precool 模式在 p_arrive_soon < {threshold} 时仍开机")
         ok = False
@@ -376,6 +390,36 @@ def check_constraints(env: SmartHomeEnv) -> bool:
     else:
         print(f"  {PASS} precool 模式只允许有预测的预冷")
     env.con_cfg.c4_mode = saved_c4
+
+    # ---- 场景 D：C3 室内温度安全区间（S9b 回归）----
+    print(f"\n  场景 D：C3 温度安全区间（16~30°C）")
+    saved_c3 = getattr(env.con_cfg, "c3_enforce", True)
+    env.con_cfg.c3_enforce = True
+    env.con_cfg.c4_mode = "off"
+    env.reset(seed=11)
+    env.sim.state.temp_in = 31.0
+    _, _, _, _, info_hot = env.step(encode_action(0, 0, 0, env.act_cfg))
+    hot_ok = (int(env.sim.state.ac_idx) == 1
+              and bool(info_hot.get("c3_override")))
+    env.reset(seed=11)
+    env.sim.state.temp_in = 15.0
+    _, _, _, _, info_cold = env.step(encode_action(ac_25, 0, 0, env.act_cfg))
+    cold_ok = (int(env.sim.state.ac_idx) == 0
+               and bool(info_cold.get("c3_override")))
+    env.reset(seed=11)
+    env.sim.state.temp_in = 25.0
+    _, _, _, _, info_ok = env.step(encode_action(0, 0, 0, env.act_cfg))
+    normal_ok = (int(env.sim.state.ac_idx) == 0
+                 and not bool(info_ok.get("c3_override")))
+    env.con_cfg.c3_enforce = saved_c3
+    env.con_cfg.c4_mode = saved_c4
+    print(f"    T=31°C 强制制冷: {hot_ok}；"
+          f"T=15°C 强制关机: {cold_ok}；T=25°C 不干预: {normal_ok}")
+    if not (hot_ok and cold_ok and normal_ok):
+        print(f"  {FAIL} C3 温度安全区间未按预期执行")
+        ok = False
+    else:
+        print(f"  {PASS} C3 温度安全区间生效")
 
     print(f"  {PASS if ok else FAIL} 约束检查")
     return ok
@@ -461,9 +505,16 @@ def check_energy_model(env: SmartHomeEnv) -> bool:
         print(f"  {FAIL} 23°C 与 29°C 的日均能耗差仅 {e23-e29:.3f} kWh，"
               f"物理上不合理（应 > 1.0）")
         ok = False
+    # 旧"净降温"模型也单调（5.346>5.324>5.313>5.281），真正抓 bug 的是
+    # 幅值；再加一条比值判据，防止参数漂移把差距压到 1.0 附近后漏报。
+    ratio = e23 / max(e29, 1e-9)
+    if ratio < 2.0:
+        print(f"  {FAIL} E23/E29 = {ratio:.3f} < 2.0，"
+              f"低设定温度没有付出应有的能耗代价")
+        ok = False
     if ok:
         print(f"  {PASS} 能耗随设定温度单调，23°C 比 29°C 多 "
-              f"{e23-e29:.3f} kWh/天")
+              f"{e23-e29:.3f} kWh/天（比值 {ratio:.2f}）")
     print(f"  {PASS if ok else FAIL} 能量模型检查")
     return ok
 

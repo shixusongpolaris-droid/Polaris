@@ -185,6 +185,9 @@ class SmartHomeEnv(gym.Env):
         super().reset(seed=seed)
         if seed is not None:
             self.sim.seed(seed)
+            # S9b：gymnasium 1.4.0 的 reset(seed) 不播种 action_space，
+            # 导致随机策略自检不可复现；这里一并播种。
+            self.action_space.seed(seed)
 
         obs_dict = self.sim.reset(start_time=self.start_datetime)
 

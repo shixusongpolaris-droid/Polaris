@@ -345,7 +345,8 @@ class HomeSimulator:
         """
         hour = self.sim_time.hour
         dow = self.sim_time.weekday()
-        p = self._occupancy_prob(hour, dow, self._is_weekend())
+        p = self._occupancy_prob(hour, dow,
+                                 self._is_weekend() or self._is_holiday())
         self._sm_occupied = 1 if self._rng.random() < p else 0
         self._sm_elapsed = 0
         self._sm_duration = (self._sm_draw_stay_steps() if self._sm_occupied
@@ -575,11 +576,17 @@ class HomeSimulator:
                 (gross_cooling / max(cfg.ac_max_cooling, 1e-6))
 
             if cooling_kw > 1e-9:
-                # 压缩机在制冷：功率 = 制冷量 / COP，并受最低/额定功率约束
+                # 压缩机在制冷：15 分钟平均功率 = 制冷量 / COP。
+                #
+                # S1b 修复（2026-10-20，团队审计 high #2）：
+                # 不再用 ac_min_power_ratio×额定功率做**平均**底价。
+                # 变频压缩机可以循环/降频；若瞬时最低功率高于负荷，
+                # 压缩机会以较低占空比运行，15 分钟平均电量仍由负荷决定。
+                # 旧写法把瞬时最低功率当平均功率，导致低负荷时有效 COP
+                # 低至 0.075，25/27/29°C 被多收 0.47~0.98 kWh/天。
+                # 瞬时最低功率/循环损耗应单独建模（尚未标定），
+                # 这里先采用物理自洽的循环平均。
                 p_compressor = cooling_kw / max(rcfg.ac_cop, 1e-6)
-                p_compressor = max(
-                    p_compressor,
-                    rcfg.ac_min_power_ratio * rcfg.ac_rated_kw)
                 p_compressor = min(p_compressor, rcfg.ac_rated_kw)
             else:
                 # 室温已低于设定温度：压缩机不制冷，只收风机/控制电路功率
@@ -687,20 +694,36 @@ class HomeSimulator:
             allow_precool = p_arrive >= getattr(
                 self.con_cfg, "c4_precool_threshold", 0.02)
 
+        forced = False
         if force_off and not allow_precool and c4_mode != "off":
-            if elapsed >= min_steps:
-                if ac_idx != 0:
-                    ac_idx = 0
-                    ac_blocked = True
-            elif ac_idx > 0 and ac_idx != self.state.ac_idx:
-                # 间隔未满足时也不允许在无人超时后新开机
+            # 安全/节能强制关机不受最小切换间隔约束；否则 interval>dt 时
+            # 会出现"刚开机 → 强制关机被最小间隔挡住"的绕过（团队审计 F1）。
+            if ac_idx != 0:
                 ac_idx = 0
                 ac_blocked = True
+                forced = True
 
-        if ac_idx != self.state.ac_idx and elapsed < min_steps:
-            # 距上次切换时间不足，屏蔽本次空调状态改变（含强制关机）
+        if (not forced) and ac_idx != self.state.ac_idx and elapsed < min_steps:
+            # 距上次切换时间不足，屏蔽本次空调状态改变
             ac_idx = self.state.ac_idx
             ac_blocked = True
+
+        # ---------- C3：室内温度安全区间（最高优先级，S9b）----------
+        # 安全优先于 C4：即使无人超时，T>30°C 也要强制制冷；T<16°C 强制关机。
+        c3_override = False
+        if getattr(self.con_cfg, "c3_enforce", True):
+            T_now = self.state.temp_in
+            if T_now > self.con_cfg.temp_safe_max:
+                # ac_idx=1 对应最低设定温度档（23°C，最大制冷）
+                if ac_idx != 1:
+                    ac_idx = 1
+                    c3_override = True
+            elif T_now < self.con_cfg.temp_safe_min:
+                if ac_idx != 0:
+                    ac_idx = 0
+                    c3_override = True
+        if c3_override:
+            ac_blocked = False
 
         # 记录空调切换
         if ac_idx != self.state.ac_idx:
@@ -737,8 +760,10 @@ class HomeSimulator:
         self._update_humidity(ac_on, vent_on)
 
         # ---------- 计算并累加能耗 ----------
-        # 本步是否发生"压缩机启动"：上一步关闭、本步开启
-        ac_started = (ac_idx > 0 and prev_ac_idx == 0)
+        # 本步是否发生"压缩机启动"：上一步关闭、本步开启，且真的在制冷
+        # （S9b：gross=0 时只开风机、压缩机不启动，不计启动损耗）
+        ac_started = (ac_idx > 0 and prev_ac_idx == 0
+                      and gross_cooling > 1e-9)
         e_load_only = self._step_energy_kwh(ac_idx, light_idx, vent_idx,
                                             gross_cooling,
                                             ac_started=ac_started)
@@ -794,11 +819,15 @@ class HomeSimulator:
             "energy_kwh_step": e,
             "energy_kwh_cum": self.state.energy_kwh,
             "ac_blocked": ac_blocked,
+            "c3_override": c3_override,
             "ac_setpoint": ac_setpoint,
             "sim_time": self.sim_time,
         }
         if ac_blocked:
             self.metrics["ac_blocked_count"] += 1
+        if c3_override:
+            self.metrics["c3_override_count"] = \
+                self.metrics.get("c3_override_count", 0) + 1
         return obs, info
 
     # ------------------------------------------------------------
@@ -825,7 +854,8 @@ class HomeSimulator:
         """
         hour = self.sim_time.hour
         dow = self.sim_time.weekday()
-        return self._occupancy_prob(hour, dow, self._is_weekend())
+        return self._occupancy_prob(hour, dow,
+                                    self._is_weekend() or self._is_holiday())
 
     def get_observation(self) -> Dict[str, Any]:
         """返回当前观测（字典形式）。
