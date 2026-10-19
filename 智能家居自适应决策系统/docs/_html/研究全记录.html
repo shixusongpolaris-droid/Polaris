@@ -67,7 +67,7 @@ hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
 <div class="l2">阶段 8：细网格扫描与梯度对齐（10-19）</div>
 <div class="l3">8.1 实验 1：细网格 es 扫描</div>
 <div class="l3">8.2 实验 2：奖励-指标对齐（未确认）</div>
-<div class="l3">8.3 实验 3：六格电价敏感性（进行中）</div>
+<div class="l3">8.3 实验 3：六格电价敏感性（已完成并通过审计）</div>
 <div class="l1">第二部分：全部报告索引（74 份）</div>
 <div class="l2">A. 结论与守则（5 份）</div>
 <div class="l2">B. 标定与模型（8 份）</div>
@@ -578,7 +578,7 @@ n=10 种子的功效只有 22.9%
 n=10 的最小可检出效应 (MDE) = 14.2%，而观测效应只有 6.1%</code></pre>
 <p>且该 −6.1% <strong>由 seed 22 单个种子主导</strong>（它 −0.788 元但 occ +3.62pp，</p>
 <p>典型的&quot;用舒适换电费&quot;），中位数仅 <strong>−0.49%</strong>。</p>
-<h3>8.3 实验 3：六格电价敏感性（进行中）</h3>
+<h3>8.3 实验 3：六格电价敏感性（已完成并通过审计）</h3>
 <p><strong>触发</strong>：项目所有者指出上海电价表是二维的（3 档 × 2 计费方式），</p>
 <p>自然应跑 6 种组合。</p>
 <p>旧实验 <code>tariff_tier_sweep</code> 确实跑过这 6 格，但有四个问题使结果不可用：</p>
@@ -588,7 +588,153 @@ n=10 的最小可检出效应 (MDE) = 14.2%，而观测效应只有 6.1%</code><
 <li>是旧代次参数（全程开空调 6.178 kWh，而 gen7 是 5.549）</li>
 <li>PPO 电量在各档之间乱跳（6.837 / 5.965 / 5.249）</li>
 </ol>
-<p><strong>已重做</strong>：gen7 + VecNormalize，5 种子，同时按各档重评 941 条规则。</p>
+<p><strong>重做</strong>：gen7 + VecNormalize，6 组合 × 5 种子，每档重评 941 条规则，</p>
+<p><strong>保存了 30 个模型</strong>（<code>models/gen7_tariff_six/{tag}_s{seed}/</code>）。</p>
+<h4>结果（t11 独立复评：30/30 模型逐位一致，5646 次规则评估逐点一致）</h4>
+<table>
+<thead><tr>
+<th>配置</th>
+<th>档位</th>
+<th>计费</th>
+<th>平/峰</th>
+<th>谷</th>
+<th>RL 电费±CI</th>
+<th>规则参照</th>
+<th>差值</th>
+<th>p</th>
+<th>判定</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>t1_flat</td>
+<td>1</td>
+<td>未分时</td>
+<td>0.617</td>
+<td>0.307</td>
+<td>1.756±0.134</td>
+<td>2.044</td>
+<td><strong>−14.1%</strong></td>
+<td>0.0039</td>
+<td>✅ RL</td>
+</tr>
+<tr>
+<td>t1_tou</td>
+<td>1</td>
+<td>分时</td>
+<td>0.617</td>
+<td>0.307</td>
+<td>2.064±0.246</td>
+<td>1.916</td>
+<td>+7.7%</td>
+<td>0.170</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>t2_flat</td>
+<td>2</td>
+<td>未分时</td>
+<td>0.667</td>
+<td>0.337</td>
+<td>2.232±0.357</td>
+<td>2.209</td>
+<td>+1.0%</td>
+<td>0.872</td>
+<td>❌ 持平</td>
+</tr>
+<tr>
+<td>t2_tou</td>
+<td>2</td>
+<td>分时</td>
+<td>0.677</td>
+<td>0.337</td>
+<td>2.156±0.406</td>
+<td>2.102</td>
+<td>+2.6%</td>
+<td>0.729</td>
+<td>❌ 持平</td>
+</tr>
+<tr>
+<td>t3_flat</td>
+<td>3</td>
+<td>未分时</td>
+<td>0.917</td>
+<td>0.487</td>
+<td>2.365±0.239</td>
+<td>2.916</td>
+<td><strong>−18.9%</strong></td>
+<td>0.0031</td>
+<td>✅ RL</td>
+</tr>
+<tr>
+<td>t3_tou</td>
+<td>3</td>
+<td>分时</td>
+<td>0.977</td>
+<td>0.487</td>
+<td>2.719±0.692</td>
+<td>2.950</td>
+<td>−7.8%</td>
+<td>0.407</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<h4>核心发现：「分时反而更贵」是真实的，机制已查清</h4>
+<p><strong>RL 确实学会了对电价信号做出反应（移峰填谷成功）：</strong></p>
+<pre><code>谷段用电占比  6.18% → 18.71%   (+12.53pp, p=0.018)
+平均电价      0.617 → 0.557    (−9.7%)</code></pre>
+<p><strong>但总电量涨 30.1%，净成本反而 +17.5%：</strong></p>
+<pre><code>电量效应 +0.529 元（多用电）
+电价效应 −0.222 元（用便宜的电）
+净效应   +0.307 元</code></pre>
+<p><strong>结论：RL 把&quot;移谷&quot;学成了&quot;过度预冷&quot;</strong> —— 移谷成功但效率崩塌。</p>
+<p>规则的电量 3.313 kWh（均价 0.578），RL 3.704 kWh（均价 0.557）。</p>
+<p><strong>规则谷占比更低但更高效。</strong></p>
+<h4>交互效应是真的，不是噪声</h4>
+<pre><code>diff-in-diff = +21.80pp  [6.59, 37.02]  t=3.98  p=0.016
+n=5 功效 84%（80% 需 5 个种子，90% 需 6 个）</code></pre>
+<h4>正确表述（<strong>不能简化成&quot;电价越高 RL 越好&quot;</strong>）</h4>
+<blockquote>
+<p><strong>电价结构对 RL—规则对比有非单调影响。</strong></p>
+<p><strong>分时电价在第一档暴露了 RL 的&quot;过度预冷&quot;缺陷（能耗 +30%、净电费 +17.5%），</strong></p>
+<p><strong>规则更擅长利用 TOU；而高电价（第三档未分时）下 RL 显著省 18.9%。</strong></p>
+<p><strong>不能声称&quot;电价越高 RL 越好&quot;。</strong></p>
+</blockquote>
+<h4>各格的可信度分层</h4>
+<table>
+<thead><tr>
+<th>结论</th>
+<th>强度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>t1_flat RL 省 14.1%</td>
+<td>✅ 5/5 种子显著</td>
+</tr>
+<tr>
+<td>t3_flat RL 省 18.9%</td>
+<td>✅ 5/5 种子显著</td>
+</tr>
+<tr>
+<td>t1 的 flat→TOU 交互（21.8pp）</td>
+<td>✅ p=0.016，功效 84%</td>
+</tr>
+<tr>
+<td>t2 两格持平</td>
+<td>✅ 无显著差异</td>
+</tr>
+<tr>
+<td>t1_tou 规则省 7.7%</td>
+<td>⚠️ 单独不显著（p=0.17，需 ~17 种子）</td>
+</tr>
+<tr>
+<td>t3_tou RL 省 7.8%</td>
+<td>⚠️ 单独不显著（p=0.41，需 ~48 种子，且 seed42 异常）</td>
+</tr>
+</tbody></table>
+<h4>局限</h4>
+<p>5 个种子、单周（9100–9107）、<code>energy_scale=30</code> 固定、</p>
+<p><code>t3_tou</code> 的 seed42 是明显异常点（4.464 kWh / 3.579 元 / 35.75% 谷占比，</p>
+<p>其余种子 2.31~2.97 kWh / 2.17~2.81 元）。</p>
 <hr>
 <h1>第二部分：全部报告索引（74 份）</h1>
 <h2>A. 结论与守则（5 份）</h2>

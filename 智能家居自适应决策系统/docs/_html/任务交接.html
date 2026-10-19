@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>任务交接文档</title>
+<title>零、30 秒速览</title>
 <style>
 :root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
         --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
@@ -51,7 +51,6 @@ hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
 <div class="meta">源文件：任务交接.md
 　·　由 scripts/md2html.py 生成</div>
 <div class="toc"><strong>目录</strong>
-<div class="l1">任务交接文档</div>
 <div class="l1">零、30 秒速览</div>
 <div class="l1">一、项目一句话</div>
 <div class="l1">二、五条铁律（违反会浪费时间或出错）</div>
@@ -129,8 +128,14 @@ hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
 <div class="l1">十三、几个容易被问住的问题（准备答案）</div>
 <div class="l1">十四、如果一切重来，我会怎么排</div>
 <div class="l1">十五、最后</div>
+<div class="l1">十六、六格电价实验的结论（2026-10-19 23:40 补）</div>
+<div class="l2">结果（t11 独立复评：30/30 模型逐位一致）</div>
+<div class="l2">⭐ 最有价值的发现</div>
+<div class="l2">正确表述（<strong>不要说&quot;电价越高 RL 越好&quot;</strong>）</div>
+<div class="l2">可信度分层</div>
+<div class="l2">局限</div>
 </div>
-<h1>任务交接文档</h1>
+<p>﻿# 任务交接文档</p>
 <blockquote>
 <p>生成：2026-10-19 22:40</p>
 <p>交接人：上一轮对话中的助手</p>
@@ -222,7 +227,7 @@ print(&quot;中文&quot;)
 <pre><code>脚本：scripts/gen7_tariff_six.py
 日志：models/_tariff6.log
 启动：2026-10-19 22:09
-预计：约 23:15 完成（6 组合 × 5 种子 + 6 档 × 941 规则）
+**已完成（2026-10-19 23:25）并通过 t11 审计**
 产物：models/gen7_tariff_six/results.json
       docs/gen7六格电价实验.md
       models/gen7_tariff_six/{tag}_s{seed}/model.zip  ← 这次存了模型</code></pre>
@@ -983,6 +988,128 @@ Remove-Item &#x27;D:\Dev\Projects\_msg.txt&#x27; -Force
 <hr>
 <p>*本交接文档生成于 2026-10-19 22:40，当前 HEAD <code>7c394b8</code>。</p>
 <p>六格电价实验正在跑，日志 <code>models/_tariff6.log</code>。*</p>
+<hr>
+<h1>十六、六格电价实验的结论（2026-10-19 23:40 补）</h1>
+<p><strong>这一轮之后才有，交接时还没有。</strong></p>
+<h2>结果（t11 独立复评：30/30 模型逐位一致）</h2>
+<table>
+<thead><tr>
+<th>配置</th>
+<th>档位</th>
+<th>计费</th>
+<th>RL 电费±CI</th>
+<th>规则参照</th>
+<th>差值</th>
+<th>p</th>
+<th>判定</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>t1_flat</td>
+<td>1</td>
+<td>未分时</td>
+<td>1.756±0.134</td>
+<td>2.044</td>
+<td><strong>−14.1%</strong></td>
+<td>0.0039</td>
+<td>✅ RL</td>
+</tr>
+<tr>
+<td>t1_tou</td>
+<td>1</td>
+<td>分时</td>
+<td>2.064±0.246</td>
+<td>1.916</td>
+<td>+7.7%</td>
+<td>0.170</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>t2_flat</td>
+<td>2</td>
+<td>未分时</td>
+<td>2.232±0.357</td>
+<td>2.209</td>
+<td>+1.0%</td>
+<td>0.872</td>
+<td>❌ 持平</td>
+</tr>
+<tr>
+<td>t2_tou</td>
+<td>2</td>
+<td>分时</td>
+<td>2.156±0.406</td>
+<td>2.102</td>
+<td>+2.6%</td>
+<td>0.729</td>
+<td>❌ 持平</td>
+</tr>
+<tr>
+<td>t3_flat</td>
+<td>3</td>
+<td>未分时</td>
+<td>2.365±0.239</td>
+<td>2.916</td>
+<td><strong>−18.9%</strong></td>
+<td>0.0031</td>
+<td>✅ RL</td>
+</tr>
+<tr>
+<td>t3_tou</td>
+<td>3</td>
+<td>分时</td>
+<td>2.719±0.692</td>
+<td>2.950</td>
+<td>−7.8%</td>
+<td>0.407</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<h2>⭐ 最有价值的发现</h2>
+<p><strong>RL 学会了对电价信号做出反应（移峰填谷成功），但方式是&quot;过度预冷&quot;：</strong></p>
+<pre><code>谷段用电占比  6.18% → 18.71%   (+12.53pp, p=0.018)   ← 移谷成功
+平均电价      0.617 → 0.557    (−9.7%)                ← 电价降了
+总电量        +30.1%                                  ← 但多用了 30% 电
+净电费        +17.5%                                  ← 结果更贵</code></pre>
+<p><strong>交互效应是真实的</strong>：diff-in-diff = +21.80pp [6.59, 37.02]，t=3.98，p=0.016，</p>
+<p>n=5 功效 84%。</p>
+<h2>正确表述（<strong>不要说&quot;电价越高 RL 越好&quot;</strong>）</h2>
+<blockquote>
+<p>电价结构对 RL—规则对比有<strong>非单调</strong>影响。</p>
+<p>分时电价在第一档暴露 RL 的&quot;过度预冷&quot;缺陷（能耗 +30%、净电费 +17.5%），</p>
+<p><strong>规则更擅长利用 TOU</strong>；高电价（第三档未分时）下 RL 显著省 18.9%。</p>
+</blockquote>
+<h2>可信度分层</h2>
+<table>
+<thead><tr>
+<th>结论</th>
+<th>强度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>t1_flat RL 省 14.1% / t3_flat RL 省 18.9%</td>
+<td>✅ 5/5 种子显著</td>
+</tr>
+<tr>
+<td>t1 的 flat→TOU 交互（21.8pp）</td>
+<td>✅ p=0.016</td>
+</tr>
+<tr>
+<td>t2 两格持平</td>
+<td>✅ 无显著差异</td>
+</tr>
+<tr>
+<td>t1_tou 规则省 7.7%</td>
+<td>⚠️ 单独不显著（需 ~17 种子）</td>
+</tr>
+<tr>
+<td>t3_tou RL 省 7.8%</td>
+<td>⚠️ 单独不显著（需 ~48 种子，seed42 异常）</td>
+</tr>
+</tbody></table>
+<h2>局限</h2>
+<p>5 种子、单周（9100–9107）、<code>energy_scale=30</code> 固定、</p>
+<p><code>t3_tou</code> 的 seed42 是异常点（4.464 kWh / 3.579 元，其余种子 2.31~2.97）。</p>
 </div>
 </body>
 </html>

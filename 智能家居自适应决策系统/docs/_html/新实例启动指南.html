@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新实例启动指南</title>
+<style>
+:root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
+        --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
+* { box-sizing: border-box; }
+body { margin:0; background:#f6f8fa; color:var(--fg);
+       font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei",
+             "PingFang SC", sans-serif; }
+.page { max-width: 1000px; margin: 0 auto; padding: 40px 28px 80px;
+        background: var(--bg); }
+h1,h2,h3,h4,h5 { line-height:1.35; margin: 1.6em 0 .6em; font-weight:600; }
+h1 { font-size: 2em; border-bottom:2px solid var(--bd); padding-bottom:.3em; }
+h2 { font-size: 1.5em; border-bottom:1px solid var(--bd); padding-bottom:.25em; }
+h3 { font-size: 1.22em; }
+h4 { font-size: 1.06em; color:var(--muted); }
+p { margin: .75em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--code); padding: .15em .4em; border-radius: 5px;
+       font: .9em/1.5 "Cascadia Mono", Consolas, monospace; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px;
+      overflow: auto; border: 1px solid var(--bd); }
+pre code { background: none; padding: 0; font-size: .88em; }
+table { border-collapse: collapse; margin: 1.1em 0; width: 100%;
+        font-size: .94em; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--bd); padding: 7px 11px; text-align: left;
+         vertical-align: top; }
+th { background: #eef2f6; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fbfcfd; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid var(--accent);
+             background: #f0f7ff; color: #1f2328; }
+blockquote p { margin: .3em 0; }
+ul, ol { margin: .7em 0; padding-left: 1.8em; }
+li { margin: .25em 0; }
+hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
+.toc { background:#f6f8fa; border:1px solid var(--bd); border-radius:8px;
+       padding: 14px 20px; margin: 1.5em 0 2em; font-size: .94em; }
+.toc div { margin: .2em 0; }
+.toc .l2 { padding-left: 1.2em; color: var(--muted); }
+.toc .l3 { padding-left: 2.4em; color: var(--muted); font-size: .95em; }
+.meta { color: var(--muted); font-size: .86em; margin-bottom: 1.5em; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="meta">源文件：新实例启动指南.md
+　·　由 scripts/md2html.py 生成</div>
+<div class="toc"><strong>目录</strong>
+<div class="l1">新实例启动指南</div>
+<div class="l1">一、最省事的做法：直接粘贴下面这段</div>
+<div class="l1">二、开工前必须做的三件确认</div>
+<div class="l1">1. 工作区是否干净（有没有未提交的东西）</div>
+<div class="l1">空 = 干净</div>
+<div class="l1">2. 环境是否正常</div>
+<div class="l1">应该六项全过</div>
+<div class="l1">3. 有没有后台任务在跑</div>
+<div class="l1">如果有，先问用户这是不是上次没跑完的</div>
+<div class="l1">三、如果助手说&quot;读不到文件&quot;</div>
+<div class="l1">四、换模型时最容易丢的东西（清单）</div>
+<div class="l1">五、如果新助手表现异常（自查表）</div>
+<div class="l1">六、给新助手的一句话提醒</div>
+<div class="l1">七、当前状态快照（2026-10-19 23:30）</div>
+</div>
+<h1>新实例启动指南</h1>
+<blockquote>
+<p>用途：<strong>换模型/开新会话时，如何把工作区交接给&quot;下一个助手&quot;</strong></p>
+<p>生成：2026-10-19</p>
+</blockquote>
+<hr>
+<h1>一、最省事的做法：直接粘贴下面这段</h1>
+<p>新建会话后，把下面整段复制粘贴给助手（不用改任何东西）：</p>
+<pre><code>工作区在 D:\Dev\Projects\Polaris\智能家居自适应决策系统
+（git 仓库根是 D:\Dev\Projects\Polaris，分支 main）
+
+请先按顺序读完这四份，再动手：
+1. docs/任务交接.md          （15+1 章，必读，含五条铁律）
+2. docs/研究全记录.md        （8 阶段流程 + 74 份报告索引 + 11 处错误清单）
+3. docs/结题引用守则.md      （写材料前必读：风险数字与正确说法）
+4. docs/项目核心结论.md      （主结论，注意可能是旧版）
+
+环境：
+- Python: &lt;项目根&gt;\.venv\Scripts\python.exe
+- 需要 PYTHONUTF8=1
+- 改任何代码后先跑 scripts/test_env.py（六项自检）
+
+习惯要求（重要）：
+- 给我确切的、客观的评价，不要刻意迎合我
+- 每次做实验前先审计代码，做完再审计结果
+- 团队插件（Agent Teams）可用，团队 ID 是 polaris-audit
+- 不显著的结果只能报&quot;未确认&quot;，不能报&quot;无效&quot;
+
+读完告诉我：当前结论是什么、还有什么待办、有没有在跑的任务。</code></pre>
+<hr>
+<h1>二、开工前必须做的三件确认</h1>
+<p>助手读完文档后，让它先跑这三条：</p>
+<pre><code># 1. 工作区是否干净（有没有未提交的东西）
+&amp; &#x27;D:\Dev\Tools\Git\cmd\git.exe&#x27; -C &#x27;D:\Dev\Projects\Polaris&#x27; status --short
+#   空 = 干净
+
+# 2. 环境是否正常
+$py = &#x27;D:\Dev\Projects\Polaris\智能家居自适应决策系统\.venv\Scripts\python.exe&#x27;
+$env:PYTHONUTF8 = &#x27;1&#x27;
+&amp; $py &#x27;&lt;项目根&gt;\scripts\test_env.py&#x27;
+#   应该六项全过
+
+# 3. 有没有后台任务在跑
+Get-Process python -ErrorAction SilentlyContinue | Where-Object { $_.CPU -gt 100 }
+#   如果有，先问用户这是不是上次没跑完的</code></pre>
+<hr>
+<h1>三、如果助手说&quot;读不到文件&quot;</h1>
+<p><strong>常见原因与解法</strong>：</p>
+<table>
+<thead><tr>
+<th>症状</th>
+<th>原因</th>
+<th>解法</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>说文件不存在</td>
+<td>路径写错（中文目录）</td>
+<td>用绝对路径 + 引号</td>
+</tr>
+<tr>
+<td>打不开 .md</td>
+<td><strong>本机没有关联 .md 程序</strong></td>
+<td>让助手跑 <code>scripts/md2html.py</code> 转 HTML，双击 <code>docs\_html\*.html</code></td>
+</tr>
+<tr>
+<td>链接点不开</td>
+<td>我给的 markdown 链接用了反斜杠</td>
+<td>让助手用 <code>&lt;正斜杠路径&gt;</code> 格式</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>四、换模型时最容易丢的东西（清单）</h1>
+<p><strong>以下内容只存在于对话历史里，不在文件里 —— 换模型会丢，必须靠文档传递：</strong></p>
+<table>
+<thead><tr>
+<th>项</th>
+<th>是否已在文档里</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>项目目标与截止期</td>
+<td>✅ 任务交接.md 零章</td>
+</tr>
+<tr>
+<td>五条铁律（PowerShell/read-before-write/.md/git/管道）</td>
+<td>✅ 任务交接.md 二章</td>
+</tr>
+<tr>
+<td>结论的三态（确认/未确认/已推翻）</td>
+<td>✅ 任务交接.md 四章</td>
+</tr>
+<tr>
+<td>数字口径（两种不达标率、两种参照值）</td>
+<td>✅ 任务交接.md 五章</td>
+</tr>
+<tr>
+<td>gen7 参数与训练配置</td>
+<td>✅ 任务交接.md 六章</td>
+</tr>
+<tr>
+<td>团队用法与已派任务</td>
+<td>✅ 任务交接.md 七章</td>
+</tr>
+<tr>
+<td><strong>我犯过的 11 处错误</strong></td>
+<td>✅ 任务交接.md 八章</td>
+</tr>
+<tr>
+<td>用户偏好</td>
+<td>✅ 任务交接.md 十一章</td>
+</tr>
+<tr>
+<td>Git 授权机制</td>
+<td>✅ 任务交接.md 十二点五章</td>
+</tr>
+<tr>
+<td>评委可能问的问题</td>
+<td>✅ 任务交接.md 十三章</td>
+</tr>
+<tr>
+<td>74 份报告各自讲什么</td>
+<td>✅ 研究全记录.md 二章</td>
+</tr>
+<tr>
+<td>结论演变的四次翻转</td>
+<td>✅ 研究全记录.md 四章</td>
+</tr>
+</tbody></table>
+<p><strong>结论：只要把上面那段启动指令粘过去，新助手就能接上。</strong></p>
+<hr>
+<h1>五、如果新助手表现异常（自查表）</h1>
+<table>
+<thead><tr>
+<th>症状</th>
+<th>可能原因</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>反复用 PowerShell heredoc 跑中文代码并失败</td>
+<td>没读&quot;铁律 1&quot;</td>
+</tr>
+<tr>
+<td>覆盖文件时反复报 <code>file has not been read</code></td>
+<td>没读&quot;铁律 2&quot;</td>
+</tr>
+<tr>
+<td>给了 .md 链接但用户打不开</td>
+<td>没读&quot;铁律 3&quot;</td>
+</tr>
+<tr>
+<td>说&quot;需要你授权 git&quot;</td>
+<td>没读&quot;十二点五章&quot;</td>
+</tr>
+<tr>
+<td>从功效不足的数据下&quot;无效&quot;结论</td>
+<td>没读&quot;第八章 B 类错误&quot;</td>
+</tr>
+<tr>
+<td>把规则基线做得很弱然后说 RL 赢了</td>
+<td>没读&quot;第八章核心模式&quot;</td>
+</tr>
+</tbody></table>
+<p><strong>出现以上任何一种，直接说：&quot;你违反了第 X 章，重读一下。&quot;</strong></p>
+<hr>
+<h1>六、给新助手的一句话提醒</h1>
+<blockquote>
+<p>**这个项目已经因为&quot;基线不够强&quot;和&quot;统计推断过度&quot;翻车过 4 次。</p>
+<p>你在下任何结论之前，先问自己：</p>
+<p>① 我的基线是独立构造的吗？② 我的样本量够检出这个效应吗？</p>
+<p>③ 如果我错了，最可能错在哪？**</p>
+</blockquote>
+<hr>
+<h1>七、当前状态快照（2026-10-19 23:30）</h1>
+<table>
+<thead><tr>
+<th>项</th>
+<th>值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>HEAD</td>
+<td><code>74282ef</code></td>
+</tr>
+<tr>
+<td>工作区</td>
+<td>干净</td>
+</tr>
+<tr>
+<td>在跑的任务</td>
+<td>无（六格实验已完成，30 个模型已保存）</td>
+</tr>
+<tr>
+<td>待审</td>
+<td>t11（六格电价盲评）</td>
+</tr>
+<tr>
+<td>主结论状态</td>
+<td><strong>待按 t11 结论更新</strong></td>
+</tr>
+</tbody></table>
+<p><strong>下一次更新本文件应在 t11 审计完成后。</strong></p>
+</div>
+</body>
+</html>
