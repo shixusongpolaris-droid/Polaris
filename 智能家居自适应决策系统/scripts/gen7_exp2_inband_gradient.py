@@ -113,6 +113,18 @@ def train_one(grad, seed):
     stats = {"mean": venv.obs_rms.mean.copy(),
              "var": venv.obs_rms.var.copy()}
     venv.close()
+    # 保存模型与归一化统计，供独立复核者重新评估。
+    # 2026-10-19 团队盲评（t9）指出：只存 results.json 会让盲评降级为
+    # "仅算术核对"——无法独立复评 per-seed 数据。后续实验必须存模型。
+    try:
+        mdir = os.path.join(OUT_DIR, f"grad{str(grad).replace('.', 'p')}"
+                                      f"_s{seed}")
+        os.makedirs(mdir, exist_ok=True)
+        model.save(os.path.join(mdir, "model"))
+        np.savez(os.path.join(mdir, "norm_stats.npz"),
+                 mean=stats["mean"], var=stats["var"])
+    except Exception as e:                      # 保存失败不阻断训练
+        print(f"    (警告) 模型保存失败: {e}")
     return model, stats, dt
 
 

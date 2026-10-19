@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>任务交接文档</title>
+<style>
+:root { --fg:#1f2328; --muted:#57606a; --bd:#d0d7de; --bg:#ffffff;
+        --code:#f6f8fa; --accent:#0969da; --warn:#fff8c5; }
+* { box-sizing: border-box; }
+body { margin:0; background:#f6f8fa; color:var(--fg);
+       font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei",
+             "PingFang SC", sans-serif; }
+.page { max-width: 1000px; margin: 0 auto; padding: 40px 28px 80px;
+        background: var(--bg); }
+h1,h2,h3,h4,h5 { line-height:1.35; margin: 1.6em 0 .6em; font-weight:600; }
+h1 { font-size: 2em; border-bottom:2px solid var(--bd); padding-bottom:.3em; }
+h2 { font-size: 1.5em; border-bottom:1px solid var(--bd); padding-bottom:.25em; }
+h3 { font-size: 1.22em; }
+h4 { font-size: 1.06em; color:var(--muted); }
+p { margin: .75em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--code); padding: .15em .4em; border-radius: 5px;
+       font: .9em/1.5 "Cascadia Mono", Consolas, monospace; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 8px;
+      overflow: auto; border: 1px solid var(--bd); }
+pre code { background: none; padding: 0; font-size: .88em; }
+table { border-collapse: collapse; margin: 1.1em 0; width: 100%;
+        font-size: .94em; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--bd); padding: 7px 11px; text-align: left;
+         vertical-align: top; }
+th { background: #eef2f6; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fbfcfd; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid var(--accent);
+             background: #f0f7ff; color: #1f2328; }
+blockquote p { margin: .3em 0; }
+ul, ol { margin: .7em 0; padding-left: 1.8em; }
+li { margin: .25em 0; }
+hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
+.toc { background:#f6f8fa; border:1px solid var(--bd); border-radius:8px;
+       padding: 14px 20px; margin: 1.5em 0 2em; font-size: .94em; }
+.toc div { margin: .2em 0; }
+.toc .l2 { padding-left: 1.2em; color: var(--muted); }
+.toc .l3 { padding-left: 2.4em; color: var(--muted); font-size: .95em; }
+.meta { color: var(--muted); font-size: .86em; margin-bottom: 1.5em; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="meta">源文件：任务交接.md
+　·　由 scripts/md2html.py 生成</div>
+<div class="toc"><strong>目录</strong>
+<div class="l1">任务交接文档</div>
+<div class="l1">零、30 秒速览</div>
+<div class="l1">一、项目一句话</div>
+<div class="l1">二、五条铁律（违反会浪费时间或出错）</div>
+<div class="l2">铁律 1：不要用 PowerShell heredoc 跑含中文的 Python</div>
+<div class="l1">❌ 会静默吞掉引号，且中文引号会破坏字符串</div>
+<div class="l2">铁律 2：<code>write</code> 覆盖已有文件前必须先用 <code>read</code> 读过</div>
+<div class="l2">铁律 3：<code>.md</code> 文件双击打不开</div>
+<div class="l1">产物在 docs\_html\，双击那个 .html</div>
+<div class="l2">铁律 4：markdown 链接里不要用 Windows 反斜杠</div>
+<div class="l2">铁律 5：输出管道不要用 <code>Select-Object -First N</code> 截断后端 Python</div>
+<div class="l1">三、当前正在进行的事</div>
+<div class="l2">六格电价敏感性实验（跑中）</div>
+<div class="l1">四、结论的当前状态（必须严格按这个说）</div>
+<div class="l2">✅ 已确认（可写进结题材料）</div>
+<div class="l2">❓ 未确认（只能说&quot;不知道&quot;）</div>
+<div class="l2">❌ 已推翻（绝对不能再写）</div>
+<div class="l1">五、必须知道的&quot;数字口径&quot;</div>
+<div class="l2">两个不同的不达标率</div>
+<div class="l2">两个不同的&quot;参照值&quot;</div>
+<div class="l2">电价</div>
+<div class="l1">六、模型代次与参数（gen7 现状）</div>
+<div class="l2">热参数（<code>src/env/config.py</code>）</div>
+<div class="l2">环境</div>
+<div class="l2">训练配置（当前标准）</div>
+<div class="l1">训练 300,000 步，8 回合评估，评估种子 9100~9107</div>
+<div class="l1">七、团队（Agent Teams）</div>
+<div class="l2">现状</div>
+<div class="l2">派任务的规矩</div>
+<div class="l2">三条必须写进任务书的硬约束</div>
+<div class="l2">盲评员（stats-reviewer）的特别要求</div>
+<div class="l2">⚠️ <code>wait_agent</code> 不能等 Agent Teams 成员</div>
+<div class="l1">八、我（上一轮）犯过的错误 —— 别重复</div>
+<div class="l2">代码缺陷（已修，但同类问题可能还有）</div>
+<div class="l2">分析错误（最危险，全部被审计抓出）</div>
+<div class="l2">⚠️ 核心模式（必须警惕）</div>
+<div class="l1">九、文件地图</div>
+<div class="l2">必读（按顺序）</div>
+<div class="l2">最新结果（gen7）</div>
+<div class="l2">关键脚本</div>
+<div class="l2">数据</div>
+<div class="l1">十、待办清单（按优先级）</div>
+<div class="l1">十一、用户偏好（重要）</div>
+<div class="l2">沟通风格</div>
+<div class="l2">判断力</div>
+<div class="l2">时间观</div>
+<div class="l1">十二、如果你要修改代码</div>
+<div class="l2">必做的四步</div>
+<div class="l1">1. 改之前先自检</div>
+<div class="l1">2. 改完之后语法 + 自检</div>
+<div class="l1">3. 两种模式都要测</div>
+<div class="l1">iid 模式应为 25 维，semi_markov 应为 27 维</div>
+<div class="l1">4. 提交前 review 自己的 diff</div>
+<div class="l2">提交规范</div>
+<div class="l2">一、背景/问题</div>
+<div class="l2">二、改动</div>
+<div class="l2">三、验证（具体命令 + 结果）</div>
+<div class="l2">四、状态/局限</div>
+<div class="l1">十二点五、Git 与远程仓库（<strong>无需用户授权</strong>）</div>
+<div class="l2">一句话结论</div>
+<div class="l2">实测验证（2026-10-19 22:44）</div>
+<div class="l1">退出码 0，耗时 4.5 秒，返回 refs/heads/main</div>
+<div class="l2">配置详情（备份用）</div>
+<div class="l2"><code>~/.ssh/config</code> 内容</div>
+<div class="l2">常用命令</div>
+<div class="l1">查看状态</div>
+<div class="l1">提交（中文多行信息必须用 -F 文件，不能 -m）</div>
+<div class="l2">一、背景</div>
+<div class="l2">二、改动</div>
+<div class="l2">三、验证</div>
+<div class="l2">四、状态</div>
+<div class="l1">推送</div>
+<div class="l1">最近提交</div>
+<div class="l2">如果将来 push 失败</div>
+<div class="l2">⚠️ 关于用户说的&quot;需要授权&quot;</div>
+<div class="l1">十三、几个容易被问住的问题（准备答案）</div>
+<div class="l1">十四、如果一切重来，我会怎么排</div>
+<div class="l1">十五、最后</div>
+</div>
+<h1>任务交接文档</h1>
+<blockquote>
+<p>生成：2026-10-19 22:40</p>
+<p>交接人：上一轮对话中的助手</p>
+<p>接收人：<strong>你（下一个我）</strong></p>
+<p></p>
+<p><strong>请先完整读完这份文档，再动手。</strong> 里面每一节都来自实际踩过的坑。</p>
+</blockquote>
+<hr>
+<h1>零、30 秒速览</h1>
+<table>
+<thead><tr>
+<th>项</th>
+<th>值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>项目</td>
+<td>大创：基于强化学习与多目标优化的智能家居自适应决策系统</td>
+</tr>
+<tr>
+<td>项目根</td>
+<td><code>D:\Dev\Projects\Polaris\智能家居自适应决策系统</code></td>
+</tr>
+<tr>
+<td>仓库</td>
+<td><code>D:\Dev\Projects\Polaris</code>（分支 main，远程 <code>git@github.com:shixusongpolaris-droid/Polaris.git</code>）</td>
+</tr>
+<tr>
+<td>venv</td>
+<td><code>&lt;项目根&gt;\.venv\Scripts\python.exe</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.13.16，SB3 2.9.0，torch <strong>2.14.1+cpu</strong>，gymnasium 1.4.0</td>
+</tr>
+<tr>
+<td>当前 HEAD</td>
+<td><code>7c394b8</code></td>
+</tr>
+<tr>
+<td>截止期</td>
+<td><strong>约 2026-11 月底 ~ 12 月中旬</strong>（用户原话：&quot;起码要一到两个月之后&quot;）</td>
+</tr>
+<tr>
+<td>当前代次</td>
+<td><strong>gen7</strong>（半马尔可夫占用 + 27 维观测 + VecNormalize）</td>
+</tr>
+<tr>
+<td>团队</td>
+<td>Agent Teams <code>polaris-audit</code>，3 名成员</td>
+</tr>
+</tbody></table>
+<p><strong>必读顺序</strong>：本文档 → <code>docs/研究全记录.md</code> → <code>docs/结题引用守则.md</code></p>
+<hr>
+<h1>一、项目一句话</h1>
+<p>在<strong>单一房间、单一空调、电价已知</strong>的设定下，比较 PPO 强化学习与人工规则控制的</p>
+<p>能耗—舒适度权衡。</p>
+<p><strong>当前结论</strong>：这是&quot;分工&quot;关系，不是替代关系。</p>
+<hr>
+<h1>二、五条铁律（违反会浪费时间或出错）</h1>
+<h2>铁律 1：不要用 PowerShell heredoc 跑含中文的 Python</h2>
+<p><strong>今天因为它浪费了至少 8 次交互。</strong></p>
+<pre><code># ❌ 会静默吞掉引号，且中文引号会破坏字符串
+&amp; $py -c @&quot;
+print(&quot;中文&quot;)
+&quot;@</code></pre>
+<p><strong>正确做法</strong>：</p>
+<ul>
+<li>短代码：<code>&amp; $py -c &quot;import ast,io; ast.parse(io.open(r&#x27;路径&#x27;,encoding=&#x27;utf-8&#x27;).read())&quot;</code></li>
+<li>长代码：<strong>写成 .py 文件，用 <code>write</code> 工具写，然后 <code>&amp; $py 文件.py</code></strong></li>
+<li>需要改文件：<strong>用 <code>edit</code> 工具，不要用 PowerShell 拼字符串</strong></li>
+</ul>
+<h2>铁律 2：<code>write</code> 覆盖已有文件前必须先用 <code>read</code> 读过</h2>
+<p>这是 fs-observation-policy 的要求。报错 <code>file has not been read</code> 就是这个。</p>
+<p><strong>新建文件不受限。</strong></p>
+<h2>铁律 3：<code>.md</code> 文件双击打不开</h2>
+<p><strong>本机没有关联 .md 程序</strong>（<code>assoc .md</code> 报 File association not found）。</p>
+<p><strong>给用户看文档时</strong>：</p>
+<pre><code>&amp; $py &quot;&lt;项目根&gt;\scripts\md2html.py&quot; &quot;&lt;某个.md&gt;&quot;
+# 产物在 docs\_html\，双击那个 .html</code></pre>
+<h2>铁律 4：markdown 链接里不要用 Windows 反斜杠</h2>
+<pre><code>❌ [文件](D:\path\to\file.md)     ← 反斜杠被当转义符，链接坏掉
+✅ [文件](&lt;D:/path/to/file.md&gt;)   ← 用正斜杠 + 尖括号</code></pre>
+<h2>铁律 5：输出管道不要用 <code>Select-Object -First N</code> 截断后端 Python</h2>
+<p><strong>会导致假的 <code>[exit code: 1]</code></strong>。要截断就先重定向到文件再读。</p>
+<hr>
+<h1>三、当前正在进行的事</h1>
+<h2>六格电价敏感性实验（跑中）</h2>
+<pre><code>脚本：scripts/gen7_tariff_six.py
+日志：models/_tariff6.log
+启动：2026-10-19 22:09
+预计：约 23:15 完成（6 组合 × 5 种子 + 6 档 × 941 规则）
+产物：models/gen7_tariff_six/results.json
+      docs/gen7六格电价实验.md
+      models/gen7_tariff_six/{tag}_s{seed}/model.zip  ← 这次存了模型</code></pre>
+<p><strong>截至 22:40 的进度</strong>：t1_flat / t1_tou 完成，t2_flat 进行中。</p>
+<p><strong>前两格结果</strong>：</p>
+<ul>
+<li>t1_flat（0.617 全天）：RL 1.831 元 / 0.87%</li>
+<li>t1_tou（0.617 / 0.307）：RL 2.064±0.246 / 2.02%，规则参照 1.916 → <strong>规则 +7.7%</strong></li>
+</ul>
+<p><strong>跑完后要做</strong>：</p>
+<ol>
+<li>读结果，汇总六格</li>
+<li>派 t11 给 <code>stats-reviewer</code> 盲评</li>
+<li>按审计后的数字改文档</li>
+</ol>
+<hr>
+<h1>四、结论的当前状态（必须严格按这个说）</h1>
+<h2>✅ 已确认（可写进结题材料）</h2>
+<table>
+<thead><tr>
+<th>结论</th>
+<th>数字</th>
+<th>证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>观测归一化让电费降 26.4%</strong></td>
+<td>es=60：2.256 → 1.660 元</td>
+<td>10 种子，团队逐位复现</td>
+</tr>
+<tr>
+<td><strong>预测能力让规则省 32%</strong></td>
+<td>2.820 → 1.916 元（同等约 1% 不舒适）</td>
+<td>gen7 实测</td>
+</tr>
+<tr>
+<td><strong>规则在 ≤1.43% 显著更省</strong></td>
+<td>1.08% 处省 24.0%（t=3.56）；1.43% 处省 18.5%（t=3.45）</td>
+<td>t9 盲评确认</td>
+</tr>
+<tr>
+<td><strong>RL 在 8.70% 显著更省</strong></td>
+<td>省 17.1%（t=−3.89，p=0.0014）</td>
+<td>t9 盲评确认</td>
+</tr>
+<tr>
+<td><strong>1.5%~9% 无法区分</strong></td>
+<td>所有 p &gt; 0.07</td>
+<td>t9 盲评确认</td>
+</tr>
+<tr>
+<td><strong>交叉点 ~1.95%</strong></td>
+<td>区间 1.78~2.03</td>
+<td>t9 盲评确认</td>
+</tr>
+<tr>
+<td><strong><code>energy_scale</code> 是决定变量</strong></td>
+<td>es=10 → 电量是规则 1.98 倍；es=100 → 0.72 倍</td>
+<td>各代单调</td>
+</tr>
+<tr>
+<td><strong>场景化权重不省电</strong></td>
+<td>gen4/5/6：+6.90 / +6.60 / +10.69%</td>
+<td>三代一致</td>
+</tr>
+<tr>
+<td><strong>储能对双方都有益</strong></td>
+<td>规则 +24~26%、PPO +14~27%</td>
+<td>gen4/5/6 一致</td>
+</tr>
+</tbody></table>
+<h2>❓ 未确认（只能说&quot;不知道&quot;）</h2>
+<table>
+<thead><tr>
+<th>事项</th>
+<th>原因</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong><code>in_band_gradient</code> 从 0.05 调到 0.02 能否省 6%</strong></td>
+<td>n=10 功效只有 22.9%，MDE=14.2%；6.1% 的效应由 seed22 单个种子主导，中位数仅 −0.49%</td>
+</tr>
+</tbody></table>
+<p><strong>要确认需要 45 个种子（约 6 小时）。建议不跑，如实写&quot;未确认&quot;。</strong></p>
+<h2>❌ 已推翻（绝对不能再写）</h2>
+<table>
+<thead><tr>
+<th>错误说法</th>
+<th>实际情况</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>&quot;规则在 1~9% 无工作点 / 33pp 结构空档&quot;</td>
+<td>规则有 <strong>12 个</strong>工作点；空档是我基线太弱</td>
+</tr>
+<tr>
+<td>&quot;es=10 处规则省 45.9%&quot;</td>
+<td>es=10 被 es=15 支配，应报 <strong>24.0%</strong></td>
+</tr>
+<tr>
+<td>&quot;交叉点上移是细网格的功劳&quot;</td>
+<td>是<strong>规则前沿变强</strong>推上去的；细网格反而把交点从 3.36 拉到 1.95</td>
+</tr>
+<tr>
+<td>&quot;标定大幅提升精度&quot;</td>
+<td>gen5 1.7821 → gen6 1.7790，只改善 <strong>0.17%</strong></td>
+</tr>
+<tr>
+<td>&quot;RL 在 5~9% 显著省 19~27%&quot;</td>
+<td>补规则维度后只有 <strong>17.1%（8.7% 处）</strong> 显著</td>
+</tr>
+<tr>
+<td>&quot;奖励-指标对齐不是瓶颈&quot;</td>
+<td>功效不足，只能报&quot;未确认&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>五、必须知道的&quot;数字口径&quot;</h1>
+<h2>两个不同的不达标率</h2>
+<table>
+<thead><tr>
+<th>口径</th>
+<th>含义</th>
+<th>用途</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>总不达标率</strong></td>
+<td>所有步（含无人）的越界比例</td>
+<td><code>gen7_unified_protocol.py</code> 的 <code>discomfort</code></td>
+</tr>
+<tr>
+<td><strong>有人不达标率</strong></td>
+<td>只统计有人在室的步</td>
+<td><strong>主口径</strong>，所有结论用它</td>
+</tr>
+</tbody></table>
+<p><strong>混用会差 4 个百分点以上。</strong> 报告里必须注明用的是哪个。</p>
+<h2>两个不同的&quot;参照值&quot;</h2>
+<table>
+<thead><tr>
+<th>判据</th>
+<th>定义</th>
+<th>何时用</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>占优判据</strong>（推荐）</td>
+<td>参照 = 所有不舒适率不高于 RL 的规则中电费最低者</td>
+<td>真实规则点，不插值</td>
+</tr>
+<tr>
+<td><strong>插值判据</strong></td>
+<td>在相邻前沿点间线性插值</td>
+<td>仅在无空档时可用</td>
+</tr>
+</tbody></table>
+<p><strong>规则前沿 11.80% ~ 51.73% 有一个 39.9pp 的空档，该区间内禁止插值。</strong></p>
+<h2>电价</h2>
+<p>上海居民一户一表，<strong>第一档</strong>（所有实验默认）：</p>
+<pre><code>峰时 06:00-22:00  0.617 元/度
+谷时 22:00-06:00  0.307 元/度
+未分时            0.617 元/度</code></pre>
+<p>第二档 0.667/0.677/0.337，第三档 0.917/0.977/0.487。</p>
+<p><strong>电价随年用电量累进，但仿真固定档位（每回合只 7 天，看不到年度累计）。</strong></p>
+<hr>
+<h1>六、模型代次与参数（gen7 现状）</h1>
+<h2>热参数（<code>src/env/config.py</code>）</h2>
+<pre><code>ua_coef        = 0.15175   （τ = 99 分钟）
+gain_base      = 0.8925    （基础得热，与人员无关）
+internal_gain  = 0.0       （人员得热，标定结果≈0）
+solar_coef     = 0.215
+ac_coef        = 1.83
+ac_max_cooling = 2.1175    （8.5 °C/小时）
+全时段 RMSE     = 1.7790 °C</code></pre>
+<p><strong>物理自洽性</strong>：各档平衡室温 23.37 / 25.22 / 27.07 / 28.91 °C。</p>
+<h2>环境</h2>
+<table>
+<thead><tr>
+<th>项</th>
+<th>值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>观测</td>
+<td><strong>27 维</strong>（semi_markov 模式）/ 25 维（iid 模式）</td>
+</tr>
+<tr>
+<td>动作</td>
+<td><strong>48</strong>（8 档空调 × 3 照明 × 2 通风）</td>
+</tr>
+<tr>
+<td>空调档位</td>
+<td>关 + 23/24/25/26/27/28/29 °C</td>
+</tr>
+<tr>
+<td>时间步长</td>
+<td>15 分钟</td>
+</tr>
+<tr>
+<td>回合</td>
+<td>7 天 = 672 步</td>
+</tr>
+<tr>
+<td>占用模型</td>
+<td><code>occupancy_mode=&quot;semi_markov&quot;</code>（可预测）/ <code>&quot;iid&quot;</code>（旧行为）</td>
+</tr>
+</tbody></table>
+<p><strong>semi_markov 新增的 2 维</strong>：</p>
+<ul>
+<li><code>empty_steps</code>：已连续无人多少步</li>
+<li><code>p_arrive_soon</code>：由风险表算出的未来 30 分钟内回归概率</li>
+</ul>
+<h2>训练配置（当前标准）</h2>
+<pre><code>PPO(&quot;MlpPolicy&quot;, venv, n_steps=1024, batch_size=256,
+    learning_rate=3e-4, gamma=0.99, ent_coef=0.01,
+    policy_kwargs=dict(net_arch=[128, 128]))
+VecNormalize(..., norm_obs=True, norm_reward=False, clip_obs=10.0)
+# 训练 300,000 步，8 回合评估，评估种子 9100~9107</code></pre>
+<p><strong>⚠️ <code>VecNormalize</code> 是必须的</strong> —— 缺它电费会高 26%。</p>
+<hr>
+<h1>七、团队（Agent Teams）</h1>
+<h2>现状</h2>
+<pre><code>团队 ID：polaris-audit
+成员：
+  script-auditor   [只读代码，找同类缺陷]        idle
+  stats-reviewer   [盲评，不读结论文档]          idle
+  repro-verifier   [独立复跑评估类脚本]          idle</code></pre>
+<p><strong>已派 10 轮任务（t1~t10），全部完成。</strong></p>
+<p><strong>下一次是 t11（六格实验盲评）。</strong></p>
+<h2>派任务的规矩</h2>
+<pre><code>agent_teams_create_task(
+    assignee=&quot;stats-reviewer&quot;,
+    subject=&quot;...&quot;,
+    description=&quot;&quot;&quot;...完整任务书...&quot;&quot;&quot;  # 见已派任务作为模板
+)
+agent_teams_send_message(to=&quot;stats-reviewer&quot;, content=&quot;【来自队长】...&quot;)</code></pre>
+<h2>三条必须写进任务书的硬约束</h2>
+<ol>
+<li><strong>先备份要覆盖的产物到项目外</strong>（如 <code>D:\Harness工作区\audit_bakN\</code>），跑完按字节还原 + SHA256 核对</li>
+<li><strong>只读</strong>，唯一允许写入指定的报告文件</li>
+<li><strong>不要训练模型</strong>（除非明确允许）</li>
+</ol>
+<h2>盲评员（stats-reviewer）的特别要求</h2>
+<ul>
+<li><strong>不要读 <code>docs/</code> 下的结论文档</strong>（盲评的意义）</li>
+<li><strong>不要复用我的 <code>pareto()</code> 函数</strong>（避免复制我的 bug）</li>
+<li>让它<strong>主动尝试构造更强的基线</strong>（它已经三次找到我的规则族漏洞）</li>
+</ul>
+<h2>⚠️ <code>wait_agent</code> 不能等 Agent Teams 成员</h2>
+<p>它只能等 <code>spawn_teammate</code> 创建的成员。Agent Teams 成员的报告会<strong>自动唤醒</strong>你。</p>
+<p><strong>不要忙轮询 <code>agent_teams_status</code></strong>，派完任务就结束回合等报告。</p>
+<hr>
+<h1>八、我（上一轮）犯过的错误 —— 别重复</h1>
+<h2>代码缺陷（已修，但同类问题可能还有）</h2>
+<table>
+<thead><tr>
+<th>#</th>
+<th>缺陷</th>
+<th>教训</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>占用判定用子串包含 <code>&quot;在房间&quot; in &quot;不在房间&quot;</code></td>
+<td><strong>子串匹配一律用 <code>startswith</code></strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>ac_started</code> 先赋值后比较</td>
+<td>判定&quot;状态变化&quot;必须先存旧值</td>
+</tr>
+<tr>
+<td>3</td>
+<td>观测上界写死，动作空间已扩</td>
+<td><strong>改动作空间必须同步改观测边界</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>空调档位最低 25 °C，实测 23 °C</td>
+<td>动作空间要从实测推导，不要假设</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>lambda=[</code> 漏冒号（应为 <code>lambda: [</code>）</td>
+<td>dataclass 默认值写法</td>
+</tr>
+<tr>
+<td>6</td>
+<td>新字段插到 <code>SimConfig</code> 类外面</td>
+<td>插入前确认类的最后一个字段在哪</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>always_on</code> 判断短路了 <code>off_empty</code></td>
+<td><strong>if 分支顺序会改变语义</strong></td>
+</tr>
+</tbody></table>
+<h2>分析错误（最危险，全部被审计抓出）</h2>
+<table>
+<thead><tr>
+<th>#</th>
+<th>错误</th>
+<th>偏向</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>4 套规则网格只用 1 套</td>
+<td>夸大 RL</td>
+</tr>
+<tr>
+<td>9</td>
+<td>维持温度只许单值</td>
+<td><strong>伪造&quot;33pp 空档&quot;，夸大 RL</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td>混用评估回合（9600/9900/9100）</td>
+<td>规则最优点数字失真</td>
+</tr>
+<tr>
+<td>11</td>
+<td>从功效 22.9% 的数据下&quot;无效&quot;结论</td>
+<td>过早关闭路径</td>
+</tr>
+</tbody></table>
+<h2>⚠️ 核心模式（必须警惕）</h2>
+<p>**11 处错误里，6 处与&quot;基线不够强&quot;或&quot;统计推断过度&quot;有关，</p>
+<p>其中 4 处都让强化学习显得比实际更强。**</p>
+<p><strong>对策</strong>：</p>
+<ol>
+<li><strong>每次训练前先跑 <code>test_env.py</code></strong></li>
+<li><strong>写训练脚本一定要 <code>model.save()</code></strong>（我漏过一次，导致盲评降级）</li>
+<li><strong>不显著只能报&quot;未确认&quot;，不能报&quot;无效&quot;</strong></li>
+<li><strong>规则基线必须让审计员独立构造</strong>（它三次找到我的漏洞）</li>
+<li><strong>同一结论至少两个独立实现/两次评估互相印证</strong></li>
+</ol>
+<hr>
+<h1>九、文件地图</h1>
+<h2>必读（按顺序）</h2>
+<table>
+<thead><tr>
+<th>文档</th>
+<th>作用</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>docs/研究全记录.md</code></td>
+<td><strong>总入口</strong>：8 阶段流程 + 74 份报告索引 + 11 处错误清单</td>
+</tr>
+<tr>
+<td><code>docs/结题引用守则.md</code></td>
+<td><strong>写材料前必读</strong>：10 个风险数字与正确说法</td>
+</tr>
+<tr>
+<td><code>docs/项目核心结论.md</code></td>
+<td>主结论（<strong>内容是 gen6 的，需按 gen7 更新</strong>）</td>
+</tr>
+<tr>
+<td><code>docs/模型代次变更记录.md</code></td>
+<td>gen1~gen6 全部变更依据</td>
+</tr>
+</tbody></table>
+<h2>最新结果（gen7）</h2>
+<table>
+<thead><tr>
+<th>文档</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>docs/gen7统一协议最终对比.md</code></td>
+<td><strong>941 条规则 + 12 个工作点</strong>（最权威的规则前沿）</td>
+</tr>
+<tr>
+<td><code>docs/gen7细网格扫描.md</code></td>
+<td>9 档 RL 前沿</td>
+</tr>
+<tr>
+<td><code>docs/gen7区间内梯度对齐.md</code></td>
+<td>梯度实验（未确认）</td>
+</tr>
+<tr>
+<td><code>docs/gen7占优判据对比.md</code></td>
+<td>不插值的对比方法</td>
+</tr>
+<tr>
+<td><code>docs/占用风险模型.md</code></td>
+<td>半马尔可夫占用的拟合</td>
+</tr>
+</tbody></table>
+<h2>关键脚本</h2>
+<table>
+<thead><tr>
+<th>脚本</th>
+<th>用途</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>scripts/test_env.py</code></td>
+<td><strong>环境六项自检（改任何东西后先跑这个）</strong></td>
+</tr>
+<tr>
+<td><code>scripts/md2html.py</code></td>
+<td>md → html（给用户看文档用）</td>
+</tr>
+<tr>
+<td><code>scripts/_timeline_util.py</code></td>
+<td>空调启停权威表（6 段 / 1731 分钟）</td>
+</tr>
+<tr>
+<td><code>scripts/gen7_unified_protocol.py</code></td>
+<td><strong>规则族统一评估（941 条）</strong></td>
+</tr>
+<tr>
+<td><code>scripts/gen7_dominance_compare.py</code></td>
+<td>占优判据对比</td>
+</tr>
+<tr>
+<td><code>scripts/gen7_exp1_es_fine.py</code></td>
+<td>细网格 es 扫描</td>
+</tr>
+<tr>
+<td><code>scripts/gen7_exp2_inband_gradient.py</code></td>
+<td>梯度对齐实验</td>
+</tr>
+<tr>
+<td><code>scripts/gen7_tariff_six.py</code></td>
+<td>六格电价实验</td>
+</tr>
+</tbody></table>
+<h2>数据</h2>
+<table>
+<thead><tr>
+<th>路径</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>data/raw/*.csv</code></td>
+<td>17918 条实测（10 秒采样）</td>
+</tr>
+<tr>
+<td><code>data/processed/timeline_final.csv</code></td>
+<td>24 段占用/AC/门窗时间表</td>
+</tr>
+<tr>
+<td><code>models/_gen{2,3,4,5,6}_backup/</code></td>
+<td>各代结果备份（约 300 MB）</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>十、待办清单（按优先级）</h1>
+<table>
+<thead><tr>
+<th>#</th>
+<th>事项</th>
+<th>状态</th>
+<th>预估</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>六格电价实验跑完 → 读结果 → 派 t11 盲评</td>
+<td>⏳ 跑中（~23:15）</td>
+<td>30 分钟</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>按 gen7 最终数字<strong>重写 <code>项目核心结论.md</code></strong></td>
+<td>⏳ 待做</td>
+<td>40 分钟</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>更新 <code>结题引用守则.md</code> 的风险数字</td>
+<td>⏳ 待做</td>
+<td>20 分钟</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>标注已被推翻的文档（<code>gen7等舒适度对比.md</code> 等）</td>
+<td>⏳ 待做</td>
+<td>10 分钟</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong>结题报告正文</strong>（1~3 章已起草思路）</td>
+<td>⏳ 未开始</td>
+<td>3 小时</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>答辩 PPT</td>
+<td>❌ 未开始</td>
+<td>2 小时</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>软著材料（如时间允许）</td>
+<td>❌ 未开始</td>
+<td>2 小时</td>
+</tr>
+</tbody></table>
+<p><strong>用户已明确的偏好</strong>：不要为了&quot;结果好看&quot;弱化基线；</p>
+<p>宁可报&quot;未确认&quot;也不硬凑显著。</p>
+<hr>
+<h1>十一、用户偏好（重要）</h1>
+<h2>沟通风格</h2>
+<ul>
+<li><strong>要&quot;确切的且客观的评价，不需要刻意迎合&quot;</strong>（原话）</li>
+<li><strong>要如实报不利结果</strong> —— 它多次表示感谢&quot;没骗它&quot;</li>
+<li>不喜欢空泛的鼓励；喜欢<strong>具体的数字和&quot;这意味着什么&quot;</strong></li>
+<li>会用提问来核对我的说法（&quot;我们是不是没加开关电器的突增？&quot;→ 抓出 bug）</li>
+</ul>
+<h2>判断力</h2>
+<ul>
+<li><strong>它抓出的问题都很准</strong>：占用判定 bug、启动损耗缺失、空调档位不符、</li>
+</ul>
+<p>电价表是二维的应该跑 6 格、用 GPU 会不会快</p>
+<ul>
+<li><strong>它要求&quot;每次审计，包括代码运行之前审计&quot;</strong> —— 这条救了两轮</li>
+</ul>
+<h2>时间观</h2>
+<ul>
+<li>截止期还有 1~2 个月</li>
+<li>愿意等长时间实验（&quot;时间还有许多&quot;）</li>
+<li>但<strong>不喜欢无效等待</strong>（会问&quot;要到什么时候结束&quot;）</li>
+</ul>
+<hr>
+<h1>十二、如果你要修改代码</h1>
+<h2>必做的四步</h2>
+<pre><code># 1. 改之前先自检
+&amp; $py &quot;&lt;项目根&gt;\scripts\test_env.py&quot;
+
+# 2. 改完之后语法 + 自检
+&amp; $py -c &quot;import ast,io; ast.parse(io.open(r&#x27;&lt;路径&gt;&#x27;,encoding=&#x27;utf-8&#x27;).read())&quot;
+&amp; $py &quot;&lt;项目根&gt;\scripts\test_env.py&quot;
+
+# 3. 两种模式都要测
+#    iid 模式应为 25 维，semi_markov 应为 27 维
+
+# 4. 提交前 review 自己的 diff
+&amp; git -C &#x27;D:\Dev\Projects\Polaris&#x27; diff</code></pre>
+<h2>提交规范</h2>
+<p><strong>中文提交信息，结构</strong>：</p>
+<pre><code>feat/fix/docs: 一句话标题
+
+## 一、背景/问题
+## 二、改动
+## 三、验证（具体命令 + 结果）
+## 四、状态/局限</code></pre>
+<p><strong>用文件传提交信息</strong>（PowerShell 里 <code>git commit -m &quot;多行中文&quot;</code> 会出问题）：</p>
+<pre><code>$m = @&#x27;
+...
+&#x27;@
+$m | Out-File -FilePath &#x27;D:\Dev\Projects\_msg.txt&#x27; -Encoding utf8
+&amp; git -C $repo commit -F &#x27;D:\Dev\Projects\_msg.txt&#x27;
+Remove-Item &#x27;D:\Dev\Projects\_msg.txt&#x27; -Force</code></pre>
+<hr>
+<h1>十二点五、Git 与远程仓库（<strong>无需用户授权</strong>）</h1>
+<h2>一句话结论</h2>
+<blockquote>
+<p>**SSH 密钥无 passphrase，且今天全程非交互推送成功。</p>
+<p>下一个我可以直接 <code>git push</code>，不需要用户输密码或点授权。**</p>
+</blockquote>
+<h2>实测验证（2026-10-19 22:44）</h2>
+<pre><code>$env:GIT_TERMINAL_PROMPT = &#x27;0&#x27;          # 禁止交互提示
+$env:GIT_SSH_COMMAND = &#x27;ssh -o BatchMode=yes&#x27;
+&amp; &#x27;D:\Dev\Tools\Git\cmd\git.exe&#x27; -C &#x27;D:\Dev\Projects\Polaris&#x27; ls-remote --heads origin
+# 退出码 0，耗时 4.5 秒，返回 refs/heads/main</code></pre>
+<p><strong><code>BatchMode=yes</code> 下成功 = 密钥无密码 = 非交互认证可用。</strong></p>
+<h2>配置详情（备份用）</h2>
+<table>
+<thead><tr>
+<th>项</th>
+<th>值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>远程</td>
+<td><code>git@github.com:shixusongpolaris-droid/Polaris.git</code></td>
+</tr>
+<tr>
+<td>分支</td>
+<td><code>main</code></td>
+</tr>
+<tr>
+<td>user.name</td>
+<td><code>Polaris</code></td>
+</tr>
+<tr>
+<td>user.email</td>
+<td><code>2277984800@qq.com</code></td>
+</tr>
+<tr>
+<td>凭据助手</td>
+<td><code>manager</code>（<strong>仅对 HTTPS 生效，本仓库是 SSH，用不到</strong>）</td>
+</tr>
+<tr>
+<td>SSH 端口</td>
+<td><strong>443</strong>（<code>ssh.github.com:443</code>，绕过 22 端口封锁）</td>
+</tr>
+<tr>
+<td>私钥</td>
+<td><code>~/.ssh/id_ed25519</code>（411 B，<strong>无 passphrase</strong>）</td>
+</tr>
+<tr>
+<td>公钥</td>
+<td><code>~/.ssh/id_ed25519.pub</code></td>
+</tr>
+<tr>
+<td>公钥内容</td>
+<td><code>ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEDqT28eRADHj6lf9DpIzqCbatRHd2VsLiRqPvNzyKHm 2277984800@qq.com</code></td>
+</tr>
+<tr>
+<td>SSH agent</td>
+<td><strong>未运行</strong>（不影响，因为密钥无密码）</td>
+</tr>
+</tbody></table>
+<h2><code>~/.ssh/config</code> 内容</h2>
+<pre><code>Host github.com
+    HostName ssh.github.com
+    Port 443
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking accept-new</code></pre>
+<p><strong>注意</strong>：<code>HostName ssh.github.com</code> + <code>Port 443</code> 是关键 ——</p>
+<p>如果这个 config 丢了，直连 <code>github.com:22</code> 可能被网络阻断，</p>
+<p>push 会挂住。<strong>换机器/重装系统时要恢复这个文件。</strong></p>
+<h2>常用命令</h2>
+<pre><code>$git = &#x27;D:\Dev\Tools\Git\cmd\git.exe&#x27;
+$repo = &#x27;D:\Dev\Projects\Polaris&#x27;
+
+# 查看状态
+&amp; $git -C $repo status --short          # 空 = 工作区干净
+
+# 提交（中文多行信息必须用 -F 文件，不能 -m）
+$m = @&#x27;
+feat: 一行标题
+
+## 一、背景
+## 二、改动
+## 三、验证
+## 四、状态
+&#x27;@
+$m | Out-File -FilePath &#x27;D:\Dev\Projects\_msg.txt&#x27; -Encoding utf8
+&amp; $git -C $repo add -A 2&gt;&amp;1 | Select-String -NotMatch &#x27;LF will be replaced&#x27; | Out-Null
+&amp; $git -C $repo commit -F &#x27;D:\Dev\Projects\_msg.txt&#x27; 2&gt;&amp;1 | Select-Object -First 4
+Remove-Item &#x27;D:\Dev\Projects\_msg.txt&#x27; -Force
+
+# 推送
+&amp; $git -C $repo push origin main 2&gt;&amp;1 | Select-String -Pattern &#x27;main&#x27; | Select-Object -First 2
+
+# 最近提交
+&amp; $git -C $repo log --oneline -10</code></pre>
+<h2>如果将来 push 失败</h2>
+<table>
+<thead><tr>
+<th>症状</th>
+<th>原因</th>
+<th>解法</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>提示输入密码 / 挂在 22 端口</td>
+<td><code>~/.ssh/config</code> 丢了</td>
+<td>重建上面那份 config</td>
+</tr>
+<tr>
+<td><code>Permission denied (publickey)</code></td>
+<td>密钥被删 或 GitHub 上公钥被移除</td>
+<td>在 GitHub Settings → SSH keys 重新添加上面那串公钥</td>
+</tr>
+<tr>
+<td><code>Host key verification failed</code></td>
+<td>known_hosts 被清</td>
+<td>加 <code>-o StrictHostKeyChecking=accept-new</code></td>
+</tr>
+<tr>
+<td>提示密码短语</td>
+<td>密钥被替换成带 passphrase 的</td>
+<td>让用户输一次，或生成新的无密码密钥</td>
+</tr>
+<tr>
+<td>需要用户授权</td>
+<td><strong>本仓库不会出现</strong>（SSH 密钥已配置）</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h2>⚠️ 关于用户说的&quot;需要授权&quot;</h2>
+<p>用户记忆中的&quot;授权&quot;可能指两种情况，<strong>都不是本仓库</strong>：</p>
+<ol>
+<li><strong>HTTPS 方式</strong>（用 <code>credential.helper=manager</code>）—— 会弹 Windows 凭据窗口</li>
+<li><strong>DSH 的沙箱升级授权</strong> —— 那是文件访问权限，与 git 无关</li>
+</ol>
+<p><strong>本仓库用 SSH + 无密码密钥，两者都不涉及。</strong></p>
+<hr>
+<h1>十三、几个容易被问住的问题（准备答案）</h1>
+<table>
+<thead><tr>
+<th>评委可能问</th>
+<th>你怎么答</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>&quot;为什么 RL 打不过规则？&quot;</strong></td>
+<td>单房间、单空调、一阶热动态下，最优策略是阈值型，而规则族能表达阈值。RL 的优势要在高维/未知动力学/多目标耦合中才显现</td>
+</tr>
+<tr>
+<td><strong>&quot;你的标定准吗？&quot;</strong></td>
+<td>RMSE 1.7790，但必须承认 gen5→gen6 只改善 0.17%，参数可辨识性差</td>
+</tr>
+<tr>
+<td><strong>&quot;为什么有 7.5pp 说不清的区间？&quot;</strong></td>
+<td>10 种子 × 8 回合的检验力不足（MDE 14.2%），要用 45 种子才能分辨</td>
+</tr>
+<tr>
+<td><strong>&quot;规则基线是不是你故意做弱的？&quot;</strong></td>
+<td>基线被独立审计员补强<strong>三次</strong>（睡/醒分担、1 小时块、找回丢失的网格），每次都让 RL 更难赢</td>
+</tr>
+<tr>
+<td><strong>&quot;结论可靠吗？&quot;</strong></td>
+<td>10 轮独立复核，其中 <strong>4/4 评估实验逐字节可复现</strong>；并且我列出了自己犯过的 11 处错误</td>
+</tr>
+<tr>
+<td><strong>&quot;为什么没用 GPU？&quot;</strong></td>
+<td>2 万参数的 MLP，瓶颈是 <code>predict()</code> 调度开销（175µs/步）不是算力；实测调线程数只差 14%</td>
+</tr>
+<tr>
+<td><strong>&quot;为什么没用闭环控制？&quot;</strong></td>
+<td>中央空调无编程接口，这是硬件限制，已如实写入局限</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>十四、如果一切重来，我会怎么排</h1>
+<ol>
+<li><strong>先建环境 + 标定</strong>（2 周）—— 这部分做得不错</li>
+<li><strong>同时建立&quot;规则能力上限&quot;作为基线</strong>（3 天）—— 我拖到最后才做，导致中间三次误判</li>
+<li><strong>先做单种子探索，但任何结论必须 10 种子 + 审计</strong>（这条最重要）</li>
+<li><strong>把&quot;独立审计&quot;从第一天就纳入流程</strong>，而不是最后一周</li>
+<li><strong>绝不用&quot;规则基线&quot;当静态对象</strong> —— 它需要和 RL 一样被持续优化</li>
+</ol>
+<hr>
+<h1>十五、最后</h1>
+<p><strong>这个项目的核心价值不在于&quot;RL 赢没赢&quot;，而在于：</strong></p>
+<ol>
+<li>一套完整的&quot;实测 → 标定 → 训练 → 多目标评估 → 独立复核&quot;流程</li>
+<li>三个可复用的方法学发现（权重标定决定性、归一化不能省、预测必须入环境）</li>
+<li><strong>一个诚实且有审计支撑的负面结论</strong></li>
+</ol>
+<p><strong>如果你只能记住一句话：</strong></p>
+<blockquote>
+<p><strong>先建强基线，再下结论；不显著就说&quot;未确认&quot;。</strong></p>
+</blockquote>
+<p>祝你好运。</p>
+<hr>
+<p>*本交接文档生成于 2026-10-19 22:40，当前 HEAD <code>7c394b8</code>。</p>
+<p>六格电价实验正在跑，日志 <code>models/_tariff6.log</code>。*</p>
+</div>
+</body>
+</html>
