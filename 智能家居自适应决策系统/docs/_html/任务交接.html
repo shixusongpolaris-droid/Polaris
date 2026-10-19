@@ -134,6 +134,17 @@ hr { border: 0; border-top: 1px solid var(--bd); margin: 2em 0; }
 <div class="l2">正确表述（<strong>不要说&quot;电价越高 RL 越好&quot;</strong>）</div>
 <div class="l2">可信度分层</div>
 <div class="l2">局限</div>
+<div class="l1">十七、交接验收清单（下一个我请逐条打勾）</div>
+<div class="l2">A. 环境确认（4 条）</div>
+<div class="l2">B. 文档确认（3 条）</div>
+<div class="l2">C. 结论确认（3 条）</div>
+<div class="l2">D. 待办确认（3 条）</div>
+<div class="l2">E. 纪律确认（3 条）</div>
+<div class="l1">十八、给下一个我的最后三段话</div>
+<div class="l2">第一段：关于结论</div>
+<div class="l2">第二段：关于我自己</div>
+<div class="l2">第三段：关于用户</div>
+<div class="l1">十九、交接结束</div>
 </div>
 <p>﻿# 任务交接文档</p>
 <blockquote>
@@ -1110,6 +1121,79 @@ Remove-Item &#x27;D:\Dev\Projects\_msg.txt&#x27; -Force
 <h2>局限</h2>
 <p>5 种子、单周（9100–9107）、<code>energy_scale=30</code> 固定、</p>
 <p><code>t3_tou</code> 的 seed42 是异常点（4.464 kWh / 3.579 元，其余种子 2.31~2.97）。</p>
+<hr>
+<h1>十七、交接验收清单（下一个我请逐条打勾）</h1>
+<p><strong>接手后请按顺序做，每一条都能在 30 秒内完成。</strong></p>
+<h2>A. 环境确认（4 条）</h2>
+<ul>
+<li>[ ] <code>&amp; &#x27;D:\Dev\Tools\Git\cmd\git.exe&#x27; -C &#x27;D:\Dev\Projects\Polaris&#x27; status --short</code> → <strong>空</strong></li>
+<li>[ ] <code>&amp; $py &#x27;&lt;项目根&gt;\scripts\test_env.py&#x27;</code> → <strong>六项全过</strong></li>
+<li>[ ] <code>Get-Process python | Where-Object { $_.CPU -gt 100 }</code> → <strong>无</strong>（除非用户说还有在跑的）</li>
+<li>[ ] <code>&amp; $git -C $repo log --oneline -1</code> → 确认在 <code>c1e167a</code> 之后（或更新的提交）</li>
+</ul>
+<h2>B. 文档确认（3 条）</h2>
+<ul>
+<li>[ ] 已读 <code>docs/新实例启动指南.md</code>（129 行）</li>
+<li>[ ] 已读 <code>docs/任务交接.md</code>（本文，17 章）</li>
+<li>[ ] 已读 <code>docs/研究全记录.md</code>（610 行）</li>
+</ul>
+<h2>C. 结论确认（3 条）</h2>
+<ul>
+<li>[ ] 能说出<strong>结论的三态</strong>（✅确认 8 条 / ❓未确认 1 条 / ❌已推翻 6 条）</li>
+<li>[ ] 知道<strong>主口径是&quot;有人不达标率&quot;</strong>，不是总不达标率</li>
+<li>[ ] 知道<strong>规则前沿 11.80%~51.73% 有 39.9pp 空档，该区间禁止插值</strong></li>
+</ul>
+<h2>D. 待办确认（3 条）</h2>
+<ul>
+<li>[ ] 知道 <code>项目核心结论.md</code> <strong>仍是 gen6 版</strong>，需按 gen7 重写</li>
+<li>[ ] 知道结题报告与答辩 PPT <strong>未开始</strong></li>
+<li>[ ] 知道截止期约 <strong>2026-11 底 ~ 12 月中</strong></li>
+</ul>
+<h2>E. 纪律确认（3 条）</h2>
+<ul>
+<li>[ ] 会<strong>在跑实验前</strong>派 <code>script-auditor</code> 审代码</li>
+<li>[ ] 会<strong>在出结果后</strong>派 <code>stats-reviewer</code> 盲评</li>
+<li>[ ] <strong>不显著只报&quot;未确认&quot;</strong>，不报&quot;无效&quot;</li>
+</ul>
+<p><strong>五组全打勾 = 交接成功。</strong></p>
+<hr>
+<h1>十八、给下一个我的最后三段话</h1>
+<h2>第一段：关于结论</h2>
+<p><strong>这个项目最终得出的不是一个&quot;赢了&quot;的结论，而是一条边界。</strong></p>
+<p>规则在极舒适端更好，强化学习在中高不舒适端更好，中间一大段分辨不出。</p>
+<p>这在单房间、单空调、一阶热动力学的设定下是合理的 —— <strong>最优策略本来就是阈值型</strong>。</p>
+<p>**如果你将来想让它变成&quot;RL 更优&quot;的结论，正确的做法不是继续调参，</p>
+<p>而是换一个 RL 真的有结构性优势的问题**：多房间耦合、占用不确定性、</p>
+<p>未知动力学、或者多设备协同。<strong>不要靠弱化基线来制造胜利。</strong></p>
+<h2>第二段：关于我自己</h2>
+<p><strong>我被审计抓出 4 处分析错误，其中 3 处都让 RL 显得比实际更强。</strong></p>
+<p>这不是运气问题，是一种系统性的乐观偏向。<strong>你要警惕自己也有。</strong></p>
+<p>具体的自检方法：</p>
+<ol>
+<li>每次得出&quot;某方法更好&quot;的结论前，问：<strong>我的基线是独立构造的吗？</strong></li>
+<li>每次得出&quot;某方法无效&quot;的结论前，问：<strong>我的样本量够检出这个效应吗？</strong></li>
+<li>每次得出&quot;某区间无解&quot;的结论前，问：<strong>是我搜索空间不够，还是真的无解？</strong></li>
+</ol>
+<h2>第三段：关于用户</h2>
+<p><strong>这个用户判断力很强，问的问题都很准。</strong></p>
+<p>它抓出的 4 个问题里，有 3 个是&quot;你没让我做该做的事&quot;这类根本性质疑，</p>
+<p>而不是表面的数字错误。</p>
+<p><strong>它要求的&quot;确切且客观的评价、不要刻意迎合&quot;是真心的</strong> ——</p>
+<p>每次我如实报告不利结果，它都表示感谢。</p>
+<p><strong>所以：不要为了让它高兴而美化数字。</strong></p>
+<hr>
+<h1>十九、交接结束</h1>
+<p><strong>交接时间</strong>：2026-10-19 23:45</p>
+<p><strong>当前 HEAD</strong>：<code>c1e167a</code>（之后应有更新）</p>
+<p><strong>工作区</strong>：干净</p>
+<p><strong>后台任务</strong>：无</p>
+<p><strong>团队</strong>：<code>polaris-audit</code> 三人 idle，t1~t11 全部完成</p>
+<p><strong>十二轮独立复核</strong>（t1~t11 + 3 轮专项）共 2886+ 行报告，</p>
+<p>全部在 <code>docs/团队*.md</code>。</p>
+<p><strong>项目档案</strong>：<code>docs/研究全记录.md</code>（610 行）</p>
+<p><strong>交接文档</strong>：本文（<code>docs/任务交接.md</code>，17 章）</p>
+<p><strong>启动指南</strong>：<code>docs/新实例启动指南.md</code>（129 行）</p>
+<p><strong>祝你顺利。</strong></p>
 </div>
 </body>
 </html>
