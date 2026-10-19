@@ -15,6 +15,7 @@ r"""
     python scripts\test_env.py
 """
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -319,6 +320,63 @@ def check_constraints(env: SmartHomeEnv) -> bool:
     else:
         print(f"  {PASS} 约束屏蔽机制正确工作")
 
+    # ---- 场景 B：C4 无人超时强制关机（S2 回归）----
+    print(f"\n  场景 B：C4 无人超时强制关机（hard 模式）")
+    saved_c4 = getattr(env.con_cfg, "c4_mode", "precool")
+    env.con_cfg.c4_mode = "hard"
+    env.reset(seed=7)
+    a = encode_action(ac_25, 0, 0, env.act_cfg)
+    checked, violations = 0, 0
+    for _ in range(env.episode_steps):
+        od0 = env.get_obs_dict()
+        empty0 = int(od0.get("empty_steps", 0))
+        _, _, term, trunc, _ = env.step(a)
+        od = env.get_obs_dict()
+        if empty0 >= 2:
+            checked += 1
+            if int(od["ac_idx"]) > 0:
+                violations += 1
+        if term or trunc:
+            break
+    print(f"    无人≥30min 的步数: {checked}；仍开机: {violations}")
+    if checked == 0:
+        print(f"  {WARN} 本回合没有无人≥30min 的窗口，C4 未验证")
+    elif violations:
+        print(f"  {FAIL} C4 未生效：无人超时后仍开机 {violations} 步")
+        ok = False
+    else:
+        print(f"  {PASS} C4 强制关机生效")
+
+    # ---- 场景 C：precool 模式允许"预测即将回家"的预冷 ----
+    print(f"\n  场景 C：precool 模式（预测回家时允许预冷）")
+    env.con_cfg.c4_mode = "precool"
+    threshold = getattr(env.con_cfg, "c4_precool_threshold", 0.02)
+    env.reset(seed=7)
+    bad_pre, allowed_pre = 0, 0
+    for _ in range(env.episode_steps):
+        od0 = env.get_obs_dict()
+        empty0 = int(od0.get("empty_steps", 0))
+        p_arrive = float(od0.get("p_arrive_soon", 0.0))
+        _, _, term, trunc, _ = env.step(a)
+        od = env.get_obs_dict()
+        if empty0 >= 2 and int(od["ac_idx"]) > 0:
+            if p_arrive < threshold:
+                bad_pre += 1
+            else:
+                allowed_pre += 1
+        if term or trunc:
+            break
+    print(f"    无预测时仍开机（不应有）: {bad_pre}；"
+          f"有预测时允许预冷: {allowed_pre}")
+    if bad_pre:
+        print(f"  {FAIL} precool 模式在 p_arrive_soon < {threshold} 时仍开机")
+        ok = False
+    elif allowed_pre == 0:
+        print(f"  {WARN} 本回合没有触发预测预冷窗口（不影响 hard 测试）")
+    else:
+        print(f"  {PASS} precool 模式只允许有预测的预冷")
+    env.con_cfg.c4_mode = saved_c4
+
     print(f"  {PASS if ok else FAIL} 约束检查")
     return ok
 
@@ -361,6 +419,55 @@ def check_metrics(env: SmartHomeEnv) -> bool:
     return True
 
 
+def check_energy_model(env: SmartHomeEnv) -> bool:
+    """检查 7：空调能耗必须随设定温度降低而显著增加（S1 回归测试）。
+
+    修正前：能耗按"净温度变化"计，稳态净变化≈0，23°C 与 29°C
+    的周能耗只差 1.2%。修正后：按 gross cooling 计，应看到
+    E(23) > E(25) > E(27) > E(29)，且两端差距远大于噪声。
+    """
+    section("检查 7：空调能耗随设定温度单调（S1 回归）")
+    dt_h = env.sim_cfg.dt_minutes / 60.0
+    days = env.episode_steps * dt_h / 24.0
+
+    # 本测试要固定 AC 常开，不能被 C4 强制关机打断
+    saved_c4 = getattr(env.con_cfg, "c4_mode", "precool")
+    env.con_cfg.c4_mode = "off"
+    results = {}
+    for sp in (23.0, 25.0, 27.0, 29.0):
+        env.reset(seed=42)
+        ac = _AC.ac_setpoints.index(sp) + 1
+        a = encode_action(ac, 0, 0, env.act_cfg)
+        e_tot = 0.0
+        temps = []
+        for _ in range(env.episode_steps):
+            _, _, term, trunc, info = env.step(a)
+            e_tot += float(info["components"]["energy_kwh"])
+            temps.append(float(env.get_obs_dict()["temp_in"]))
+            if term or trunc:
+                break
+        results[sp] = (e_tot / days, sum(temps) / len(temps))
+        print(f"    设定 {sp:4.1f}°C：日均 {e_tot/days:6.3f} kWh/天，"
+              f"平均室温 {sum(temps)/len(temps):5.2f}°C")
+    env.con_cfg.c4_mode = saved_c4
+
+    e23, e25, e27, e29 = (results[s][0] for s in (23.0, 25.0, 27.0, 29.0))
+    ok = True
+    if not (e23 > e25 > e27 > e29):
+        print(f"  {FAIL} 能耗未随设定温度单调："
+              f"{e23:.3f} / {e25:.3f} / {e27:.3f} / {e29:.3f}")
+        ok = False
+    if e23 - e29 < 1.0:
+        print(f"  {FAIL} 23°C 与 29°C 的日均能耗差仅 {e23-e29:.3f} kWh，"
+              f"物理上不合理（应 > 1.0）")
+        ok = False
+    if ok:
+        print(f"  {PASS} 能耗随设定温度单调，23°C 比 29°C 多 "
+              f"{e23-e29:.3f} kWh/天")
+    print(f"  {PASS if ok else FAIL} 能量模型检查")
+    return ok
+
+
 def show_trajectory(env: SmartHomeEnv, days: int = 3) -> None:
     """打印一段温度轨迹，直观检查环境行为。"""
     section(f"附：{days} 天温度轨迹（随机策略，每分钟一格）")
@@ -390,11 +497,18 @@ def show_trajectory(env: SmartHomeEnv, days: int = 3) -> None:
 
 
 def main():
+    parser = argparse.ArgumentParser(description="MDP 环境自检")
+    parser.add_argument("--mode", choices=["iid", "semi_markov"],
+                        default="semi_markov",
+                        help="占用模式；主实验默认 semi_markov（27 维）")
+    args = parser.parse_args()
+
     print("=" * 62)
     print(" MDP 环境自检 —— 智能家居自适应决策系统")
+    print(f" 占用模式: {args.mode}（iid=25 维 / semi_markov=27 维）")
     print("=" * 62)
 
-    env = SmartHomeEnv(seed=42)
+    env = SmartHomeEnv(sim_cfg=SimConfig(occupancy_mode=args.mode), seed=42)
     results = {}
 
     results["1 接口正确性"] = check_interface(env)
@@ -403,6 +517,7 @@ def main():
     results["4 奖励合理性"] = check_reward(env)
     results["5 约束有效性"] = check_constraints(env)
     results["6 指标产出"] = check_metrics(env)
+    results["7 能量模型"] = check_energy_model(env)
 
     show_trajectory(env, days=2)
 

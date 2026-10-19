@@ -460,8 +460,16 @@ class HomeSimulator:
 
     def _update_temperature(
         self, ac_cooling_cmd: float, ac_on: bool, vent_on: bool
-    ) -> None:
-        """按一阶热模型更新室内温度。
+    ) -> float:
+        """按一阶热模型更新室内温度，并返回空调本步的**实际制冷量**。
+
+        返回值 gross_cooling 是 AC 自身贡献的降温量（°C/步），
+        不含围护传热、日照、通风、人员得热。它用于能耗计算：
+        压缩机功率应与 gross_cooling 成正比，而不是与"净温度变化"成正比。
+
+        S1 修复（2026-10-20）：此前 step() 用 `temp_before - temp_after`
+        作为制冷量，稳态时净变化≈0，导致 23°C 与 29°C 能耗几乎一样。
+        现在由本函数返回 AC 的 gross cooling，step() 直接使用它。
 
         温度变化由五部分组成：
             1. 围护结构传热：向室外温度靠拢
@@ -488,6 +496,7 @@ class HomeSimulator:
         dT += cfg.solar_coef * self._solar_factor()
 
         # 4) 空调制冷
+        cooling = 0.0
         if ac_on:
             # 制冷需求：室内与设定温度之差，乘以等效降温系数
             demand = cfg.ac_coef * (T - ac_cooling_cmd)
@@ -505,6 +514,7 @@ class HomeSimulator:
         # 安全裁剪，防止仿真发散
         T_new = max(-10.0, min(cfg.temp_clip_max, T_new))
         self.state.temp_in = T_new
+        return cooling
 
     def _update_humidity(self, ac_on: bool, vent_on: bool) -> None:
         """更新室内湿度。"""
@@ -537,11 +547,16 @@ class HomeSimulator:
     # ------------------------------------------------------------
     def _step_energy_kwh(
         self, ac_idx: int, light_idx: int, vent_idx: int,
-        cooling_delivered: float, ac_started: bool = False
+        gross_cooling: float, ac_started: bool = False
     ) -> float:
         """计算本时间步的耗电量（kWh）。
 
         注意：能耗为仿真模型计算值，不是实测值（文档 3.2 节已说明）。
+
+        S1 修复（2026-10-20）：参数从"净降温"改为 AC 的 **gross cooling**
+        （见 `_update_temperature` 的返回值）。压缩机功率与制冷量成正比；
+        只有 gross_cooling > 0 时才应用最低压缩机功率；风机功率单列。
+        这样 23°C 与 29°C 的能耗会显著不同，而不是被最低功率拍平。
 
         参数 ac_started 表示本步空调是否从"关闭"变为"开启"，
         用于计入压缩机启动损耗（见 RewardConfig.ac_startup_penalty_kwh）。
@@ -555,15 +570,22 @@ class HomeSimulator:
             # 关闭状态：仅待机功耗（控制电路等）
             p_ac = rcfg.ac_standby_kw
         else:
-            # 制冷量（kW）= 名义制冷量 × 实际降温量 / 最大降温能力
+            # 制冷量（kW）= 名义制冷量 × 实际制冷量 / 最大制冷能力
             cooling_kw = rcfg.ac_cooling_capacity_kw * \
-                (cooling_delivered / max(cfg.ac_max_cooling, 1e-6))
-            # 压缩机能耗 = 制冷量 / 能效比（取 3.0 作为简化假设）
-            p_ac = cooling_kw / 3.0
-            # 限制在额定功率以内
-            p_ac = min(p_ac, rcfg.ac_rated_kw)
-            # 开启后存在最低运行功率（风机、最低压缩机负荷等）
-            p_ac = max(p_ac, rcfg.ac_min_power_ratio * rcfg.ac_rated_kw)
+                (gross_cooling / max(cfg.ac_max_cooling, 1e-6))
+
+            if cooling_kw > 1e-9:
+                # 压缩机在制冷：功率 = 制冷量 / COP，并受最低/额定功率约束
+                p_compressor = cooling_kw / max(rcfg.ac_cop, 1e-6)
+                p_compressor = max(
+                    p_compressor,
+                    rcfg.ac_min_power_ratio * rcfg.ac_rated_kw)
+                p_compressor = min(p_compressor, rcfg.ac_rated_kw)
+            else:
+                # 室温已低于设定温度：压缩机不制冷，只收风机/控制电路功率
+                p_compressor = 0.0
+
+            p_ac = p_compressor + rcfg.ac_fan_kw
 
         # 照明
         p_light = rcfg.light_rated_kw * rcfg.light_power_ratio[light_idx]
@@ -608,7 +630,7 @@ class HomeSimulator:
         self._reset_semi_markov()      # gen7：初始化半马尔可夫占用状态
 
         self._update_outdoor()
-        self._update_occupancy(self._is_weekend())
+        self._update_occupancy(self._is_weekend() or self._is_holiday())
         self._update_light()
 
         # 与 step() 保持一致地更新派生特征。否则 reset 后若初始为"无人"，
@@ -648,15 +670,37 @@ class HomeSimulator:
         elapsed = self.step_count - self._last_ac_change_step
         min_steps = self.con_cfg.ac_min_switch_interval / cfg.dt_minutes
 
-        if ac_idx != self.state.ac_idx:
-            if elapsed < min_steps:
-                # 距上次切换时间不足，屏蔽本次空调状态改变（含强制关机）
-                ac_idx = self.state.ac_idx
-                ac_blocked = True
-            elif force_off and ac_idx > 0:
-                # 满足间隔要求时，无人超时才真正执行强制关机
+        # S2 修复（2026-10-20）：C4 必须在"动作是否变化"之外执行。
+        # 原逻辑只在 ac_idx != state.ac_idx 时检查，策略保持开机能绕过约束。
+        #
+        # 同时处理 C4 与"无人预冷"的冲突：
+        #   precool 模式：若 p_arrive_soon >= 阈值，允许预冷（不强制关机）
+        #   hard   模式：无条件强制关机
+        #   off    模式：不执行 C4（仅用于复现旧结果）
+        c4_mode = getattr(self.con_cfg, "c4_mode", "precool")
+        allow_precool = False
+        if force_off and c4_mode == "precool":
+            if self.sim_cfg.occupancy_mode == "semi_markov":
+                p_arrive = self._hazard_30(self._empty_steps)
+            else:
+                p_arrive = 0.0
+            allow_precool = p_arrive >= getattr(
+                self.con_cfg, "c4_precool_threshold", 0.02)
+
+        if force_off and not allow_precool and c4_mode != "off":
+            if elapsed >= min_steps:
+                if ac_idx != 0:
+                    ac_idx = 0
+                    ac_blocked = True
+            elif ac_idx > 0 and ac_idx != self.state.ac_idx:
+                # 间隔未满足时也不允许在无人超时后新开机
                 ac_idx = 0
                 ac_blocked = True
+
+        if ac_idx != self.state.ac_idx and elapsed < min_steps:
+            # 距上次切换时间不足，屏蔽本次空调状态改变（含强制关机）
+            ac_idx = self.state.ac_idx
+            ac_blocked = True
 
         # 记录空调切换
         if ac_idx != self.state.ac_idx:
@@ -688,16 +732,15 @@ class HomeSimulator:
                        if ac_on else 0.0)
         vent_on = vent_idx == 1
 
-        temp_before = self.state.temp_in
-        self._update_temperature(ac_setpoint, ac_on, vent_on)
-        cooling_delivered = temp_before - self.state.temp_in
+        # S1 修复：使用 AC 自身的 gross cooling 计费，而不是净温度变化
+        gross_cooling = self._update_temperature(ac_setpoint, ac_on, vent_on)
         self._update_humidity(ac_on, vent_on)
 
         # ---------- 计算并累加能耗 ----------
         # 本步是否发生"压缩机启动"：上一步关闭、本步开启
         ac_started = (ac_idx > 0 and prev_ac_idx == 0)
         e_load_only = self._step_energy_kwh(ac_idx, light_idx, vent_idx,
-                                            max(cooling_delivered, 0.0),
+                                            gross_cooling,
                                             ac_started=ac_started)
 
         # ---------- 储能充放电（v4）----------
@@ -727,7 +770,7 @@ class HomeSimulator:
 
         # ---------- 更新室外、占用、光照 ----------
         self._update_outdoor()
-        is_weekend = self._is_weekend()
+        is_weekend = self._is_weekend() or self._is_holiday()
         self._update_occupancy(is_weekend)
         self._update_light()
 
@@ -763,6 +806,10 @@ class HomeSimulator:
     # ------------------------------------------------------------
     def _is_weekend(self) -> bool:
         return self.sim_time.weekday() >= 5
+
+    def _is_holiday(self) -> bool:
+        """是否法定节假日（S9 修复：原来 is_holiday 永久为 0）。"""
+        return self.sim_time.strftime("%Y-%m-%d") in self.sim_cfg.holiday_dates
 
     def _hour_sin_cos(self) -> Tuple[float, float]:
         """小时的周期编码（文档 1.3 节）。"""
@@ -806,7 +853,7 @@ class HomeSimulator:
             "hour": float(self.sim_time.hour),
             "dow": float(self.sim_time.weekday()),
             "is_weekend": 1.0 if self._is_weekend() else 0.0,
-            "is_holiday": 0.0,
+            "is_holiday": 1.0 if self._is_holiday() else 0.0,
             "hour_sin": float(hour_sin),
             "hour_cos": float(hour_cos),
             # 室外环境

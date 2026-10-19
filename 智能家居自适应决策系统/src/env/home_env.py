@@ -76,7 +76,10 @@ class SmartHomeEnv(gym.Env):
         self.rew_cfg = rew_cfg or RewardConfig()
 
         self.episode_steps = episode_steps or (7 * self.sim_cfg.steps_per_day)
-        self.start_datetime = start_datetime or datetime(2026, 1, 5, 0, 0)
+        # S9 修复：原默认 2026-01-05（周一）但室外参数是 10 月；改为
+        # 2026-10-12（同为周一），让日历与"10 月供冷季"口径一致。
+        # 周内序列不变，只改变日期标签，不影响只依赖 hour/dow 的特征。
+        self.start_datetime = start_datetime or datetime(2026, 10, 12, 0, 0)
         self.render_mode = render_mode
 
         # ---- 构造组件 ----
