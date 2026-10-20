@@ -1,0 +1,210 @@
+{
+  "seed": 20261020,
+  "generated_at": "2026-10-20 14:19:32",
+  "rows": 3000,
+  "start_date": "2026-04-24",
+  "end_date": "2026-10-20",
+  "days": 180,
+  "columns": [
+    "order_id",
+    "created_at",
+    "community",
+    "building",
+    "unit",
+    "room",
+    "description",
+    "repair_type",
+    "facility_type",
+    "urgency",
+    "worker_id",
+    "worker_name",
+    "worker_trade",
+    "dispatch_mode",
+    "reassigned",
+    "response_minutes",
+    "duration_minutes",
+    "sla_minutes",
+    "is_timeout",
+    "is_closed",
+    "satisfaction",
+    "photos_count",
+    "result_note",
+    "source"
+  ],
+  "type_rules": {
+    "电梯困人": {
+      "facility": "电梯",
+      "urgency": "紧急",
+      "sla_minutes": 30,
+      "trade": "电梯维保"
+    },
+    "电梯故障": {
+      "facility": "电梯",
+      "urgency": "高",
+      "sla_minutes": 60,
+      "trade": "电梯维保"
+    },
+    "水管爆裂": {
+      "facility": "给排水",
+      "urgency": "紧急",
+      "sla_minutes": 30,
+      "trade": "水电工"
+    },
+    "水管漏水": {
+      "facility": "给排水",
+      "urgency": "高",
+      "sla_minutes": 120,
+      "trade": "水电工"
+    },
+    "下水道堵塞": {
+      "facility": "给排水",
+      "urgency": "中",
+      "sla_minutes": 120,
+      "trade": "水电工"
+    },
+    "电路故障": {
+      "facility": "电气",
+      "urgency": "高",
+      "sla_minutes": 60,
+      "trade": "电工"
+    },
+    "燃气泄漏": {
+      "facility": "燃气",
+      "urgency": "紧急",
+      "sla_minutes": 15,
+      "trade": "燃气抢修"
+    },
+    "消防隐患": {
+      "facility": "消防",
+      "urgency": "紧急",
+      "sla_minutes": 15,
+      "trade": "秩序维护"
+    },
+    "门禁故障": {
+      "facility": "门禁",
+      "urgency": "中",
+      "sla_minutes": 240,
+      "trade": "综合维修"
+    },
+    "公共照明": {
+      "facility": "照明",
+      "urgency": "中",
+      "sla_minutes": 240,
+      "trade": "电工"
+    },
+    "墙面地面破损": {
+      "facility": "土建",
+      "urgency": "低",
+      "sla_minutes": 480,
+      "trade": "土建维修"
+    },
+    "环境卫生": {
+      "facility": "环境",
+      "urgency": "低",
+      "sla_minutes": 480,
+      "trade": "保洁"
+    },
+    "其他报修": {
+      "facility": "其他",
+      "urgency": "中",
+      "sla_minutes": 240,
+      "trade": "综合维修"
+    }
+  },
+  "type_distribution": {
+    "电梯困人": 61,
+    "电梯故障": 278,
+    "水管爆裂": 82,
+    "水管漏水": 504,
+    "下水道堵塞": 377,
+    "电路故障": 321,
+    "燃气泄漏": 46,
+    "消防隐患": 48,
+    "门禁故障": 266,
+    "公共照明": 269,
+    "墙面地面破损": 248,
+    "环境卫生": 283,
+    "其他报修": 217
+  },
+  "urgency_distribution": {
+    "紧急": 237,
+    "高": 1103,
+    "中": 1129,
+    "低": 531
+  },
+  "closed": 2807,
+  "closed_rate": 93.6,
+  "timeout": 362,
+  "timeout_rate": 12.1,
+  "avg_duration": 92.9,
+  "avg_response": 28.9,
+  "avg_satisfaction": 4.5,
+  "auto": 2827,
+  "auto_rate": 94.2,
+  "manual_rate": 5.8,
+  "reassigned": 159,
+  "reassigned_rate": 5.3,
+  "weekend_orders": 909,
+  "worker_master": {
+    "W001": {
+      "name": "张伟",
+      "trade": "电梯维保",
+      "zone": "A"
+    },
+    "W002": {
+      "name": "李强",
+      "trade": "电梯维保",
+      "zone": "B"
+    },
+    "W003": {
+      "name": "王建国",
+      "trade": "水电工",
+      "zone": "A"
+    },
+    "W004": {
+      "name": "赵磊",
+      "trade": "水电工",
+      "zone": "B"
+    },
+    "W005": {
+      "name": "陈明",
+      "trade": "电工",
+      "zone": "A"
+    },
+    "W006": {
+      "name": "刘洋",
+      "trade": "电工",
+      "zone": "C"
+    },
+    "W007": {
+      "name": "孙杰",
+      "trade": "燃气抢修",
+      "zone": "A"
+    },
+    "W008": {
+      "name": "周敏",
+      "trade": "综合维修",
+      "zone": "B"
+    },
+    "W009": {
+      "name": "吴芳",
+      "trade": "保洁",
+      "zone": "C"
+    },
+    "W010": {
+      "name": "郑海",
+      "trade": "秩序维护",
+      "zone": "A"
+    },
+    "W011": {
+      "name": "马超",
+      "trade": "土建维修",
+      "zone": "B"
+    },
+    "W012": {
+      "name": "何静",
+      "trade": "综合维修",
+      "zone": "C"
+    }
+  }
+}

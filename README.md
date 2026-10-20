@@ -63,6 +63,32 @@ Python 数据分析项目，对大数据岗位招聘数据进行采集、清洗�
 
 ---
 
+### 🏘 智修云 · 小区物业智能体
+
+基于多智能体协同的小区物业系统：报修工单自动派发与闭环验证，并扩展小区守护（住户画像、连续未出门预警）与停车管理（车辆进出自动计费收费）。
+
+| 模块 | 说明 |
+|---|---|
+| `app/agents/` | 报修理解、派单决策、过程监控、闭环验证、小区守护、停车收费、住户画像 |
+| `app/services/` | 工单编排、历史分析、社区守护、停车计费 |
+| `app/static/` | 8 个看板页面（总览/工单/小区守护/停车/派单/日志/分析/架构），本地 ECharts |
+| `scripts/seed_community.py` | 240 名住户、140 辆车、停车记录与画像演示数据 |
+| `tests/` | 29 个单元/接口测试 |
+
+**技术栈**: Python 3.9+ · FastAPI · SQLite · pandas · 原生 HTML/CSS/JS · ECharts
+
+**启动**：
+
+```bash
+cd property-agent-system
+./run.sh
+# http://127.0.0.1:8000
+```
+
+详见 [`property-agent-system/README.md`](property-agent-system/README.md)。
+
+---
+
 ## 🛠 技术栈总览
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)

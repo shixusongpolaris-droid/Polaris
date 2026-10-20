@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="智修云 · 小区物业智能体 —— 工单闭环、住户守护、停车收费全场景演示看板">
+  <title>智修云 · 小区物业智能体</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <!-- 图标精灵：全部内联 SVG，无外网依赖 -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-logo" viewBox="0 0 24 24"><path d="M12 2.5 20 7v10l-8 4.5L4 17V7l8-4.5Z"/><path d="m13.2 6.5-4.4 6.3h3l-1 4.7 4.4-6.3h-3l1-4.7Z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.6a2.4 2.4 0 0 0 0 4.8V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.6a2.4 2.4 0 0 0 0-4.8V8Z"/><path d="M9.5 6v12" stroke-dasharray="2 2.6"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m11 3 1.8 4.9L17.7 9.7l-4.9 1.8L11 16.4l-1.8-4.9L4.3 9.7l4.9-1.8L11 3Z"/><path d="m18.5 15 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8.5 6h12M8.5 12h12M8.5 18h12"/><circle cx="4" cy="6" r="1.1"/><circle cx="4" cy="12" r="1.1"/><circle cx="4" cy="18" r="1.1"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><rect x="5" y="11" width="3.4" height="6.5" rx="1"/><rect x="10.3" y="6" width="3.4" height="11.5" rx="1"/><rect x="15.6" y="8.5" width="3.4" height="9" rx="1"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 8.5 4.6L12 12.2 3.5 7.6 12 3Z"/><path d="m3.5 12 8.5 4.6 8.5-4.6"/><path d="m3.5 16.4 8.5 4.6 8.5-4.6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20.2 11.2a8.2 8.2 0 1 0-2.4 5.9"/><path d="M20.5 4.6v6.8h-6.8"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m20 20-4.4-4.4"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.6 4.8 4.8L19.5 6.8"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.9 20h18.2L12 3.5Z"/><path d="M12 9.5v4.7"/><circle cx="12" cy="17.4" r=".85" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.4V12l3.1 2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.6 20.4a7.4 7.4 0 0 1 14.8 0"/></symbol>
+    <symbol id="i-trend-up" viewBox="0 0 24 24"><path d="m3 16.8 6-6 4 4 8-8"/><path d="M14.8 6.8H21v6.2"/></symbol>
+    <symbol id="i-trend-down" viewBox="0 0 24 24"><path d="m3 7.2 6 6 4-4 8 8"/><path d="M14.8 17.2H21V11"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13.2 2.5 4.8 13.7H11l-1 8.2 8.4-11.2H12l1.2-8.2Z"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.4" rx="7.6" ry="3"/><path d="M4.4 5.4v13.2c0 1.66 3.4 3 7.6 3s7.6-1.34 7.6-3V5.4"/><path d="M4.4 12c0 1.66 3.4 3 7.6 3s7.6-1.34 7.6-3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4.4 5.9v5.6c0 4.5 3.1 8.1 7.6 9.7 4.5-1.6 7.6-5.2 7.6-9.7V5.9L12 2.8Z"/><path d="m8.4 12 2.5 2.5 4.6-5"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.2"/><rect x="9.6" y="9.6" width="4.8" height="4.8" rx="1"/><path d="M9.2 3v2.4M14.8 3v2.4M9.2 18.6V21M14.8 18.6V21M3 9.2h2.4M3 14.8h2.4M18.6 9.2H21M18.6 14.8H21"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6.6A1.6 1.6 0 0 0 5 4.6v14.8A1.6 1.6 0 0 0 6.6 21h10.8a1.6 1.6 0 0 0 1.6-1.6V8l-5-5Z"/><path d="M14 3v5h5M8.6 13h6.8M8.6 17h4.8"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9.2 6 6 6-6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="m20 4-8.6 8.6"/><path d="M19 14.2v4.6A1.6 1.6 0 0 1 17.4 20.4H5.6A1.6 1.6 0 0 1 4 18.8V7A1.6 1.6 0 0 1 5.6 5.4h4.6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7.2 4.6 19.6 12 7.2 19.4V4.6Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 11v5.6"/><circle cx="12" cy="7.5" r=".9" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M20.6 3.4 10.9 21.2l-2.2-7.3-7.3-2.2L20.6 3.4Z"/><path d="m8.7 13.9 5.4-5.4"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M15.6 4.2a4.7 4.7 0 0 0-3.9 7.2l-7.4 7.4 1.3 1.3 7.4-7.4a4.7 4.7 0 0 0 7.2-3.9c0-.75-.18-1.45-.48-2.08l-2.9 2.9-2.06-2.06 2.9-2.9a4.6 4.6 0 0 0-2.06-.46Z"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="5" cy="5.6" r="2.1"/><circle cx="19" cy="5.6" r="2.1"/><circle cx="12" cy="18.4" r="2.1"/><path d="M7.1 5.6h9.8M6 7.5l4.9 8.9M18 7.5l-4.9 8.9"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.2s6.9-6.2 6.9-10.9a6.9 6.9 0 1 0-13.8 0c0 4.7 6.9 10.9 6.9 10.9Z"/><circle cx="12" cy="10.1" r="2.5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.4" rx="2.2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+    <symbol id="i-robot" viewBox="0 0 24 24"><rect x="5" y="7.4" width="14" height="11" rx="3.2"/><circle cx="9.6" cy="12.4" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.4" cy="12.4" r="1.15" fill="currentColor" stroke="none"/><path d="M12 3.4v4M9.4 15.6h5.2"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3.5 5.5h17l-6.6 7.6V20l-3.8-2v-4.9L3.5 5.5Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.5v11M7.4 10l4.6 4.6L16.6 10"/><path d="M4.5 20h15"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.6 12 4l8 6.6V20a1.4 1.4 0 0 1-1.4 1.4H5.4A1.4 1.4 0 0 1 4 20V10.6Z"/><path d="M9.4 21.4v-6.2h5.2v6.2"/></symbol>
+    <symbol id="i-car" viewBox="0 0 24 24"><path d="M4.2 16.4 5.6 9.8a2.4 2.4 0 0 1 2.35-1.9h8.1a2.4 2.4 0 0 1 2.35 1.9l1.4 6.6"/><path d="M3.4 16.4h17.2v3.2H3.4z"/><circle cx="7.4" cy="19.6" r="1.4"/><circle cx="16.6" cy="19.6" r="1.4"/><path d="M6.6 12.8h10.8"/></symbol>
+    <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.6" r="2.1"/><path d="m12.6 8.4-2.1 4.2 2.6 2.1.8 6.3"/><path d="m10.5 12.6-3.6 3M15.5 10.4l2.8 1.6"/></symbol>
+  </svg>
+
+  <div class="app" id="app">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ===================== 侧边栏 ===================== -->
+    <aside class="sidebar" id="sidebar" aria-label="主导航">
+      <div class="brand">
+        <div class="brand-mark"><svg class="icon"><use href="#i-logo"></use></svg></div>
+        <div class="brand-text">
+          <strong>智修云</strong>
+          <span>小区物业智能体 · 工单 / 守护 / 停车</span>
+        </div>
+      </div>
+
+      <nav class="nav" id="nav">
+        <div class="nav-group">
+          <div class="nav-group-label">运行监控</div>
+          <a class="nav-item" href="#dashboard" data-page="dashboard">
+            <svg class="icon"><use href="#i-grid"></use></svg><span class="nav-label">总览</span>
+          </a>
+          <a class="nav-item" href="#tickets" data-page="tickets">
+            <svg class="icon"><use href="#i-ticket"></use></svg><span class="nav-label">工单中心</span>
+            <span class="nav-badge" id="navOpenBadge" hidden>0</span>
+          </a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">社区运营</div>
+          <a class="nav-item" href="#community" data-page="community">
+            <svg class="icon"><use href="#i-shield"></use></svg><span class="nav-label">小区守护</span>
+          </a>
+          <a class="nav-item" href="#parking" data-page="parking">
+            <svg class="icon"><use href="#i-car"></use></svg><span class="nav-label">停车管理</span>
+          </a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">智能协作</div>
+          <a class="nav-item" href="#dispatch" data-page="dispatch">
+            <svg class="icon"><use href="#i-spark"></use></svg><span class="nav-label">智能派单</span>
+          </a>
+          <a class="nav-item" href="#logs" data-page="logs">
+            <svg class="icon"><use href="#i-list"></use></svg><span class="nav-label">决策日志</span>
+          </a>
+          <a class="nav-item" href="#analytics" data-page="analytics">
+            <svg class="icon"><use href="#i-chart"></use></svg><span class="nav-label">数据分析</span>
+          </a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">系统</div>
+          <a class="nav-item" href="#about" data-page="about">
+            <svg class="icon"><use href="#i-layers"></use></svg><span class="nav-label">系统架构</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="engine-card">
+          <span class="engine-dot"></span>
+          <div><strong>AI 引擎</strong><span id="engineStatusText">连接检测中…</span></div>
+        </div>
+        <div class="sidebar-version">v1.1.0 · 本地演示环境</div>
+      </div>
+    </aside>
+
+    <!-- ===================== 主区域 ===================== -->
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="折叠 / 展开侧边栏" aria-expanded="true">
+          <svg class="icon"><use href="#i-menu"></use></svg>
+        </button>
+        <div class="topbar-title">
+          <span class="topbar-page" id="topbarPage">总览</span>
+          <span class="topbar-sep">/</span>
+          <span class="topbar-sub" id="topbarSub">运营态势与 Agent 运行指标</span>
+        </div>
+        <div class="topbar-right">
+          <div class="date-chip">
+            <svg class="icon"><use href="#i-calendar"></use></svg>
+            <span id="topbarDate">—</span>
+          </div>
+          <div class="status-chip" id="apiStatusChip" title="后端接口健康状态">
+            <span class="status-dot"></span><span id="apiStatusText">检测中</span>
+          </div>
+          <button class="icon-btn" id="globalRefresh" title="刷新当前页面数据" aria-label="刷新当前页面数据">
+            <svg class="icon"><use href="#i-refresh"></use></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="content" id="content">
+
+        <!-- ===================== 1. 总览 ===================== -->
+        <section class="page" id="page-dashboard" data-page="dashboard" aria-label="总览">
+          <div class="welcome">
+            <div class="welcome-main">
+              <div class="welcome-eyebrow"><span class="pulse-dot"></span>智修云 · 物业工单智能中枢</div>
+              <h1>早上好，欢迎回到 <span class="grad-text">智修云</span></h1>
+              <p>小区物业智能体 · 覆盖报修工单闭环、住户守护与停车收费全链路</p>
+              <div class="welcome-meta">
+                <span class="welcome-chip"><svg class="icon"><use href="#i-calendar"></use></svg><span id="dashDate">—</span></span>
+                <span class="welcome-chip"><svg class="icon"><use href="#i-clock"></use></svg><span id="dashGenerated">数据更新于 —</span></span>
+                <span class="welcome-chip sample-chip" id="dashSampleChip" hidden>示例数据</span>
+              </div>
+            </div>
+            <div class="welcome-side">
+              <div class="ai-status-card">
+                <span class="ai-status-dot"></span>
+                <div><strong>AI 引擎运行中</strong><span>7 个 Agent 在线协作</span></div>
+              </div>
+              <button class="btn light" id="dashRefresh" type="button">
+                <svg class="icon"><use href="#i-refresh"></use></svg>刷新数据
+              </button>
+            </div>
+          </div>
+
+          <div class="sample-note" id="dashSampleNote" hidden></div>
+
+          <div class="kpi-grid" id="kpiGrid">
+            <div class="kpi-card" data-accent="blue">
+              <div class="kpi-head"><span class="kpi-label">历史工单总量</span><span class="kpi-icon blue"><svg class="icon"><use href="#i-db"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="kpiTotal">—</span><span class="kpi-unit">单</span></div>
+              <div class="kpi-foot" id="kpiTotalFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="green">
+              <div class="kpi-head"><span class="kpi-label">闭环率</span><span class="kpi-icon green"><svg class="icon"><use href="#i-check"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="kpiClosedRate">—</span><span class="kpi-unit">%</span></div>
+              <div class="kpi-foot" id="kpiClosedRateFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="red">
+              <div class="kpi-head"><span class="kpi-label">超时率</span><span class="kpi-icon red"><svg class="icon"><use href="#i-alert"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="kpiTimeoutRate">—</span><span class="kpi-unit">%</span></div>
+              <div class="kpi-foot" id="kpiTimeoutRateFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="cyan">
+              <div class="kpi-head"><span class="kpi-label">平均处理时长</span><span class="kpi-icon cyan"><svg class="icon"><use href="#i-clock"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="kpiDuration">—</span><span class="kpi-unit">分钟</span></div>
+              <div class="kpi-foot" id="kpiDurationFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="violet">
+              <div class="kpi-head"><span class="kpi-label">自动派单准确率</span><span class="kpi-icon violet"><svg class="icon"><use href="#i-target"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="kpiDispatchAcc">—</span><span class="kpi-unit">%</span></div>
+              <div class="kpi-foot" id="kpiDispatchAccFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="amber">
+              <div class="kpi-head"><span class="kpi-label">实时待处理</span><span class="kpi-icon amber"><svg class="icon"><use href="#i-ticket"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="kpiOpen">—</span><span class="kpi-unit">单</span></div>
+              <div class="kpi-foot" id="kpiOpenFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+          </div>
+
+          <div class="grid-12">
+            <div class="card span-8">
+              <div class="card-head">
+                <div><h3>近 30 天工单量趋势</h3><p>工单量 · 闭环量 · 超时量</p></div>
+                <span class="badge-soft blue">日粒度</span>
+              </div>
+              <div class="chart chart-lg" id="chartTrend" role="img" aria-label="近30天工单量趋势图"></div>
+            </div>
+            <div class="card span-4">
+              <div class="card-head">
+                <div><h3>Agent 运行指标</h3><p>决策质量与效率</p></div>
+                <span class="badge-soft cyan">实时</span>
+              </div>
+              <div class="chart" id="chartAgent" style="height:200px" role="img" aria-label="Agent运行指标"></div>
+              <div class="agent-decision" id="agentDecision"></div>
+            </div>
+
+            <div class="card span-4">
+              <div class="card-head"><div><h3>报修类型分布</h3><p>按历史工单类型统计</p></div></div>
+              <div class="chart" id="chartTypes" style="height:286px" role="img" aria-label="报修类型分布"></div>
+            </div>
+            <div class="card span-5">
+              <div class="card-head"><div><h3>楼栋故障 TOP8</h3><p>工单量对比 · 超时率</p></div></div>
+              <div class="chart" id="chartBuildings" style="height:286px" role="img" aria-label="楼栋故障TOP8"></div>
+            </div>
+            <div class="card span-3">
+              <div class="card-head"><div><h3>紧急程度分布</h3><p>紧急工单优先响应</p></div></div>
+              <div class="chart" id="chartUrgency" style="height:286px" role="img" aria-label="紧急程度分布"></div>
+            </div>
+
+            <div class="card span-7">
+              <div class="card-head">
+                <div><h3>维修工效率排行</h3><p>按历史工单量排序</p></div>
+                <span class="badge-soft">TOP 8</span>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table compact">
+                  <thead><tr><th>排名</th><th>维修工</th><th>工种</th><th class="num">工单量</th><th class="num">平均时长</th><th class="num">满意度</th><th class="num">超时率</th></tr></thead>
+                  <tbody id="workerRows">
+                    <tr><td colspan="7"><div class="skeleton-row">加载中…</div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card span-5">
+              <div class="card-head">
+                <div><h3>最新工单</h3><p>实时工单流转</p></div>
+                <button class="link-btn" id="recentMore" type="button">查看全部<svg class="icon"><use href="#i-arrow-right"></use></svg></button>
+              </div>
+              <div class="recent-list" id="recentList">
+                <div class="skeleton-block"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== 2. 工单中心 ===================== -->
+        <section class="page" id="page-tickets" data-page="tickets" aria-label="工单中心">
+          <div class="page-head">
+            <div><h2>工单中心</h2><p>实时工单流转与多 Agent 决策全链路追踪，点击任意行查看详情</p></div>
+            <div class="page-actions">
+              <button class="btn ghost" id="ticketsRefresh" type="button"><svg class="icon"><use href="#i-refresh"></use></svg>刷新</button>
+              <button class="btn primary" id="ticketsNew" type="button"><svg class="icon"><use href="#i-plus"></use></svg>新建报修</button>
+            </div>
+          </div>
+
+          <div class="sample-note" id="ticketsSample" hidden></div>
+
+          <div class="card">
+            <div class="filter-bar">
+              <label class="field">
+                <span>状态</span>
+                <div class="select-wrap">
+                  <select id="filterStatus">
+                    <option value="all">全部状态</option>
+                    <option value="assigned">待接单</option>
+                    <option value="accepted">已接单</option>
+                    <option value="processing">处理中</option>
+                    <option value="returned">退回整改</option>
+                    <option value="closed">已闭环</option>
+                    <option value="open">全部未闭环</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="field">
+                <span>紧急程度</span>
+                <div class="select-wrap">
+                  <select id="filterUrgency">
+                    <option value="">全部紧急度</option>
+                    <option value="紧急">紧急</option>
+                    <option value="高">高</option>
+                    <option value="中">中</option>
+                    <option value="低">低</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="field grow">
+                <span>关键词</span>
+                <div class="search-input">
+                  <svg class="icon"><use href="#i-search"></use></svg>
+                  <input type="search" id="filterQ" placeholder="搜索工单号 / 报修内容 / 位置 / 维修工" autocomplete="off">
+                </div>
+              </label>
+              <div class="filter-actions">
+                <button class="btn primary" id="filterApply" type="button">查询</button>
+                <button class="btn ghost" id="filterReset" type="button">重置</button>
+              </div>
+            </div>
+
+            <div class="table-meta">
+              <span id="ticketsTotal">共 0 条工单</span>
+              <span class="table-hint"><svg class="icon"><use href="#i-info"></use></svg>点击表格行可打开 Agent 决策详情</span>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table ticket-table">
+                <thead>
+                  <tr>
+                    <th>工单号</th><th>报修内容摘要</th><th>类型</th><th>位置</th><th>紧急度</th><th>状态</th><th>维修工</th><th>时限</th><th>创建时间</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketRows">
+                  <tr class="placeholder-row"><td colspan="9"><div class="skeleton-row">加载中…</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <span id="ticketsPageInfo">—</span>
+              <div class="pager">
+                <button class="btn ghost sm" id="ticketsPrev" type="button" disabled>上一页</button>
+                <button class="btn ghost sm" id="ticketsNext" type="button" disabled>下一页</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== 3. 小区守护 ===================== -->
+        <section class="page" id="page-community" data-page="community" aria-label="小区守护">
+          <div class="page-head">
+            <div><h2>小区守护</h2><p>住户出入与独居关怀监测</p></div>
+            <div class="page-actions">
+              <button class="btn ghost" id="communityRefresh" type="button"><svg class="icon"><use href="#i-refresh"></use></svg>刷新</button>
+              <button class="btn ghost" id="communityScan" type="button"><svg class="icon"><use href="#i-shield"></use></svg>立即巡检</button>
+              <button class="btn primary" id="communityAddResident" type="button"><svg class="icon"><use href="#i-plus"></use></svg>新增住户</button>
+            </div>
+          </div>
+
+          <div class="sample-note" id="communitySampleNote" hidden></div>
+
+          <div class="kpi-grid" id="communityKpis">
+            <div class="kpi-card" data-accent="blue">
+              <div class="kpi-head"><span class="kpi-label">住户总数</span><span class="kpi-icon blue"><svg class="icon"><use href="#i-user"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="cKpiResidents">—</span><span class="kpi-unit">户</span></div>
+              <div class="kpi-foot" id="cKpiResidentsFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="green">
+              <div class="kpi-head"><span class="kpi-label">当前在家</span><span class="kpi-icon green"><svg class="icon"><use href="#i-home"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="cKpiHome">—</span><span class="kpi-unit">户</span></div>
+              <div class="kpi-foot" id="cKpiHomeFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="violet">
+              <div class="kpi-head"><span class="kpi-label">超 3 天未出门</span><span class="kpi-icon violet"><svg class="icon"><use href="#i-clock"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="cKpiInactive3">—</span><span class="kpi-unit">户</span></div>
+              <div class="kpi-foot" id="cKpiInactive3Foot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="amber">
+              <div class="kpi-head"><span class="kpi-label">未处理预警</span><span class="kpi-icon amber"><svg class="icon"><use href="#i-alert"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="cKpiOpenAlerts">—</span><span class="kpi-unit">条</span></div>
+              <div class="kpi-foot" id="cKpiOpenAlertsFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="red">
+              <div class="kpi-head"><span class="kpi-label">紧急预警</span><span class="kpi-icon red"><svg class="icon"><use href="#i-alert"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="cKpiCritical">—</span><span class="kpi-unit">条</span></div>
+              <div class="kpi-foot" id="cKpiCriticalFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="cyan">
+              <div class="kpi-head"><span class="kpi-label">今日出入</span><span class="kpi-icon cyan"><svg class="icon"><use href="#i-walk"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="cKpiToday">—</span><span class="kpi-unit">次</span></div>
+              <div class="kpi-foot" id="cKpiTodayFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+          </div>
+
+          <div class="grid-12">
+            <div class="card span-4">
+              <div class="card-head">
+                <div><h3>风险分布</h3><p>按住户风险等级统计</p></div>
+                <span class="badge-soft green">实时</span>
+              </div>
+              <div class="chart chart-md" id="chartCommunityRisk" role="img" aria-label="住户风险分布环形图"></div>
+            </div>
+            <div class="card span-8">
+              <div class="card-head">
+                <div><h3>近 7 日门禁事件 / 预警趋势</h3><p>门禁事件量 · 新增预警量</p></div>
+                <span class="badge-soft blue">日粒度</span>
+              </div>
+              <div class="chart chart-md" id="chartCommunityTrend" role="img" aria-label="近7日门禁事件与预警趋势"></div>
+            </div>
+
+            <div class="card span-5">
+              <div class="card-head">
+                <div><h3>楼栋未出门排名</h3><p>连续未出门住户数 · 按楼栋</p></div>
+                <span class="badge-soft amber">TOP 8</span>
+              </div>
+              <div class="chart chart-md" id="chartCommunityBuildings" role="img" aria-label="楼栋未出门排名"></div>
+            </div>
+            <div class="card span-7">
+              <div class="card-head">
+                <div><h3>待处理预警</h3><p>独居 / 高龄住户未出门预警，建议优先上门探访</p></div>
+                <span class="badge-soft red" id="communityAlertCount">待处理 0 条</span>
+              </div>
+              <div class="alert-list" id="communityAlertList">
+                <div class="skeleton-block"></div>
+                <div class="skeleton-block"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card community-residents-card">
+            <div class="card-head">
+              <div><h3>住户关怀档案</h3><p>监控每位住户连续未出门天数，超过阈值自动生成分级预警</p></div>
+              <span class="badge-soft"><svg class="icon"><use href="#i-user"></use></svg><span id="communityResidentMeta">共 0 户</span></span>
+            </div>
+
+            <div class="filter-bar">
+              <label class="field">
+                <span>风险等级</span>
+                <div class="select-wrap">
+                  <select id="communityRiskFilter">
+                    <option value="">全部等级</option>
+                    <option value="normal">正常</option>
+                    <option value="watch">关注</option>
+                    <option value="warning">预警</option>
+                    <option value="critical">紧急</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="field">
+                <span>在家状态</span>
+                <div class="select-wrap">
+                  <select id="communityPresenceFilter">
+                    <option value="">全部状态</option>
+                    <option value="home">在家</option>
+                    <option value="away">外出</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="field grow">
+                <span>关键词</span>
+                <div class="search-input">
+                  <svg class="icon"><use href="#i-search"></use></svg>
+                  <input type="search" id="communitySearch" placeholder="搜索姓名 / 楼栋 / 房号" autocomplete="off">
+                </div>
+              </label>
+              <div class="filter-actions">
+                <button class="btn primary" id="communityFilterApply" type="button">查询</button>
+                <button class="btn ghost" id="communityFilterReset" type="button">重置</button>
+              </div>
+            </div>
+
+            <div class="table-meta">
+              <span id="communityTableMeta">正在加载住户…</span>
+              <span class="table-hint"><svg class="icon"><use href="#i-info"></use></svg>点击住户行查看最近 30 条出入记录与历史预警</span>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table resident-table">
+                <thead>
+                  <tr>
+                    <th>住户</th><th>地址</th><th>状态</th><th class="num">连续未出门</th><th>最近出门</th><th>风险等级</th><th>关怀等级 / 画像</th><th class="num">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="communityResidentRows">
+                  <tr class="placeholder-row"><td colspan="8"><div class="loading-block"><span class="spinner"></span>正在加载住户档案…</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== 4. 停车管理 ===================== -->
+        <section class="page" id="page-parking" data-page="parking" aria-label="停车管理">
+          <div class="page-head">
+            <div><h2>停车管理</h2><p>车辆进出识别与自动计费</p></div>
+            <div class="page-actions">
+              <button class="btn ghost" id="parkingRefresh" type="button"><svg class="icon"><use href="#i-refresh"></use></svg>刷新</button>
+              <button class="btn primary" id="parkingEntryToggle" type="button"><svg class="icon"><use href="#i-plus"></use></svg>模拟车辆入场</button>
+            </div>
+          </div>
+
+          <div class="sample-note" id="parkingSampleNote" hidden></div>
+
+          <div class="card parking-entry-card" id="parkingEntryForm" hidden>
+            <div class="card-head">
+              <div><h3>模拟车辆入场</h3><p>车牌不存在时后端自动创建临时车辆；车位已满将返回错误提示</p></div>
+              <span class="badge-soft cyan"><svg class="icon"><use href="#i-car"></use></svg>车牌识别</span>
+            </div>
+            <div class="parking-entry-fields">
+              <label class="form-field">
+                <span>车牌号</span>
+                <input id="parkingPlate" placeholder="例如 粤B12345" maxlength="10" autocomplete="off">
+              </label>
+              <label class="form-field">
+                <span>车辆类型</span>
+                <div class="select-wrap">
+                  <select id="parkingVehicleType">
+                    <option value="小型车">小型车</option>
+                    <option value="新能源">新能源</option>
+                    <option value="SUV">SUV</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <div class="parking-entry-actions">
+                <button class="btn primary" id="parkingEntrySubmit" type="button"><svg class="icon"><use href="#i-check"></use></svg>确认入场</button>
+                <button class="btn ghost" id="parkingEntryCancel" type="button">收起</button>
+              </div>
+            </div>
+            <div class="form-error" id="parkingEntryError" hidden></div>
+          </div>
+
+          <div class="kpi-grid" id="parkingKpis">
+            <div class="kpi-card" data-accent="green">
+              <div class="kpi-head"><span class="kpi-label">今日收入</span><span class="kpi-icon green"><svg class="icon"><use href="#i-trend-up"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="pKpiToday">—</span><span class="kpi-unit">元</span></div>
+              <div class="kpi-foot" id="pKpiTodayFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="cyan">
+              <div class="kpi-head"><span class="kpi-label">本月收入</span><span class="kpi-icon cyan"><svg class="icon"><use href="#i-calendar"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="pKpiMonth">—</span><span class="kpi-unit">元</span></div>
+              <div class="kpi-foot" id="pKpiMonthFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="blue">
+              <div class="kpi-head"><span class="kpi-label">在停车辆</span><span class="kpi-icon blue"><svg class="icon"><use href="#i-car"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="pKpiParked">—</span><span class="kpi-unit">辆</span></div>
+              <div class="kpi-foot" id="pKpiParkedFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="violet">
+              <div class="kpi-head"><span class="kpi-label">空余车位</span><span class="kpi-icon violet"><svg class="icon"><use href="#i-grid"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="pKpiFree">—</span><span class="kpi-unit">个</span></div>
+              <div class="kpi-foot" id="pKpiFreeFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="amber">
+              <div class="kpi-head"><span class="kpi-label">车位占用率</span><span class="kpi-icon amber"><svg class="icon"><use href="#i-target"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="pKpiOccupancy">—</span><span class="kpi-unit">%</span></div>
+              <div class="kpi-foot" id="pKpiOccupancyFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+            <div class="kpi-card" data-accent="red">
+              <div class="kpi-head"><span class="kpi-label">待缴费</span><span class="kpi-icon red"><svg class="icon"><use href="#i-alert"></use></svg></span></div>
+              <div class="kpi-value-row"><span class="kpi-value" id="pKpiUnpaid">—</span><span class="kpi-unit">元</span></div>
+              <div class="kpi-foot" id="pKpiUnpaidFoot"><span class="trend muted">等待数据</span></div>
+            </div>
+          </div>
+
+          <div class="grid-12">
+            <div class="card span-7">
+              <div class="card-head">
+                <div><h3>近 14 日收入趋势</h3><p>停车收入 · 计费订单数</p></div>
+                <span class="badge-soft green">14 天</span>
+              </div>
+              <div class="chart chart-md" id="chartParkingRevenue" role="img" aria-label="近14日停车收入趋势"></div>
+            </div>
+            <div class="card span-5">
+              <div class="card-head">
+                <div><h3>支付方式占比</h3><p>近 30 日缴费笔数统计</p></div>
+                <span class="badge-soft cyan">实时</span>
+              </div>
+              <div class="chart chart-md" id="chartParkingPayment" role="img" aria-label="支付方式占比"></div>
+            </div>
+
+            <div class="card span-7">
+              <div class="card-head">
+                <div><h3>24 小时入场分布</h3><p>车辆入场时段分布</p></div>
+                <span class="badge-soft blue">今日</span>
+              </div>
+              <div class="chart chart-md" id="chartParkingHourly" role="img" aria-label="24小时车辆入场分布"></div>
+            </div>
+            <div class="card span-5">
+              <div class="card-head">
+                <div><h3>车位占用率</h3><p id="parkingLotName">地下一层停车场</p></div>
+                <span class="badge-soft amber" id="parkingLotBadge">—</span>
+              </div>
+              <div class="chart chart-md" id="chartParkingOccupancy" role="img" aria-label="车位占用率仪表盘"></div>
+              <div class="chart-footnote" id="parkingLotInfo">正在加载车位信息…</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div><h3>在停车辆</h3><p>车辆出场后自动按时长计费，月卡车辆不另收费</p></div>
+              <span class="badge-soft blue"><svg class="icon"><use href="#i-car"></use></svg><span id="parkingParkedMeta">在停 0 辆</span></span>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table parking-table">
+                <thead>
+                  <tr><th>车牌</th><th>车辆类型</th><th>车主 / 住户</th><th>入场时间</th><th class="num">已停时长</th><th class="num">预估费用</th><th>车位号</th><th class="num">操作</th></tr>
+                </thead>
+                <tbody id="parkingRows">
+                  <tr class="placeholder-row"><td colspan="8"><div class="loading-block"><span class="spinner"></span>正在加载在停车辆…</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div><h3>最近进出记录</h3><p>待缴费记录可直接选择支付方式完成收费</p></div>
+              <span class="badge-soft amber" id="parkingRecentMeta">最近 0 条</span>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table parking-table">
+                <thead>
+                  <tr><th>车牌</th><th>入场时间</th><th>出场时间</th><th class="num">时长</th><th class="num">金额</th><th>状态</th><th>支付方式</th><th class="num">操作</th></tr>
+                </thead>
+                <tbody id="parkingRecentRows">
+                  <tr class="placeholder-row"><td colspan="8"><div class="loading-block"><span class="spinner"></span>正在加载进出记录…</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div><h3>计费规则</h3><p>自动计费口径，来自后端配置</p></div>
+              <span class="badge-soft violet"><svg class="icon"><use href="#i-info"></use></svg>规则透明</span>
+            </div>
+            <div class="rules-grid" id="parkingRules">
+              <div class="skeleton-block"></div>
+              <div class="skeleton-block"></div>
+              <div class="skeleton-block"></div>
+              <div class="skeleton-block"></div>
+            </div>
+            <div class="rules-desc" id="parkingRulesDesc"></div>
+          </div>
+        </section>
+
+        <!-- ===================== 5. 智能派单 ===================== -->
+        <section class="page" id="page-dispatch" data-page="dispatch" aria-label="智能派单">
+          <div class="page-head">
+            <div><h2>智能派单</h2><p>提交自然语言报修，观察 5 个 Agent 协作完成理解、派单、监控与闭环验证</p></div>
+            <div class="page-actions">
+              <span class="badge-soft cyan"><svg class="icon"><use href="#i-robot"></use></svg>Agent 流水线 · 本地规则引擎</span>
+            </div>
+          </div>
+
+          <div class="dispatch-grid">
+            <div class="card form-card">
+              <div class="card-head"><div><h3>报修受理</h3><p>自然语言输入，Agent 自动理解并派单</p></div></div>
+              <div class="form-body">
+                <label class="form-label" for="dispatchDesc">报修描述</label>
+                <textarea id="dispatchDesc" rows="4" placeholder="例如：5栋1单元水管爆裂，楼道大量积水，业主家里停水"></textarea>
+                <div class="sample-chips">
+                  <span>示例：</span>
+                  <button class="chip" type="button" data-sample="elevator">电梯困人</button>
+                  <button class="chip" type="button" data-sample="pipe">水管爆裂</button>
+                  <button class="chip" type="button" data-sample="drain">下水道堵塞</button>
+                </div>
+                <div class="form-grid">
+                  <label class="form-field"><span>报修人</span><input id="dispatchReporter" placeholder="王女士" autocomplete="off"></label>
+                  <label class="form-field"><span>联系电话</span><input id="dispatchPhone" placeholder="13800000000" inputmode="tel" autocomplete="off"></label>
+                  <label class="form-field"><span>楼栋</span><input id="dispatchBuilding" placeholder="5栋" autocomplete="off"></label>
+                  <label class="form-field"><span>单元</span><input id="dispatchUnit" placeholder="1单元" autocomplete="off"></label>
+                </div>
+                <button class="btn primary block" id="dispatchSubmit" type="button">
+                  <svg class="icon"><use href="#i-send"></use></svg>提交报修 · 启动智能派单
+                </button>
+                <p class="form-hint" id="dispatchHint">Agent 将自动完成报修理解、派单决策、过程监控与闭环验证</p>
+              </div>
+            </div>
+
+            <div class="card pipeline-card">
+              <div class="card-head">
+                <div><h3>多智能体流水线</h3><p>报修理解 → 派单决策 → 过程监控 → 闭环验证 → 工单闭环</p></div>
+                <button class="btn ghost sm" id="demoRunBtn" type="button"><svg class="icon"><use href="#i-play"></use></svg>运行完整闭环演示</button>
+              </div>
+              <div class="pipeline" id="pipeline">
+                <div class="pipe-node" id="pipe1" data-agent="understanding">
+                  <div class="pipe-marker"><span class="pipe-index">1</span><svg class="icon pipe-check"><use href="#i-check"></use></svg></div>
+                  <div class="pipe-content">
+                    <div class="pipe-title">报修理解<span class="agent-tag understanding">理解 Agent</span><span class="pipe-dur" hidden></span></div>
+                    <p class="pipe-summary">等待报修文本输入</p>
+                    <span class="pipe-state">待触发</span>
+                  </div>
+                </div>
+                <div class="pipe-node" id="pipe2" data-agent="dispatch">
+                  <div class="pipe-marker"><span class="pipe-index">2</span><svg class="icon pipe-check"><use href="#i-check"></use></svg></div>
+                  <div class="pipe-content">
+                    <div class="pipe-title">派单决策<span class="agent-tag dispatch">派单 Agent</span><span class="pipe-dur" hidden></span></div>
+                    <p class="pipe-summary">基于技能匹配、负载与区域生成派单方案</p>
+                    <span class="pipe-state">待触发</span>
+                  </div>
+                </div>
+                <div class="pipe-node" id="pipe3" data-agent="monitoring">
+                  <div class="pipe-marker"><span class="pipe-index">3</span><svg class="icon pipe-check"><use href="#i-check"></use></svg></div>
+                  <div class="pipe-content">
+                    <div class="pipe-title">过程监控<span class="agent-tag monitoring">监控 Agent</span><span class="pipe-dur" hidden></span></div>
+                    <p class="pipe-summary">SLA 倒计时扫描，超时预警与升级</p>
+                    <span class="pipe-state">待触发</span>
+                  </div>
+                </div>
+                <div class="pipe-node" id="pipe4" data-agent="verification">
+                  <div class="pipe-marker"><span class="pipe-index">4</span><svg class="icon pipe-check"><use href="#i-check"></use></svg></div>
+                  <div class="pipe-content">
+                    <div class="pipe-title">闭环验证<span class="agent-tag verification">验证 Agent</span><span class="pipe-dur" hidden></span></div>
+                    <p class="pipe-summary">核验完工说明与照片，判定是否通过</p>
+                    <span class="pipe-state">待触发</span>
+                  </div>
+                </div>
+                <div class="pipe-node" id="pipe5" data-agent="coordinator">
+                  <div class="pipe-marker"><span class="pipe-index">5</span><svg class="icon pipe-check"><use href="#i-check"></use></svg></div>
+                  <div class="pipe-content">
+                    <div class="pipe-title">工单闭环<span class="agent-tag coordinator">编排中心</span><span class="pipe-dur" hidden></span></div>
+                    <p class="pipe-summary">归档工单、沉淀决策日志与运行指标</p>
+                    <span class="pipe-state">待触发</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="demo-stream-head" id="demoStreamHead" hidden>
+                <span class="demo-live-dot"></span>
+                <strong>执行流</strong>
+                <span class="demo-badge" id="demoBadge" hidden>示例回放</span>
+                <span class="demo-progress-text" id="demoProgressText"></span>
+              </div>
+              <div class="demo-stream" id="demoStream" aria-live="polite"></div>
+            </div>
+
+            <div class="card result-card">
+              <div class="card-head">
+                <div><h3>派单结果</h3><p>责任人 · SLA · 决策依据</p></div>
+                <span class="badge-soft amber" id="resultSampleBadge" hidden>示例</span>
+              </div>
+              <div id="dispatchResult">
+                <div class="empty-state">
+                  <div class="empty-icon"><svg class="icon"><use href="#i-spark"></use></svg></div>
+                  <strong>等待派单</strong>
+                  <p>提交报修或运行完整演示后，这里将展示维修工、SLA 评分依据与候选得分。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== 6. 决策日志 ===================== -->
+        <section class="page" id="page-logs" data-page="logs" aria-label="决策日志">
+          <div class="page-head">
+            <div><h2>决策日志</h2><p>Agent 每一次决策的输入、依据、置信度与耗时都可追溯</p></div>
+            <div class="page-actions">
+              <button class="btn ghost" id="logsRefresh" type="button"><svg class="icon"><use href="#i-refresh"></use></svg>刷新</button>
+            </div>
+          </div>
+
+          <div class="sample-note" id="logsSample" hidden></div>
+
+          <div class="log-stats" id="logStats">
+            <div class="stat-card"><div class="skeleton-block"></div></div>
+            <div class="stat-card"><div class="skeleton-block"></div></div>
+            <div class="stat-card"><div class="skeleton-block"></div></div>
+            <div class="stat-card"><div class="skeleton-block"></div></div>
+          </div>
+
+          <div class="card">
+            <div class="filter-bar">
+              <label class="field">
+                <span>Agent</span>
+                <div class="select-wrap">
+                  <select id="logAgentFilter">
+                    <option value="">全部 Agent</option>
+                    <option value="understanding">报修理解 Agent</option>
+                    <option value="dispatch">派单决策 Agent</option>
+                    <option value="monitoring">过程监控 Agent</option>
+                    <option value="verification">闭环验证 Agent</option>
+                    <option value="coordinator">工单编排中心</option>
+                    <option value="community_guard">小区守护 Agent</option>
+                    <option value="parking">停车收费 Agent</option>
+                    <option value="resident_profile">住户画像 Agent</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="field grow">
+                <span>关键词</span>
+                <div class="search-input">
+                  <svg class="icon"><use href="#i-search"></use></svg>
+                  <input type="search" id="logQ" placeholder="搜索动作 / 工单号 / 决策摘要" autocomplete="off">
+                </div>
+              </label>
+              <div class="filter-actions">
+                <button class="btn primary" id="logFilterApply" type="button">筛选</button>
+                <button class="btn ghost" id="logFilterReset" type="button">重置</button>
+              </div>
+            </div>
+            <div class="table-meta">
+              <span id="logsMeta">共 0 条决策记录</span>
+              <span class="table-hint"><svg class="icon"><use href="#i-info"></use></svg>点击行展开决策依据与 output JSON</span>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table log-table">
+                <thead>
+                  <tr><th>时间</th><th>Agent</th><th>动作</th><th>工单</th><th>决策摘要</th><th>置信度</th><th class="num">耗时</th></tr>
+                </thead>
+                <tbody id="logRows">
+                  <tr class="placeholder-row"><td colspan="7"><div class="skeleton-row">加载中…</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer">
+              <span id="logsPageInfo">—</span>
+              <button class="btn ghost sm" id="logsMore" type="button" hidden>加载更多</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== 7. 数据分析 ===================== -->
+        <section class="page" id="page-analytics" data-page="analytics" aria-label="数据分析">
+          <div class="page-head">
+            <div><h2>数据分析</h2><p>历史工单运营分析 · Agent 评估结果与优化建议</p></div>
+            <div class="page-actions">
+              <a class="btn primary" id="reportLink" href="/reports/%E5%8E%86%E5%8F%B2%E5%B7%A5%E5%8D%95%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A.md" target="_blank" rel="noopener">
+                <svg class="icon"><use href="#i-file"></use></svg>查看完整分析报告<svg class="icon sm"><use href="#i-external"></use></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="sample-note" id="analyticsSample" hidden></div>
+
+          <div class="analytics-kpis" id="analyticsKpis">
+            <div class="mini-stat"><span>分析样本</span><strong id="anaSample">—</strong></div>
+            <div class="mini-stat"><span>历史闭环率</span><strong id="anaClosedRate">—</strong></div>
+            <div class="mini-stat"><span>平均处理时长</span><strong id="anaDuration">—</strong></div>
+            <div class="mini-stat"><span>用户满意度</span><strong id="anaSatisfaction">—</strong></div>
+          </div>
+
+          <div class="analytics-layout">
+            <div class="chart-grid">
+              <div class="card">
+                <div class="card-head"><div><h3>报修类型分布</h3><p>历史工单类型构成</p></div></div>
+                <div class="chart chart-md" id="chartAnaTypes" role="img" aria-label="报修类型分布"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><h3>月度趋势</h3><p>工单量 · 闭环率</p></div></div>
+                <div class="chart chart-md" id="chartAnaMonthly" role="img" aria-label="月度趋势"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><h3>超时率对比</h3><p>按报修类型 / 楼栋</p></div></div>
+                <div class="chart chart-md" id="chartAnaTimeout" role="img" aria-label="超时率对比"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><h3>楼栋故障排名</h3><p>工单量 TOP 10</p></div></div>
+                <div class="chart chart-md" id="chartAnaBuildings" role="img" aria-label="楼栋故障排名"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><h3>维修工效率散点</h3><p>工单量 × 平均时长 · 气泡大小为满意度</p></div></div>
+                <div class="chart chart-md" id="chartAnaWorkers" role="img" aria-label="维修工效率散点"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><h3>报修时段分布</h3><p>24 小时工单量</p></div></div>
+                <div class="chart chart-md" id="chartAnaHourly" role="img" aria-label="报修时段分布"></div>
+              </div>
+            </div>
+
+            <div class="card insight-card">
+              <div class="card-head">
+                <div><h3>分析结论</h3><p>基于历史数据自动归纳</p></div>
+                <span class="badge-soft violet"><svg class="icon"><use href="#i-zap"></use></svg>Insight</span>
+              </div>
+              <div class="insight-list" id="insightList">
+                <div class="skeleton-block"></div>
+              </div>
+              <div class="insight-foot">
+                <span id="insightSource">数据来源：历史工单库</span>
+                <button class="link-btn" id="insightRefresh" type="button"><svg class="icon"><use href="#i-refresh"></use></svg>重新生成</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== 8. 系统架构 ===================== -->
+        <section class="page" id="page-about" data-page="about" aria-label="系统架构">
+          <div class="about-hero">
+            <div class="about-hero-main">
+              <div class="welcome-eyebrow"><span class="pulse-dot"></span>ABOUT THE SYSTEM</div>
+              <h2>智修云 · 小区物业智能体</h2>
+              <p>面向小区物业全场景，以 7 个协作 Agent 覆盖报修「理解 → 派单 → 监控 → 验证 → 闭环」，并扩展住户守护与停车收费；用可解释的决策日志让每一次判断都可追溯、可评估、可优化。</p>
+              <div class="tech-tags">
+                <span class="tech-tag">Python 3.9</span><span class="tech-tag">FastAPI</span><span class="tech-tag">SQLite</span>
+                <span class="tech-tag">原生 HTML / CSS / JS</span><span class="tech-tag">ECharts 5（本地）</span><span class="tech-tag">多智能体编排</span>
+                <span class="tech-tag">规则引擎 + 先验知识</span><span class="tech-tag">零外网依赖</span>
+              </div>
+            </div>
+            <div class="about-hero-side">
+              <div class="version-pill">v1.1.0</div>
+              <div class="health-panel" id="aboutHealth">
+                <div class="health-row"><span class="status-dot"></span><span>API 健康检查</span><strong id="healthStatusText">检测中</strong></div>
+              </div>
+              <div class="about-metrics" id="aboutMetrics">
+                <div class="about-metric"><span>历史工单</span><strong id="aboutHistory">—</strong></div>
+                <div class="about-metric"><span>自动派单准确率</span><strong id="aboutDispatchAcc">—</strong></div>
+                <div class="about-metric"><span>平均决策耗时</span><strong id="aboutDecisionMs">—</strong></div>
+                <div class="about-metric"><span>Agent 数量</span><strong>7</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title"><h3>7 个协作 Agent</h3><p>工单闭环 5 个 + 社区守护与停车收费 2 个，各司其职</p></div>
+          <div class="agent-grid">
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar understanding"><svg class="icon"><use href="#i-eye"></use></svg></div><div><h4>报修理解 Agent</h4><span class="agent-code">understanding</span></div></div>
+              <p class="agent-duty">解析自然语言报修，识别报修类型、设施类型、位置与紧急程度，输出结构化理解结果。</p>
+              <div class="agent-io"><span>输入</span>报修文本 / 楼栋单元<span class="io-arrow">→</span><span>输出</span>类型 · 紧急度 · 置信度</div>
+              <div class="agent-tech"><span>关键词规则</span><span>模糊匹配</span><span>置信度评估</span></div>
+            </article>
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar dispatch"><svg class="icon"><use href="#i-target"></use></svg></div><div><h4>派单决策 Agent</h4><span class="agent-code">dispatch</span></div></div>
+              <p class="agent-duty">综合技能匹配、区域就近、当前负载、历史评分与接单时长，为工单选择最优维修工并生成可解释评分。</p>
+              <div class="agent-io"><span>输入</span>理解结果 / 维修工池<span class="io-arrow">→</span><span>输出</span>维修工 · 时限 · 评分依据</div>
+              <div class="agent-tech"><span>多因子加权</span><span>负载均衡</span><span>先验知识</span></div>
+            </article>
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar monitoring"><svg class="icon"><use href="#i-alert"></use></svg></div><div><h4>过程监控 Agent</h4><span class="agent-code">monitoring</span></div></div>
+              <p class="agent-duty">按 SLA 倒计时扫描工单，识别接单超时、处理超时风险，生成预警并升级至人工座席。</p>
+              <div class="agent-io"><span>输入</span>工单时限 / 状态<span class="io-arrow">→</span><span>输出</span>预警记录 · 升级建议</div>
+              <div class="agent-tech"><span>SLA 扫描</span><span>分级预警</span><span>自动升级</span></div>
+            </article>
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar verification"><svg class="icon"><use href="#i-shield"></use></svg></div><div><h4>闭环验证 Agent</h4><span class="agent-code">verification</span></div></div>
+              <p class="agent-duty">校验完工说明与照片是否满足要求，判定通过或退回整改，保障工单质量与业主满意度。</p>
+              <div class="agent-io"><span>输入</span>完工说明 / 照片数<span class="io-arrow">→</span><span>输出</span>通过 / 退回 · 验证说明</div>
+              <div class="agent-tech"><span>质量规则</span><span>完整性校验</span><span>退回整改</span></div>
+            </article>
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar coordinator"><svg class="icon"><use href="#i-flow"></use></svg></div><div><h4>工单编排中心</h4><span class="agent-code">coordinator</span></div></div>
+              <p class="agent-duty">作为多智能体调度中枢，创建 trace、串联各 Agent、沉淀事件流与决策日志，并归档闭环工单。</p>
+              <div class="agent-io"><span>输入</span>完整工单生命周期<span class="io-arrow">→</span><span>输出</span>trace · 事件 · 指标</div>
+              <div class="agent-tech"><span>流程编排</span><span>可观测性</span><span>指标沉淀</span></div>
+            </article>
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar understanding"><svg class="icon"><use href="#i-shield"></use></svg></div><div><h4>小区守护 Agent</h4><span class="agent-code">community_guard</span></div></div>
+              <p class="agent-duty">巡检住户门禁出入，按年龄、独居/慢病等标签计算连续未出门天数，自动生成分级关怀预警。</p>
+              <div class="agent-io"><span>输入</span>门禁事件 / 住户标签<span class="io-arrow">→</span><span>输出</span>未出门天数 · 风险等级 · 预警</div>
+              <div class="agent-tech"><span>阈值规则</span><span>风险分级</span><span>自动巡检</span></div>
+            </article>
+            <article class="agent-card">
+              <div class="agent-card-head"><div class="agent-avatar dispatch"><svg class="icon"><use href="#i-car"></use></svg></div><div><h4>停车收费 Agent</h4><span class="agent-code">parking</span></div></div>
+              <p class="agent-duty">识别车辆进出，按免费时长、小时费率、单日封顶与月卡规则自动计费，沉淀收入、占用与缴费指标。</p>
+              <div class="agent-io"><span>输入</span>车牌 / 进出时间<span class="io-arrow">→</span><span>输出</span>停车时长 · 应收金额 · 缴费状态</div>
+              <div class="agent-tech"><span>分段计费</span><span>月卡校验</span><span>自动收费</span></div>
+            </article>
+          </div>
+
+          <div class="section-title"><h3>系统数据流</h3><p>从业主报修到工单闭环的端到端链路</p></div>
+          <div class="card flow-card">
+            <div class="flow-map">
+              <div class="flow-col">
+                <div class="flow-node source"><span class="flow-kicker">业主</span><strong>报修入口</strong><small>电话 / 小程序 / 前台</small></div>
+                <div class="flow-node"><span class="flow-kicker">编排中心</span><strong>工单创建</strong><small>生成 trace_id</small></div>
+              </div>
+              <div class="flow-arrow"><span>→</span></div>
+              <div class="flow-col">
+                <div class="flow-node accent-understanding"><span class="flow-kicker">理解 Agent</span><strong>结构化理解</strong><small>类型 · 紧急度 · 位置</small></div>
+                <div class="flow-node accent-dispatch"><span class="flow-kicker">派单 Agent</span><strong>智能派单</strong><small>多因子评分与解释</small></div>
+              </div>
+              <div class="flow-arrow"><span>→</span></div>
+              <div class="flow-col">
+                <div class="flow-node accent-monitoring"><span class="flow-kicker">监控 Agent</span><strong>SLA 监控</strong><small>预警 · 升级</small></div>
+                <div class="flow-node accent-verification"><span class="flow-kicker">验证 Agent</span><strong>闭环验证</strong><small>通过 / 退回整改</small></div>
+              </div>
+              <div class="flow-arrow"><span>→</span></div>
+              <div class="flow-col">
+                <div class="flow-node accent-orchestrator"><span class="flow-kicker">编排中心</span><strong>工单闭环</strong><small>归档 · 指标沉淀</small></div>
+                <div class="flow-node"><span class="flow-kicker">数据层</span><strong>看板 / 报告</strong><small>SQLite · 分析报告</small></div>
+              </div>
+            </div>
+            <div class="flow-legend">
+              <span><i class="legend-dot" style="background:#2563eb"></i>理解</span>
+              <span><i class="legend-dot" style="background:#06b6d4"></i>派单</span>
+              <span><i class="legend-dot" style="background:#f59e0b"></i>监控</span>
+              <span><i class="legend-dot" style="background:#16a34a"></i>验证</span>
+              <span><i class="legend-dot" style="background:#8b5cf6"></i>编排</span>
+              <span class="flow-legend-note">全链路事件与决策日志可追溯</span>
+            </div>
+          </div>
+
+          <div class="two-col-grid">
+            <div class="card">
+              <div class="card-head"><div><h3>三项创新点</h3><p>让工单系统从自动化走向智能化</p></div></div>
+              <ol class="innovation-list">
+                <li><span class="innovation-index">01</span><div><strong>可解释的多因子派单</strong><p>技能匹配、区域就近、负载、历史评分加权打分，输出完整评分依据与候选排名，而非黑盒指派。</p></div></li>
+                <li><span class="innovation-index">02</span><div><strong>全链路 Agent 决策追溯</strong><p>每次决策保留 trace_id、rationale、confidence 与耗时，可回放、可评估，为答辩演示提供完整证据链。</p></div></li>
+                <li><span class="innovation-index">03</span><div><strong>闭环验证与 SLA 自愈</strong><p>完工后自动验证，不通过退回整改；SLA 扫描主动预警升级，形成「派单—执行—验证—闭环」自愈环路。</p></div></li>
+              </ol>
+            </div>
+            <div class="card">
+              <div class="card-head"><div><h3>演示流程</h3><p>答辩现场 6 步走</p></div></div>
+              <ol class="demo-step-list">
+                <li><span class="step-num">1</span><div><strong>总览看板</strong><p>展示历史工单规模、闭环率、超时率与 Agent 指标。</p></div></li>
+                <li><span class="step-num">2</span><div><strong>智能派单</strong><p>输入「5栋1单元水管爆裂」，观察理解与派单决策。</p></div></li>
+                <li><span class="step-num">3</span><div><strong>完整闭环演示</strong><p>一键播放 T+ 时间轴，展示 5 个 Agent 协作全过程。</p></div></li>
+                <li><span class="step-num">4</span><div><strong>工单中心</strong><p>打开工单抽屉，查看事件时间线与决策日志。</p></div></li>
+                <li><span class="step-num">5</span><div><strong>操作闭环</strong><p>标记接单 → 提交完工 → 验证通过 → 自动闭环。</p></div></li>
+                <li><span class="step-num">6</span><div><strong>数据分析</strong><p>查看历史分析与 Agent 评估结论，打开完整报告。</p></div></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="about-footnote">
+            <span>智修云 · 小区物业智能体</span>
+            <span>数据与接口同源 · ECharts 本地加载 · 无外网依赖</span>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== 工单详情抽屉 ===================== -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="ticketDrawer" aria-hidden="true" aria-labelledby="drawerTitle">
+    <header class="drawer-head">
+      <div class="drawer-title-wrap">
+        <span class="drawer-eyebrow"><svg class="icon"><use href="#i-ticket"></use></svg>工单详情</span>
+        <h3 id="drawerTitle">—</h3>
+        <div class="drawer-badges" id="drawerBadges"></div>
+      </div>
+      <button class="icon-btn drawer-close" id="drawerClose" aria-label="关闭详情" type="button">
+        <svg class="icon"><use href="#i-x"></use></svg>
+      </button>
+    </header>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <!-- ===================== 住户关怀抽屉（小区守护） ===================== -->
+  <div class="drawer-overlay" id="residentDrawerOverlay"></div>
+  <aside class="drawer resident-drawer" id="residentDrawer" aria-hidden="true" aria-labelledby="residentDrawerTitle">
+    <header class="drawer-head">
+      <div class="drawer-title-wrap">
+        <span class="drawer-eyebrow"><svg class="icon"><use href="#i-shield"></use></svg>住户关怀档案</span>
+        <h3 id="residentDrawerTitle">—</h3>
+        <div class="drawer-badges" id="residentDrawerBadges"></div>
+      </div>
+      <div class="drawer-head-actions">
+        <button class="btn ghost sm" id="residentDrawerEdit" type="button" disabled>
+          <svg class="icon"><use href="#i-file"></use></svg>编辑画像
+        </button>
+        <button class="icon-btn drawer-close" id="residentDrawerClose" aria-label="关闭住户详情" type="button">
+          <svg class="icon"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+    </header>
+    <div class="drawer-body" id="residentDrawerBody"></div>
+  </aside>
+
+  <!-- ===================== 停车收费弹窗（停车管理） ===================== -->
+  <div class="modal-overlay" id="parkingPayOverlay" hidden>
+    <div class="modal parking-pay-modal" role="dialog" aria-modal="true" aria-labelledby="parkingPayTitle">
+      <header class="modal-head">
+        <div>
+          <span class="modal-eyebrow"><svg class="icon"><use href="#i-car"></use></svg>车辆出场 · 自动计费</span>
+          <h3 id="parkingPayTitle">收费确认</h3>
+        </div>
+        <button class="icon-btn" id="parkingPayClose" type="button" aria-label="关闭收费弹窗">
+          <svg class="icon"><use href="#i-x"></use></svg>
+        </button>
+      </header>
+      <div class="pay-summary" id="parkingPaySummary"></div>
+      <div class="pay-methods" id="parkingPayMethods">
+        <button class="pay-method wechat" type="button" data-pay-method="微信">
+          <svg class="icon"><use href="#i-check"></use></svg><strong>微信支付</strong><span>扫码收款</span>
+        </button>
+        <button class="pay-method alipay" type="button" data-pay-method="支付宝">
+          <svg class="icon"><use href="#i-check"></use></svg><strong>支付宝</strong><span>扫码收款</span>
+        </button>
+        <button class="pay-method cash" type="button" data-pay-method="现金">
+          <svg class="icon"><use href="#i-check"></use></svg><strong>现金</strong><span>岗亭收款</span>
+        </button>
+      </div>
+      <div class="pay-error" id="parkingPayError" hidden></div>
+      <footer class="modal-foot">
+        <button class="btn ghost" id="parkingPayLater" type="button">稍后缴费</button>
+        <span class="modal-hint">稍后缴费会在「最近进出记录」中保留待缴费记录</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===================== 住户档案表单弹窗（小区守护） ===================== -->
+  <div class="modal-overlay" id="residentFormOverlay" hidden>
+    <div class="modal resident-form-modal" role="dialog" aria-modal="true" aria-labelledby="residentFormTitle">
+      <header class="modal-head">
+        <div>
+          <span class="modal-eyebrow"><svg class="icon"><use href="#i-user"></use></svg>住户画像 · 档案录入</span>
+          <h3 id="residentFormTitle">新增住户</h3>
+          <p class="modal-sub" id="residentFormSub">填写基础档案与关怀信息，保存后由住户画像 Agent 自动生成画像与关怀等级</p>
+        </div>
+        <button class="icon-btn" id="residentFormClose" type="button" aria-label="关闭住户表单">
+          <svg class="icon"><use href="#i-x"></use></svg>
+        </button>
+      </header>
+
+      <form id="residentForm" class="resident-form" novalidate>
+        <div class="resident-form-body">
+          <div class="form-section">
+            <h4><svg class="icon"><use href="#i-user"></use></svg>基础信息</h4>
+            <div class="rf-grid">
+              <label class="form-field"><span>姓名 <em>*</em></span><input id="rfName" name="name" placeholder="例如 王秀兰" maxlength="40" autocomplete="off"></label>
+              <label class="form-field"><span>性别</span>
+                <div class="select-wrap">
+                  <select id="rfGender">
+                    <option value="女">女</option>
+                    <option value="男">男</option>
+                    <option value="未知">未知</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="form-field"><span>年龄</span><input id="rfAge" type="number" min="0" max="120" placeholder="例如 78" inputmode="numeric"></label>
+              <label class="form-field"><span>联系电话</span><input id="rfPhone" placeholder="13800000000" maxlength="30" autocomplete="off"></label>
+            </div>
+            <div class="rf-grid rf-grid-3">
+              <label class="form-field"><span>楼栋 <em>*</em></span><input id="rfBuilding" placeholder="例如 12栋" maxlength="20" autocomplete="off"></label>
+              <label class="form-field"><span>单元</span><input id="rfUnit" placeholder="例如 2单元" maxlength="20" autocomplete="off"></label>
+              <label class="form-field"><span>房号</span><input id="rfRoom" placeholder="例如 301" maxlength="20" autocomplete="off"></label>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h4><svg class="icon"><use href="#i-shield"></use></svg>关怀标签</h4>
+            <div class="tag-choices" id="rfTagChoices">
+              <label class="tag-choice"><input type="checkbox" value="独居老人"><span>独居老人</span></label>
+              <label class="tag-choice"><input type="checkbox" value="慢病"><span>慢病</span></label>
+              <label class="tag-choice"><input type="checkbox" value="行动不便"><span>行动不便</span></label>
+              <label class="tag-choice"><input type="checkbox" value="高龄"><span>高龄</span></label>
+              <label class="tag-choice"><input type="checkbox" value="残障"><span>残障</span></label>
+            </div>
+            <p class="form-hint">标签会影响画像生成与预警阈值（独居/高龄/慢病等标签会提高关怀等级）</p>
+          </div>
+
+          <div class="form-section">
+            <h4><svg class="icon"><use href="#i-robot"></use></svg>画像信息</h4>
+            <div class="rf-grid">
+              <label class="form-field"><span>居住状态</span>
+                <div class="select-wrap">
+                  <select id="rfLiving">
+                    <option value="">未填写</option>
+                    <option value="独居">独居</option>
+                    <option value="与家人同住">与家人同住</option>
+                    <option value="空巢">空巢</option>
+                    <option value="机构照护">机构照护</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="form-field"><span>健康状况</span>
+                <input id="rfHealth" list="rfHealthOptions" placeholder="例如 健康 / 高血压" maxlength="30" autocomplete="off">
+                <datalist id="rfHealthOptions">
+                  <option value="健康"></option>
+                  <option value="高血压"></option>
+                  <option value="糖尿病"></option>
+                  <option value="心脏病"></option>
+                  <option value="认知障碍"></option>
+                  <option value="其他"></option>
+                </datalist>
+              </label>
+              <label class="form-field"><span>行动能力</span>
+                <div class="select-wrap">
+                  <select id="rfMobility">
+                    <option value="">未填写</option>
+                    <option value="行动自如">行动自如</option>
+                    <option value="行动缓慢">行动缓慢</option>
+                    <option value="行动不便">行动不便</option>
+                    <option value="卧床">卧床</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+              <label class="form-field"><span>关怀等级</span>
+                <div class="select-wrap">
+                  <select id="rfCareLevel">
+                    <option value="">自动评估</option>
+                    <option value="常规">常规</option>
+                    <option value="日常关注">日常关注</option>
+                    <option value="重点关注">重点关注</option>
+                    <option value="特殊关怀">特殊关怀</option>
+                  </select>
+                  <svg class="icon select-arrow"><use href="#i-chevron-down"></use></svg>
+                </div>
+              </label>
+            </div>
+            <div class="rf-grid">
+              <label class="form-field"><span>家属信息</span><input id="rfFamily" placeholder="例如 王先生 13900000000" maxlength="100" autocomplete="off"></label>
+              <label class="form-field"><span>紧急联系人</span><input id="rfEmergency" placeholder="例如 王先生 13900000000" maxlength="100" autocomplete="off"></label>
+            </div>
+            <div class="form-field">
+              <span>服务需求</span>
+              <div class="tag-choices service-choices" id="rfServiceChoices">
+                <label class="tag-choice"><input type="checkbox" value="每日问候"><span>每日问候</span></label>
+                <label class="tag-choice"><input type="checkbox" value="用药提醒"><span>用药提醒</span></label>
+                <label class="tag-choice"><input type="checkbox" value="陪同就医"><span>陪同就医</span></label>
+                <label class="tag-choice"><input type="checkbox" value="助餐"><span>助餐</span></label>
+                <label class="tag-choice"><input type="checkbox" value="助浴"><span>助浴</span></label>
+                <label class="tag-choice"><input type="checkbox" value="家政保洁"><span>家政保洁</span></label>
+                <label class="tag-choice"><input type="checkbox" value="紧急呼叫"><span>紧急呼叫</span></label>
+              </div>
+            </div>
+            <div class="rf-grid">
+              <label class="form-field"><span>生活习惯</span><input id="rfHabits" placeholder="例如 每天晨间外出散步" maxlength="200" autocomplete="off"></label>
+              <label class="form-field"><span>备注</span><input id="rfNotes" placeholder="补充说明（可选）" maxlength="200" autocomplete="off"></label>
+            </div>
+          </div>
+
+          <div class="form-error" id="residentFormError" hidden></div>
+        </div>
+
+        <footer class="modal-foot resident-form-foot">
+          <span class="modal-hint">带 <em class="required-mark">*</em> 为必填；关怀等级选择「自动评估」时由画像 Agent 判定</span>
+          <div class="modal-actions">
+            <button class="btn ghost" id="residentFormCancel" type="button">取消</button>
+            <button class="btn primary" id="residentFormSubmit" type="submit"><svg class="icon"><use href="#i-check"></use></svg><span id="residentFormSubmitText">保存住户</span></button>
+          </div>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== 全局提示 ===================== -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="false"></div>
+
+  <noscript>
+    <div class="noscript">智修云看板需要启用 JavaScript 才能运行，请开启后刷新页面。</div>
+  </noscript>
+
+  <script src="/static/vendor/echarts.min.js" defer></script>
+  <script src="/static/js/sample.js" defer></script>
+  <script src="/static/js/api.js" defer></script>
+  <script src="/static/js/charts.js" defer></script>
+  <script src="/static/js/demo.js" defer></script>
+  <script src="/static/js/community.js" defer></script>
+  <script src="/static/js/parking.js" defer></script>
+  <script src="/static/js/app.js" defer></script>
+</body>
+</html>

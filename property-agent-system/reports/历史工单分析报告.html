@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>历史工单分析报告 · 智修云</title>
+<style>
+:root { --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#2563eb; --bg:#f8fafc; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; line-height:1.85; }
+.report-top { background:linear-gradient(125deg,#0b1f3a 0%,#123a6b 55%,#0e7490 100%); color:#fff; padding:44px 0 38px; }
+.wrap { width:min(980px,92vw); margin:0 auto; }
+.report-top .eyebrow { letter-spacing:.22em; font-size:12px; color:#7dd3fc; text-transform:uppercase; }
+.report-top h1 { margin:10px 0 8px; font-size:34px; line-height:1.3; font-weight:700; color:#ffffff; }
+.report-top p { margin:0; color:#c7d7ee; font-size:14px; }
+.report-top .meta { display:flex; gap:16px; flex-wrap:wrap; margin-top:18px; color:#dbeafe; font-size:13px; }
+.report-top .meta span { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.16); border-radius:999px; padding:5px 14px; }
+.toolbar { display:flex; justify-content:space-between; align-items:center; margin:18px 0 0; }
+.toolbar a, .toolbar button { border:1px solid var(--line); background:#fff; color:#334155; padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; text-decoration:none; }
+.toolbar a:hover, .toolbar button:hover { border-color:var(--brand); color:var(--brand); }
+.paper { background:#fff; margin:22px auto 50px; padding:54px 64px; border:1px solid var(--line); border-radius:14px; box-shadow:0 18px 50px rgba(15,23,42,.08); }
+h1 { font-size:30px; margin:0 0 18px; color:#0b1f3a; }
+h2 { font-size:23px; margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--line); color:#0b1f3a; }
+h3 { font-size:18px; margin:28px 0 10px; color:#1e3a8a; }
+h4 { font-size:16px; margin:22px 0 8px; }
+p { margin:10px 0; color:#334155; }
+strong { color:#0f172a; }
+table { width:100%; border-collapse:collapse; margin:16px 0 22px; font-size:13.5px; }
+th { background:#eff6ff; color:#1e40af; font-weight:600; text-align:left; }
+th, td { border:1px solid #e2e8f0; padding:9px 11px; vertical-align:top; }
+tr:nth-child(even) td { background:#f8fafc; }
+img { max-width:100%; height:auto; display:block; margin:18px auto 8px; border:1px solid var(--line); border-radius:10px; }
+blockquote { margin:16px 0; padding:12px 18px; background:#f0f9ff; border-left:4px solid #0ea5e9; color:#0c4a6e; }
+code { background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:.9em; }
+pre { background:#0f172a; color:#e2e8f0; padding:16px; border-radius:10px; overflow:auto; }
+pre code { background:transparent; color:inherit; }
+ul, ol { padding-left:24px; color:#334155; }
+li { margin:5px 0; }
+hr { border:0; border-top:1px solid var(--line); margin:30px 0; }
+.foot { text-align:center; color:var(--muted); font-size:12px; padding-bottom:30px; }
+@media (max-width:720px) { .paper { padding:28px 20px; } .report-top h1 { font-size:25px; } }
+@media print {
+  body { background:#fff; }
+  .report-top { background:#0b1f3a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .toolbar { display:none; }
+  .paper { border:0; box-shadow:none; margin:0; padding:20px 0; }
+  h2 { page-break-after:avoid; }
+  table, img { page-break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+<header class="report-top">
+  <div class="wrap">
+    <div class="eyebrow">ZHIXIU CLOUD · DATA ANALYSIS</div>
+    <h1>小区物业历史报修工单数据分析报告</h1>
+    <p>智修云 · 多智能体物业工单闭环系统 · 离线分析分册</p>
+    <div class="meta"><span>3000 条历史工单</span><span>180 天</span><span>13 类报修</span><span>12 名维修工</span></div>
+  </div>
+</header>
+<div class="wrap">
+  <div class="toolbar">
+    <a href="/">← 返回智修云看板</a>
+    <button onclick="window.print()">打印 / 导出 PDF</button>
+  </div>
+  <main class="paper"><h1>小区物业历史报修工单数据分析报告</h1>
+<p><strong>项目</strong>：智修云 · 多智能体物业工单系统<br>
+<strong>数据文件</strong>：<code>data/historical_orders.csv</code>（3000 条，2026-04-24 至 2026-10-20，共 180 天）<br>
+<strong>生成脚本</strong>：<code>scripts/generate_data.py</code>（随机种子 20261020，可重复生成）<br>
+<strong>分析脚本</strong>：<code>scripts/analyze.py</code>　<strong>报告生成时间</strong>：2026-10-20 14:24:25</p>
+<h2>摘要</h2>
+<p>本报告基于 3000 条小区物业历史报修工单，从报修类型、时空分布、超时与闭环、维修工效率四个维度进行离线分析，并提取可供在线派单 Agent 使用的先验特征。结果显示：整体闭环率 93.6%，超时率 12.1%，平均处理时长 92.9 分钟、平均响应 28.9 分钟，闭环满意度 4.50 分；给排水类工单占比最高，工作日 8-11 点与 18-21 点形成明显双高峰；超时与未闭环高度相关，超时工单闭环率仅 57.5%。分析结果已沉淀为 <code>data/dispatch_priors.json</code>，直接服务于自动派单决策。</p>
+<h2>一、数据说明与字段</h2>
+<h3>1.1 数据范围与性质</h3>
+<p>数据覆盖 5 个小区（锦绣家园、翠湖名居、阳光里、江南雅苑、金域蓝湾）、13 类报修、12 名维修工，时间跨度 180 天（2026-04-24 ~ 2026-10-20），共 3000 条工单，日均 16.7 单。数据依据真实物业工单业务规则与业主作息规律模拟生成，固定随机种子 20261020，可完全复现；不包含任何真实业主隐私信息，仅用于系统开发、算法离线验证与毕业论文实验。</p>
+<h3>1.2 字段说明</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order_id</td>
+<td>字符串</td>
+<td>工单编号，WO + 日期 + 当日流水号</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>时间</td>
+<td>业主报修时间（YYYY-MM-DD HH:MM:SS）</td>
+</tr>
+<tr>
+<td>community</td>
+<td>字符串</td>
+<td>小区名称，共 5 个</td>
+</tr>
+<tr>
+<td>building</td>
+<td>字符串</td>
+<td>楼栋，如 5栋</td>
+</tr>
+<tr>
+<td>unit</td>
+<td>字符串</td>
+<td>单元，如 1单元</td>
+</tr>
+<tr>
+<td>room</td>
+<td>字符串</td>
+<td>房号，如 1203</td>
+</tr>
+<tr>
+<td>description</td>
+<td>字符串</td>
+<td>业主口语化报修描述，含地点与症状</td>
+</tr>
+<tr>
+<td>repair_type</td>
+<td>类别</td>
+<td>报修类型，13 类之一</td>
+</tr>
+<tr>
+<td>facility_type</td>
+<td>类别</td>
+<td>设施类型，由报修类型唯一决定</td>
+</tr>
+<tr>
+<td>urgency</td>
+<td>类别</td>
+<td>紧急程度：紧急/高/中/低</td>
+</tr>
+<tr>
+<td>worker_id</td>
+<td>字符串</td>
+<td>维修工编号 W001-W012</td>
+</tr>
+<tr>
+<td>worker_name</td>
+<td>字符串</td>
+<td>维修工姓名</td>
+</tr>
+<tr>
+<td>worker_trade</td>
+<td>类别</td>
+<td>维修工工种，与报修类型匹配</td>
+</tr>
+<tr>
+<td>dispatch_mode</td>
+<td>类别</td>
+<td>派单方式：auto 自动 / manual 人工</td>
+</tr>
+<tr>
+<td>reassigned</td>
+<td>0/1</td>
+<td>是否发生人工改派</td>
+</tr>
+<tr>
+<td>response_minutes</td>
+<td>数值</td>
+<td>从报修到接单的响应时长（分钟）</td>
+</tr>
+<tr>
+<td>duration_minutes</td>
+<td>数值</td>
+<td>从接单到完工的处理时长（分钟）</td>
+</tr>
+<tr>
+<td>sla_minutes</td>
+<td>整数</td>
+<td>该类型规定处理时限（分钟）</td>
+</tr>
+<tr>
+<td>is_timeout</td>
+<td>0/1</td>
+<td>是否超时，严格由 duration_minutes &gt; sla_minutes 判定</td>
+</tr>
+<tr>
+<td>is_closed</td>
+<td>0/1</td>
+<td>是否已闭环</td>
+</tr>
+<tr>
+<td>satisfaction</td>
+<td>数值</td>
+<td>闭环满意度，3.2-5.0；未闭环为空</td>
+</tr>
+<tr>
+<td>photos_count</td>
+<td>整数</td>
+<td>处理照片数量，0-4 张</td>
+</tr>
+<tr>
+<td>result_note</td>
+<td>字符串</td>
+<td>处理记录短句；未闭环可为空</td>
+</tr>
+<tr>
+<td>source</td>
+<td>类别</td>
+<td>报修来源：业主App/电话/微信小程序/前台登记</td>
+</tr>
+</tbody>
+</table>
+<h3>1.3 数据质量校验</h3>
+<p>分析前对数据执行了严格校验：① 工单数量恰好 3000 行、字段顺序与契约一致；② 13 类报修类型与（设施类型、紧急程度、SLA、责任工种）的映射 100% 合法，例如“电梯困人 → 电梯 / 紧急 / 30 分钟 / 电梯维保”；③ <code>is_timeout</code> 与 <code>duration_minutes &gt; sla_minutes</code> 逐行严格一致；④ 维修工编号、姓名、工种三者一致，且每类工单只派给对应工种；⑤ 闭环工单满意度均落在 3.2-5.0，未闭环工单满意度为空；⑥ 各紧急程度响应时长分别落在 2-15、5-30、10-60、20-120 分钟区间内。上述校验全部通过，数据可直接用于统计分析与 Agent 先验提取。</p>
+<h2>二、分析方法</h2>
+<h3>2.1 预处理</h3>
+<p>使用 pandas 读取 CSV 并解析 <code>created_at</code>，派生日期、月份、小时、星期、是否周末等字段，将数值列转换为数值类型。分析过程中不剔除任何记录，未闭环工单在满意度、处理记录等字段上的空值按业务含义保留，不参与对应指标的均值计算。</p>
+<h3>2.2 统计口径</h3>
+<ul>
+<li><strong>闭环率</strong> = <code>is_closed = 1</code> 的工单数 / 工单总数；</li>
+<li><strong>超时率</strong> = <code>is_timeout = 1</code> 的工单数 / 工单总数，超时仅由处理时长是否超过该类型 SLA 严格判定；</li>
+<li><strong>平均处理时长 / 平均响应时长</strong> 分别为 <code>duration_minutes</code>、<code>response_minutes</code> 的算术均值；</li>
+<li><strong>P90 时长</strong> 为同一类型工单处理时长的 90% 分位数，用于刻画长尾；</li>
+<li><strong>满意度</strong> 仅统计已闭环工单，未闭环不计入；</li>
+<li>分类型、分楼栋、分维修工的比率均以对应分组工单数为分母。</li>
+</ul>
+<h3>2.3 维修工效率指数</h3>
+<p>为综合衡量维修工表现，构造效率指数：</p>
+<p><code>效率指数 = 100 × (0.5 × 准时率 + 0.3 × 满意度 / 5 + 0.2 × 时长指数)</code></p>
+<p>其中准时率 = 1 − 超时率，时长指数 = min(1, 全部工单平均时长 / 该维修工平均时长)。该指数兼顾“按时完成、业主满意、处理高效”三个目标，数值越高表示综合效率越好，用于横向对比与派单参考。</p>
+<h3>2.4 工具与可复现性</h3>
+<p>分析使用 Python 3、pandas 2.3.3、numpy 与 matplotlib 3.9.4；随机种子固定，任何一次重新生成与重新分析都会得到一致的数值结果。</p>
+<h2>三、总体指标</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>统计口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工单总数</td>
+<td>3000 单</td>
+<td>CSV 全部记录</td>
+</tr>
+<tr>
+<td>时间范围</td>
+<td>2026-04-24 ~ 2026-10-20（180 天）</td>
+<td>created_at 最小/最大值</td>
+</tr>
+<tr>
+<td>日均工单量</td>
+<td>16.7 单/天</td>
+<td>工单总数 / 天数</td>
+</tr>
+<tr>
+<td>闭环率</td>
+<td>93.6%</td>
+<td>is_closed = 1 占比</td>
+</tr>
+<tr>
+<td>超时率</td>
+<td>12.1%</td>
+<td>is_timeout = 1 占比</td>
+</tr>
+<tr>
+<td>平均处理时长</td>
+<td>92.9 分钟</td>
+<td>duration_minutes 均值</td>
+</tr>
+<tr>
+<td>平均响应时长</td>
+<td>28.9 分钟</td>
+<td>response_minutes 均值</td>
+</tr>
+<tr>
+<td>闭环满意度</td>
+<td>4.50 分</td>
+<td>闭环工单 satisfaction 均值</td>
+</tr>
+<tr>
+<td>自动派单率</td>
+<td>94.2%</td>
+<td>dispatch_mode = auto 占比</td>
+</tr>
+<tr>
+<td>人工派单率</td>
+<td>5.8%</td>
+<td>dispatch_mode = manual 占比</td>
+</tr>
+<tr>
+<td>改派率</td>
+<td>5.3%</td>
+<td>reassigned = 1 占比</td>
+</tr>
+<tr>
+<td>未闭环工单</td>
+<td>193 单</td>
+<td>is_closed = 0 记录</td>
+</tr>
+</tbody>
+</table>
+<p>从总体看，系统在 180 天内处理 3000 单，闭环率 93.6%、超时率 12.1%，平均响应 28.9 分钟，平均处理 92.9 分钟，闭环满意度 4.50 分。自动派单占比 94.2%，人工派单与改派分别占 5.8% 和 5.3%，说明绝大多数工单可由规则引擎自动完成派发，人工主要介入复杂或异常工单。</p>
+<h2>四、报修类型分析</h2>
+<h3>4.1 类型分布</h3>
+<table>
+<thead>
+<tr>
+<th>报修类型</th>
+<th>工单数</th>
+<th>占比</th>
+<th>紧急程度</th>
+<th>SLA(分钟)</th>
+<th>平均时长</th>
+<th>P90</th>
+<th>超时率</th>
+<th>满意度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>水管漏水</td>
+<td>504</td>
+<td>16.8%</td>
+<td>高</td>
+<td>120</td>
+<td>84.9</td>
+<td>127.3</td>
+<td>12.5%</td>
+<td>4.51</td>
+</tr>
+<tr>
+<td>下水道堵塞</td>
+<td>377</td>
+<td>12.6%</td>
+<td>中</td>
+<td>120</td>
+<td>78.9</td>
+<td>126.4</td>
+<td>12.5%</td>
+<td>4.50</td>
+</tr>
+<tr>
+<td>电路故障</td>
+<td>321</td>
+<td>10.7%</td>
+<td>高</td>
+<td>60</td>
+<td>42.8</td>
+<td>62.1</td>
+<td>12.5%</td>
+<td>4.49</td>
+</tr>
+<tr>
+<td>环境卫生</td>
+<td>283</td>
+<td>9.4%</td>
+<td>低</td>
+<td>480</td>
+<td>119.5</td>
+<td>507.2</td>
+<td>12.4%</td>
+<td>4.51</td>
+</tr>
+<tr>
+<td>电梯故障</td>
+<td>278</td>
+<td>9.3%</td>
+<td>高</td>
+<td>60</td>
+<td>44.7</td>
+<td>63.9</td>
+<td>12.6%</td>
+<td>4.48</td>
+</tr>
+<tr>
+<td>公共照明</td>
+<td>269</td>
+<td>9.0%</td>
+<td>中</td>
+<td>240</td>
+<td>88.5</td>
+<td>252.3</td>
+<td>12.6%</td>
+<td>4.54</td>
+</tr>
+<tr>
+<td>门禁故障</td>
+<td>266</td>
+<td>8.9%</td>
+<td>中</td>
+<td>240</td>
+<td>103.1</td>
+<td>249.4</td>
+<td>12.4%</td>
+<td>4.52</td>
+</tr>
+<tr>
+<td>墙面地面破损</td>
+<td>248</td>
+<td>8.3%</td>
+<td>低</td>
+<td>480</td>
+<td>267.5</td>
+<td>504.5</td>
+<td>12.5%</td>
+<td>4.52</td>
+</tr>
+<tr>
+<td>其他报修</td>
+<td>217</td>
+<td>7.2%</td>
+<td>中</td>
+<td>240</td>
+<td>114.6</td>
+<td>250.1</td>
+<td>12.4%</td>
+<td>4.51</td>
+</tr>
+<tr>
+<td>水管爆裂</td>
+<td>82</td>
+<td>2.7%</td>
+<td>紧急</td>
+<td>30</td>
+<td>21.4</td>
+<td>32.2</td>
+<td>12.2%</td>
+<td>4.46</td>
+</tr>
+<tr>
+<td>电梯困人</td>
+<td>61</td>
+<td>2.0%</td>
+<td>紧急</td>
+<td>30</td>
+<td>18.0</td>
+<td>23.4</td>
+<td>4.9%</td>
+<td>4.54</td>
+</tr>
+<tr>
+<td>消防隐患</td>
+<td>48</td>
+<td>1.6%</td>
+<td>紧急</td>
+<td>15</td>
+<td>9.6</td>
+<td>12.0</td>
+<td>4.2%</td>
+<td>4.44</td>
+</tr>
+<tr>
+<td>燃气泄漏</td>
+<td>46</td>
+<td>1.5%</td>
+<td>紧急</td>
+<td>15</td>
+<td>10.3</td>
+<td>13.4</td>
+<td>4.3%</td>
+<td>4.51</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="图 1 报修类型分布" src="figures/01_type_distribution.png"></p>
+<p>水管漏水（504 单，16.8%）、下水道堵塞（377 单，12.6%）与电路故障（321 单，10.7%）是最高频的三类报修。从设施维度看，给排水 963 单（32.1%）、电梯 339 单（11.3%）、电气 321 单（10.7%）、环境 283 单（9.4%）、照明 269 单（9.0%）；给排水类工单量明显高于其他设施，是物业日常运维最主要的压力来源；电梯类工单虽然总量不大，但包含电梯困人等紧急场景，安全权重远高于其数量占比。</p>
+<h3>4.2 类型与紧急程度</h3>
+<p>各类型紧急程度分布为 紧急 237 单（7.9%）、高 1103 单（36.8%）、中 1129 单（37.6%）、低 531 单（17.7%）。紧急工单平均响应 7.1 分钟，远快于低紧急度工单的 64.2 分钟，表明派单与接单流程对紧急程度做出了实质响应。SLA 方面，15~30 分钟的短时限类型（燃气泄漏、消防隐患、电梯困人、水管爆裂）共同构成安全底线，其中电梯困人、燃气泄漏、消防隐患的超时率分别仅 4.9%、4.3%、4.2%；而 240~480 分钟的长时限类型（门禁故障、公共照明、墙面地面破损等）超时率相对更高，可能与配件到货周期、业主在家时间等因素有关。</p>
+<h2>五、时空分布</h2>
+<h3>5.1 小时与周内规律</h3>
+<p>从小时分布看，工单呈现明显的“双高峰”特征：8-11 点合计 834 单，占 27.8%；18-21 点合计 848 单，占 28.3%；峰值出现在 19 点（255 单）和 10 点（235 单）。0-6 点仅 204 单，占 6.8%，与业主作息高度吻合。周末共 909 单（占 30.3%），周末日均 17.5 单，比工作日的 16.3 单高 7.0%，说明业主在家时间越长，报修意愿越强。</p>
+<p><img alt="图 6 周内×小时工单热力图" src="figures/06_hourly_heatmap_or_bar.png"></p>
+<h3>5.2 日趋势与月度波动</h3>
+<p>近 90 天工单量在 12~31 单/天之间波动，日均 17.0 单，整体平稳，没有长期恶化趋势。月度上，完整月份（2026-05 ~ 2026-09）的月工单量在 496~520 单之间，2026-07 最多（520 单，超时率 10.0%）；首尾两个月为不完整月份（2026-04 自 24 日起、2026-10 截至 20 日），分别 107 单与 347 单，不宜直接与整月对比。</p>
+<p><img alt="图 2 近90天工单量趋势" src="figures/02_daily_trend.png"></p>
+<table>
+<thead>
+<tr>
+<th>月份</th>
+<th>工单数</th>
+<th>闭环率</th>
+<th>超时率</th>
+<th>平均处理时长(分钟)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-04</td>
+<td>107</td>
+<td>92.5%</td>
+<td>17.8%</td>
+<td>113.7</td>
+</tr>
+<tr>
+<td>2026-05</td>
+<td>496</td>
+<td>95.4%</td>
+<td>9.5%</td>
+<td>89.2</td>
+</tr>
+<tr>
+<td>2026-06</td>
+<td>512</td>
+<td>92.4%</td>
+<td>14.3%</td>
+<td>90.5</td>
+</tr>
+<tr>
+<td>2026-07</td>
+<td>520</td>
+<td>94.0%</td>
+<td>10.0%</td>
+<td>89.7</td>
+</tr>
+<tr>
+<td>2026-08</td>
+<td>518</td>
+<td>92.3%</td>
+<td>11.6%</td>
+<td>88.7</td>
+</tr>
+<tr>
+<td>2026-09</td>
+<td>500</td>
+<td>93.2%</td>
+<td>12.6%</td>
+<td>102.5</td>
+</tr>
+<tr>
+<td>2026-10</td>
+<td>347</td>
+<td>94.8%</td>
+<td>13.8%</td>
+<td>92.8</td>
+</tr>
+</tbody>
+</table>
+<h3>5.3 楼栋分布</h3>
+<p>64.6% 的工单集中在前 5 栋楼，其中 6栋工单最多（420 单，占 14.0%）。在工单量不少于 60 单的楼栋中，8栋的超时率最高（14.5%），建议作为驻点人员与备件前置的重点楼栋，并进一步排查其工单结构与维修动线。</p>
+<p><img alt="图 4 工单量Top10楼栋" src="figures/04_building_ranking.png"></p>
+<table>
+<thead>
+<tr>
+<th>楼栋</th>
+<th>工单数</th>
+<th>占比</th>
+<th>超时率</th>
+<th>平均处理时长(分钟)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6栋</td>
+<td>420</td>
+<td>14.0%</td>
+<td>12.1%</td>
+<td>90.2</td>
+</tr>
+<tr>
+<td>3栋</td>
+<td>396</td>
+<td>13.2%</td>
+<td>11.1%</td>
+<td>91.2</td>
+</tr>
+<tr>
+<td>1栋</td>
+<td>389</td>
+<td>13.0%</td>
+<td>12.9%</td>
+<td>91.7</td>
+</tr>
+<tr>
+<td>4栋</td>
+<td>374</td>
+<td>12.5%</td>
+<td>11.8%</td>
+<td>91.8</td>
+</tr>
+<tr>
+<td>2栋</td>
+<td>357</td>
+<td>11.9%</td>
+<td>12.0%</td>
+<td>98.6</td>
+</tr>
+<tr>
+<td>5栋</td>
+<td>354</td>
+<td>11.8%</td>
+<td>12.4%</td>
+<td>95.0</td>
+</tr>
+<tr>
+<td>7栋</td>
+<td>285</td>
+<td>9.5%</td>
+<td>10.2%</td>
+<td>90.6</td>
+</tr>
+<tr>
+<td>8栋</td>
+<td>221</td>
+<td>7.4%</td>
+<td>14.5%</td>
+<td>98.9</td>
+</tr>
+<tr>
+<td>9栋</td>
+<td>126</td>
+<td>4.2%</td>
+<td>14.3%</td>
+<td>93.6</td>
+</tr>
+<tr>
+<td>10栋</td>
+<td>78</td>
+<td>2.6%</td>
+<td>9.0%</td>
+<td>82.5</td>
+</tr>
+</tbody>
+</table>
+<h2>六、超时与闭环分析</h2>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>工单数</th>
+<th>闭环率</th>
+<th>平均处理时长(分钟)</th>
+<th>平均响应(分钟)</th>
+<th>平均满意度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>超时工单</td>
+<td>362</td>
+<td>57.5%</td>
+<td>223.1</td>
+<td>28.7</td>
+<td>4.19</td>
+</tr>
+<tr>
+<td>非超时工单</td>
+<td>2638</td>
+<td>98.5%</td>
+<td>75.1</td>
+<td>28.9</td>
+<td>4.53</td>
+</tr>
+</tbody>
+</table>
+<p>超时与闭环之间存在显著关联：超时工单闭环率仅 57.5%，而非超时工单闭环率达到 98.5%，相差 41.0 个百分点；3000 单中有 193 单未闭环，其中 79.8% 属于超时工单。可见“超时 → 业主不满 / 返工 → 未闭环”是主要风险链路。分类型看，超时率最低的是消防隐患（4.2%）、燃气泄漏（4.3%）和电梯困人（4.9%），均属于 SLA 短、处置流程标准化的紧急工单；超时率最高的是电梯故障（12.6%）。</p>
+<p>满意度方面，闭环工单平均 4.50 分，其中非超时工单 4.53 分、超时工单 4.19 分，超时直接拉低约 0.34 分。分类型满意度最高的是公共照明（4.54），最低的是消防隐患（4.44）；最低类型样本量为 48 单，差异不宜过度解读，建议结合回访记录进一步分析。</p>
+<p><img alt="图 3 各类型超时率" src="figures/03_timeout_by_type.png"></p>
+<h2>七、维修工效率</h2>
+<table>
+<thead>
+<tr>
+<th>工号</th>
+<th>姓名</th>
+<th>工种</th>
+<th>工单数</th>
+<th>平均时长(分钟)</th>
+<th>超时率</th>
+<th>满意度</th>
+<th>效率指数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W007</td>
+<td>孙杰</td>
+<td>燃气抢修</td>
+<td>46</td>
+<td>10.3</td>
+<td>4.3%</td>
+<td>4.51</td>
+<td>94.9</td>
+</tr>
+<tr>
+<td>W010</td>
+<td>郑海</td>
+<td>秩序维护</td>
+<td>48</td>
+<td>9.6</td>
+<td>4.2%</td>
+<td>4.44</td>
+<td>94.6</td>
+</tr>
+<tr>
+<td>W001</td>
+<td>张伟</td>
+<td>电梯维保</td>
+<td>160</td>
+<td>37.9</td>
+<td>10.6%</td>
+<td>4.48</td>
+<td>91.6</td>
+</tr>
+<tr>
+<td>W003</td>
+<td>王建国</td>
+<td>水电工</td>
+<td>487</td>
+<td>76.4</td>
+<td>11.5%</td>
+<td>4.49</td>
+<td>91.2</td>
+</tr>
+<tr>
+<td>W005</td>
+<td>陈明</td>
+<td>电工</td>
+<td>341</td>
+<td>65.8</td>
+<td>11.7%</td>
+<td>4.51</td>
+<td>91.2</td>
+</tr>
+<tr>
+<td>W002</td>
+<td>李强</td>
+<td>电梯维保</td>
+<td>179</td>
+<td>41.6</td>
+<td>11.7%</td>
+<td>4.50</td>
+<td>91.1</td>
+</tr>
+<tr>
+<td>W004</td>
+<td>赵磊</td>
+<td>水电工</td>
+<td>476</td>
+<td>77.9</td>
+<td>13.4%</td>
+<td>4.51</td>
+<td>90.4</td>
+</tr>
+<tr>
+<td>W006</td>
+<td>刘洋</td>
+<td>电工</td>
+<td>249</td>
+<td>60.6</td>
+<td>13.7%</td>
+<td>4.52</td>
+<td>90.3</td>
+</tr>
+<tr>
+<td>W008</td>
+<td>周敏</td>
+<td>综合维修</td>
+<td>263</td>
+<td>108.7</td>
+<td>12.2%</td>
+<td>4.53</td>
+<td>88.2</td>
+</tr>
+<tr>
+<td>W012</td>
+<td>何静</td>
+<td>综合维修</td>
+<td>220</td>
+<td>107.8</td>
+<td>12.7%</td>
+<td>4.49</td>
+<td>87.8</td>
+</tr>
+<tr>
+<td>W009</td>
+<td>吴芳</td>
+<td>保洁</td>
+<td>283</td>
+<td>119.5</td>
+<td>12.4%</td>
+<td>4.51</td>
+<td>86.4</td>
+</tr>
+<tr>
+<td>W011</td>
+<td>马超</td>
+<td>土建维修</td>
+<td>248</td>
+<td>267.5</td>
+<td>12.5%</td>
+<td>4.52</td>
+<td>77.8</td>
+</tr>
+</tbody>
+</table>
+<p>从接单量看，王建国承接最多（487 单），是给排水类工单的主力；郑海准时率最高（95.8%）。综合效率指数最高的是孙杰（94.9），其平均处理时长 10.3 分钟、超时率 4.3%、满意度 4.51，属于“快、稳、好评”的骨干维修工。整体看，同一工种内部也存在效率差异，说明在技能匹配的前提下，结合历史准时率与处理时长进行二次排序，可以进一步提升派单质量。</p>
+<p><img alt="图 5 维修工效率分布" src="figures/05_worker_efficiency.png"></p>
+<h2>八、Agent 派单可用的先验特征</h2>
+<p>分析结果已写入 <code>data/dispatch_priors.json</code>，供在线派单 Agent 直接加载，主要包括：</p>
+<ul>
+<li><strong>类型先验 type_stats</strong>：每类报修的工单占比、平均时长、P90 时长、超时率、SLA 与责任工种。派单 Agent 可用 P90 时长估计工单复杂度，用超时率计算维修工历史准时率，用工种完成技能匹配。</li>
+<li><strong>维修工先验 worker_stats</strong>：W001-W012 的接单量、平均时长、超时率、满意度与所属片区，用于多因子评分中的可靠性、速度与负载参考。</li>
+<li><strong>紧急程度先验 urgency_distribution</strong>：各紧急程度的单量与平均响应时长，可校准不同优先级工单的响应预期。</li>
+<li><strong>时间先验 hour_distribution / daily_trend</strong>：小时与近 90 天日单量分布，用于预测高峰时段负载、提前安排值班。</li>
+<li><strong>楼栋先验 building_stats</strong>：各楼栋单量与超时率，可辅助片区划分与驻点资源投放。</li>
+</ul>
+<p>以水管漏水为例，其先验 P90 时长为 127.3 分钟、超时率 12.5%、责任工种为水电工；派单时可先按工种筛出候选人，再结合候选人的历史准时率与平均时长计算期望完成时间，优先选择能在 SLA 内完成的维修工。</p>
+<h2>九、结论与改进建议</h2>
+<ol>
+<li>180 天共受理工单 3000 单，日均 16.7 单；闭环率 93.6%，整体超时率 12.1%，平均处理时长 92.9 分钟，平均响应 28.9 分钟，闭环满意度 4.50 分。</li>
+<li>水管漏水以 504 单（16.8%）居首，下水道堵塞（12.6%）次之；给排水类设施合计 963 单，占全部工单的 32.1%，是最主要的设施风险来源。</li>
+<li>紧急工单共 237 单（占 7.9%），平均响应 7.1 分钟，明显快于低紧急度工单的 64.2 分钟，说明紧急程度对响应速度有实质影响。</li>
+<li>超时率最低的三类为 消防隐患（4.2%）、燃气泄漏（4.3%）、电梯困人（4.9%），多为 15~30 分钟短 SLA 的应急处置类工单；超时率最高的是 电梯故障（12.6%，SLA 60 分钟）。</li>
+<li>工作日呈 8-11 点与 18-21 点双高峰，峰值出现在 19 点（255 单）；周末日均 17.5 单，较工作日 16.3 单高 7.0%。</li>
+<li>楼栋分布上，6栋工单最多（420 单），前 5 栋合计占 64.6%；8栋的超时率最高（14.5%），建议作为驻点资源投放的重点。</li>
+<li>维修工中孙杰效率指数最高（94.9），超时率 4.3%、满意度 4.51；王建国承接工单最多（487 单）。</li>
+<li>未闭环工单共 193 单，其中 79.8% 为超时工单；超时工单闭环率仅 57.5%，远低于非超时工单的 98.5%，超时是导致工单无法闭环的首要风险因素。</li>
+</ol>
+<h2>十、图表清单与复现方式</h2>
+<table>
+<thead>
+<tr>
+<th>图号</th>
+<th>文件</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图 1</td>
+<td>figures/01_type_distribution.png</td>
+<td>报修类型分布</td>
+</tr>
+<tr>
+<td>图 2</td>
+<td>figures/02_daily_trend.png</td>
+<td>近 90 天工单趋势</td>
+</tr>
+<tr>
+<td>图 3</td>
+<td>figures/03_timeout_by_type.png</td>
+<td>各类型超时率</td>
+</tr>
+<tr>
+<td>图 4</td>
+<td>figures/04_building_ranking.png</td>
+<td>工单量 Top10 楼栋</td>
+</tr>
+<tr>
+<td>图 5</td>
+<td>figures/05_worker_efficiency.png</td>
+<td>维修工效率分布</td>
+</tr>
+<tr>
+<td>图 6</td>
+<td>figures/06_hourly_heatmap_or_bar.png</td>
+<td>周内-小时热力图</td>
+</tr>
+</tbody>
+</table>
+<p>复现命令：</p>
+<pre><code class="language-bash">.venv/bin/python scripts/generate_data.py
+.venv/bin/python scripts/analyze.py
+</code></pre>
+<p>报告中的全部数字均来自 <code>data/historical_orders.csv</code> 的实际计算，并与 <code>reports/analysis_summary.json</code>、<code>data/dispatch_priors.json</code> 保持一致。</p></main>
+  <div class="foot">智修云 · 多智能体物业工单闭环系统　|　报告由 scripts/analyze.py 生成，数据可复现</div>
+</div>
+</body>
+</html>

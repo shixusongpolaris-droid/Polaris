@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+data/property.db
+data/property.db-wal
+data/property.db-shm
+.pytest_cache/
+*.log
+.tools/
+.dsh-office.*
+deliverables/_build/
+labs/

@@ -1,0 +1,1014 @@
+{
+  "total_orders": 3000,
+  "generated_at": "2026-10-20 14:24:25",
+  "time_range": {
+    "start": "2026-04-24",
+    "end": "2026-10-20",
+    "days": 180
+  },
+  "overall": {
+    "closed_rate": 93.6,
+    "timeout_rate": 12.1,
+    "avg_duration": 92.9,
+    "avg_response": 28.9,
+    "satisfaction": 4.5
+  },
+  "type_stats": {
+    "水管漏水": {
+      "count": 504,
+      "pct": 16.8,
+      "avg_duration": 84.9,
+      "p90_duration": 127.3,
+      "timeout_rate": 12.5,
+      "sla_minutes": 120,
+      "trade": "水电工",
+      "avg_satisfaction": 4.51,
+      "facility_type": "给排水",
+      "urgency": "高"
+    },
+    "下水道堵塞": {
+      "count": 377,
+      "pct": 12.6,
+      "avg_duration": 78.9,
+      "p90_duration": 126.4,
+      "timeout_rate": 12.5,
+      "sla_minutes": 120,
+      "trade": "水电工",
+      "avg_satisfaction": 4.5,
+      "facility_type": "给排水",
+      "urgency": "中"
+    },
+    "电路故障": {
+      "count": 321,
+      "pct": 10.7,
+      "avg_duration": 42.8,
+      "p90_duration": 62.1,
+      "timeout_rate": 12.5,
+      "sla_minutes": 60,
+      "trade": "电工",
+      "avg_satisfaction": 4.49,
+      "facility_type": "电气",
+      "urgency": "高"
+    },
+    "环境卫生": {
+      "count": 283,
+      "pct": 9.4,
+      "avg_duration": 119.5,
+      "p90_duration": 507.2,
+      "timeout_rate": 12.4,
+      "sla_minutes": 480,
+      "trade": "保洁",
+      "avg_satisfaction": 4.51,
+      "facility_type": "环境",
+      "urgency": "低"
+    },
+    "电梯故障": {
+      "count": 278,
+      "pct": 9.3,
+      "avg_duration": 44.7,
+      "p90_duration": 63.9,
+      "timeout_rate": 12.6,
+      "sla_minutes": 60,
+      "trade": "电梯维保",
+      "avg_satisfaction": 4.48,
+      "facility_type": "电梯",
+      "urgency": "高"
+    },
+    "公共照明": {
+      "count": 269,
+      "pct": 9.0,
+      "avg_duration": 88.5,
+      "p90_duration": 252.3,
+      "timeout_rate": 12.6,
+      "sla_minutes": 240,
+      "trade": "电工",
+      "avg_satisfaction": 4.54,
+      "facility_type": "照明",
+      "urgency": "中"
+    },
+    "门禁故障": {
+      "count": 266,
+      "pct": 8.9,
+      "avg_duration": 103.1,
+      "p90_duration": 249.4,
+      "timeout_rate": 12.4,
+      "sla_minutes": 240,
+      "trade": "综合维修",
+      "avg_satisfaction": 4.52,
+      "facility_type": "门禁",
+      "urgency": "中"
+    },
+    "墙面地面破损": {
+      "count": 248,
+      "pct": 8.3,
+      "avg_duration": 267.5,
+      "p90_duration": 504.5,
+      "timeout_rate": 12.5,
+      "sla_minutes": 480,
+      "trade": "土建维修",
+      "avg_satisfaction": 4.52,
+      "facility_type": "土建",
+      "urgency": "低"
+    },
+    "其他报修": {
+      "count": 217,
+      "pct": 7.2,
+      "avg_duration": 114.6,
+      "p90_duration": 250.1,
+      "timeout_rate": 12.4,
+      "sla_minutes": 240,
+      "trade": "综合维修",
+      "avg_satisfaction": 4.51,
+      "facility_type": "其他",
+      "urgency": "中"
+    },
+    "水管爆裂": {
+      "count": 82,
+      "pct": 2.7,
+      "avg_duration": 21.4,
+      "p90_duration": 32.2,
+      "timeout_rate": 12.2,
+      "sla_minutes": 30,
+      "trade": "水电工",
+      "avg_satisfaction": 4.46,
+      "facility_type": "给排水",
+      "urgency": "紧急"
+    },
+    "电梯困人": {
+      "count": 61,
+      "pct": 2.0,
+      "avg_duration": 18.0,
+      "p90_duration": 23.4,
+      "timeout_rate": 4.9,
+      "sla_minutes": 30,
+      "trade": "电梯维保",
+      "avg_satisfaction": 4.54,
+      "facility_type": "电梯",
+      "urgency": "紧急"
+    },
+    "消防隐患": {
+      "count": 48,
+      "pct": 1.6,
+      "avg_duration": 9.6,
+      "p90_duration": 12.0,
+      "timeout_rate": 4.2,
+      "sla_minutes": 15,
+      "trade": "秩序维护",
+      "avg_satisfaction": 4.44,
+      "facility_type": "消防",
+      "urgency": "紧急"
+    },
+    "燃气泄漏": {
+      "count": 46,
+      "pct": 1.5,
+      "avg_duration": 10.3,
+      "p90_duration": 13.4,
+      "timeout_rate": 4.3,
+      "sla_minutes": 15,
+      "trade": "燃气抢修",
+      "avg_satisfaction": 4.51,
+      "facility_type": "燃气",
+      "urgency": "紧急"
+    }
+  },
+  "worker_stats": {
+    "W007": {
+      "name": "孙杰",
+      "trade": "燃气抢修",
+      "zone": "A",
+      "orders": 46,
+      "avg_duration": 10.3,
+      "timeout_rate": 4.3,
+      "satisfaction": 4.51,
+      "on_time_rate": 95.7
+    },
+    "W010": {
+      "name": "郑海",
+      "trade": "秩序维护",
+      "zone": "A",
+      "orders": 48,
+      "avg_duration": 9.6,
+      "timeout_rate": 4.2,
+      "satisfaction": 4.44,
+      "on_time_rate": 95.8
+    },
+    "W001": {
+      "name": "张伟",
+      "trade": "电梯维保",
+      "zone": "A",
+      "orders": 160,
+      "avg_duration": 37.9,
+      "timeout_rate": 10.6,
+      "satisfaction": 4.48,
+      "on_time_rate": 89.4
+    },
+    "W003": {
+      "name": "王建国",
+      "trade": "水电工",
+      "zone": "A",
+      "orders": 487,
+      "avg_duration": 76.4,
+      "timeout_rate": 11.5,
+      "satisfaction": 4.49,
+      "on_time_rate": 88.5
+    },
+    "W005": {
+      "name": "陈明",
+      "trade": "电工",
+      "zone": "A",
+      "orders": 341,
+      "avg_duration": 65.8,
+      "timeout_rate": 11.7,
+      "satisfaction": 4.51,
+      "on_time_rate": 88.3
+    },
+    "W002": {
+      "name": "李强",
+      "trade": "电梯维保",
+      "zone": "B",
+      "orders": 179,
+      "avg_duration": 41.6,
+      "timeout_rate": 11.7,
+      "satisfaction": 4.5,
+      "on_time_rate": 88.3
+    },
+    "W004": {
+      "name": "赵磊",
+      "trade": "水电工",
+      "zone": "B",
+      "orders": 476,
+      "avg_duration": 77.9,
+      "timeout_rate": 13.4,
+      "satisfaction": 4.51,
+      "on_time_rate": 86.6
+    },
+    "W006": {
+      "name": "刘洋",
+      "trade": "电工",
+      "zone": "C",
+      "orders": 249,
+      "avg_duration": 60.6,
+      "timeout_rate": 13.7,
+      "satisfaction": 4.52,
+      "on_time_rate": 86.3
+    },
+    "W008": {
+      "name": "周敏",
+      "trade": "综合维修",
+      "zone": "B",
+      "orders": 263,
+      "avg_duration": 108.7,
+      "timeout_rate": 12.2,
+      "satisfaction": 4.53,
+      "on_time_rate": 87.8
+    },
+    "W012": {
+      "name": "何静",
+      "trade": "综合维修",
+      "zone": "C",
+      "orders": 220,
+      "avg_duration": 107.8,
+      "timeout_rate": 12.7,
+      "satisfaction": 4.49,
+      "on_time_rate": 87.3
+    },
+    "W009": {
+      "name": "吴芳",
+      "trade": "保洁",
+      "zone": "C",
+      "orders": 283,
+      "avg_duration": 119.5,
+      "timeout_rate": 12.4,
+      "satisfaction": 4.51,
+      "on_time_rate": 87.6
+    },
+    "W011": {
+      "name": "马超",
+      "trade": "土建维修",
+      "zone": "B",
+      "orders": 248,
+      "avg_duration": 267.5,
+      "timeout_rate": 12.5,
+      "satisfaction": 4.52,
+      "on_time_rate": 87.5
+    }
+  },
+  "urgency_distribution": [
+    {
+      "name": "紧急",
+      "value": 237,
+      "pct": 7.9,
+      "avg_response": 7.1
+    },
+    {
+      "name": "高",
+      "value": 1103,
+      "pct": 36.8,
+      "avg_response": 14.5
+    },
+    {
+      "name": "中",
+      "value": 1129,
+      "pct": 37.6,
+      "avg_response": 30.8
+    },
+    {
+      "name": "低",
+      "value": 531,
+      "pct": 17.7,
+      "avg_response": 64.2
+    }
+  ],
+  "hour_distribution": [
+    {
+      "hour": 0,
+      "orders": 44
+    },
+    {
+      "hour": 1,
+      "orders": 28
+    },
+    {
+      "hour": 2,
+      "orders": 14
+    },
+    {
+      "hour": 3,
+      "orders": 20
+    },
+    {
+      "hour": 4,
+      "orders": 17
+    },
+    {
+      "hour": 5,
+      "orders": 22
+    },
+    {
+      "hour": 6,
+      "orders": 59
+    },
+    {
+      "hour": 7,
+      "orders": 121
+    },
+    {
+      "hour": 8,
+      "orders": 211
+    },
+    {
+      "hour": 9,
+      "orders": 217
+    },
+    {
+      "hour": 10,
+      "orders": 235
+    },
+    {
+      "hour": 11,
+      "orders": 171
+    },
+    {
+      "hour": 12,
+      "orders": 125
+    },
+    {
+      "hour": 13,
+      "orders": 113
+    },
+    {
+      "hour": 14,
+      "orders": 142
+    },
+    {
+      "hour": 15,
+      "orders": 114
+    },
+    {
+      "hour": 16,
+      "orders": 141
+    },
+    {
+      "hour": 17,
+      "orders": 195
+    },
+    {
+      "hour": 18,
+      "orders": 233
+    },
+    {
+      "hour": 19,
+      "orders": 255
+    },
+    {
+      "hour": 20,
+      "orders": 224
+    },
+    {
+      "hour": 21,
+      "orders": 136
+    },
+    {
+      "hour": 22,
+      "orders": 105
+    },
+    {
+      "hour": 23,
+      "orders": 58
+    }
+  ],
+  "building_stats": {
+    "10栋": {
+      "orders": 78,
+      "timeout_rate": 9.0,
+      "avg_duration": 82.5
+    },
+    "1栋": {
+      "orders": 389,
+      "timeout_rate": 12.9,
+      "avg_duration": 91.7
+    },
+    "2栋": {
+      "orders": 357,
+      "timeout_rate": 12.0,
+      "avg_duration": 98.6
+    },
+    "3栋": {
+      "orders": 396,
+      "timeout_rate": 11.1,
+      "avg_duration": 91.2
+    },
+    "4栋": {
+      "orders": 374,
+      "timeout_rate": 11.8,
+      "avg_duration": 91.8
+    },
+    "5栋": {
+      "orders": 354,
+      "timeout_rate": 12.4,
+      "avg_duration": 95.0
+    },
+    "6栋": {
+      "orders": 420,
+      "timeout_rate": 12.1,
+      "avg_duration": 90.2
+    },
+    "7栋": {
+      "orders": 285,
+      "timeout_rate": 10.2,
+      "avg_duration": 90.6
+    },
+    "8栋": {
+      "orders": 221,
+      "timeout_rate": 14.5,
+      "avg_duration": 98.9
+    },
+    "9栋": {
+      "orders": 126,
+      "timeout_rate": 14.3,
+      "avg_duration": 93.6
+    }
+  },
+  "daily_trend": [
+    {
+      "date": "2026-07-23",
+      "orders": 18,
+      "closed": 17,
+      "timeout": 1
+    },
+    {
+      "date": "2026-07-24",
+      "orders": 29,
+      "closed": 26,
+      "timeout": 2
+    },
+    {
+      "date": "2026-07-25",
+      "orders": 14,
+      "closed": 13,
+      "timeout": 2
+    },
+    {
+      "date": "2026-07-26",
+      "orders": 21,
+      "closed": 19,
+      "timeout": 3
+    },
+    {
+      "date": "2026-07-27",
+      "orders": 12,
+      "closed": 11,
+      "timeout": 2
+    },
+    {
+      "date": "2026-07-28",
+      "orders": 21,
+      "closed": 21,
+      "timeout": 0
+    },
+    {
+      "date": "2026-07-29",
+      "orders": 15,
+      "closed": 14,
+      "timeout": 4
+    },
+    {
+      "date": "2026-07-30",
+      "orders": 16,
+      "closed": 15,
+      "timeout": 1
+    },
+    {
+      "date": "2026-07-31",
+      "orders": 15,
+      "closed": 14,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-01",
+      "orders": 12,
+      "closed": 12,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-02",
+      "orders": 16,
+      "closed": 14,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-03",
+      "orders": 13,
+      "closed": 13,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-04",
+      "orders": 29,
+      "closed": 26,
+      "timeout": 6
+    },
+    {
+      "date": "2026-08-05",
+      "orders": 12,
+      "closed": 12,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-06",
+      "orders": 16,
+      "closed": 16,
+      "timeout": 0
+    },
+    {
+      "date": "2026-08-07",
+      "orders": 14,
+      "closed": 14,
+      "timeout": 0
+    },
+    {
+      "date": "2026-08-08",
+      "orders": 19,
+      "closed": 19,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-09",
+      "orders": 18,
+      "closed": 18,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-10",
+      "orders": 13,
+      "closed": 10,
+      "timeout": 2
+    },
+    {
+      "date": "2026-08-11",
+      "orders": 20,
+      "closed": 19,
+      "timeout": 2
+    },
+    {
+      "date": "2026-08-12",
+      "orders": 13,
+      "closed": 11,
+      "timeout": 2
+    },
+    {
+      "date": "2026-08-13",
+      "orders": 16,
+      "closed": 12,
+      "timeout": 5
+    },
+    {
+      "date": "2026-08-14",
+      "orders": 17,
+      "closed": 15,
+      "timeout": 4
+    },
+    {
+      "date": "2026-08-15",
+      "orders": 16,
+      "closed": 14,
+      "timeout": 3
+    },
+    {
+      "date": "2026-08-16",
+      "orders": 12,
+      "closed": 12,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-17",
+      "orders": 16,
+      "closed": 13,
+      "timeout": 3
+    },
+    {
+      "date": "2026-08-18",
+      "orders": 20,
+      "closed": 18,
+      "timeout": 3
+    },
+    {
+      "date": "2026-08-19",
+      "orders": 16,
+      "closed": 15,
+      "timeout": 0
+    },
+    {
+      "date": "2026-08-20",
+      "orders": 22,
+      "closed": 22,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-21",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 3
+    },
+    {
+      "date": "2026-08-22",
+      "orders": 23,
+      "closed": 22,
+      "timeout": 3
+    },
+    {
+      "date": "2026-08-23",
+      "orders": 15,
+      "closed": 13,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-24",
+      "orders": 18,
+      "closed": 15,
+      "timeout": 4
+    },
+    {
+      "date": "2026-08-25",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-26",
+      "orders": 13,
+      "closed": 12,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-27",
+      "orders": 19,
+      "closed": 19,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-28",
+      "orders": 12,
+      "closed": 11,
+      "timeout": 1
+    },
+    {
+      "date": "2026-08-29",
+      "orders": 22,
+      "closed": 20,
+      "timeout": 3
+    },
+    {
+      "date": "2026-08-30",
+      "orders": 19,
+      "closed": 19,
+      "timeout": 2
+    },
+    {
+      "date": "2026-08-31",
+      "orders": 13,
+      "closed": 10,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-01",
+      "orders": 13,
+      "closed": 12,
+      "timeout": 5
+    },
+    {
+      "date": "2026-09-02",
+      "orders": 18,
+      "closed": 17,
+      "timeout": 4
+    },
+    {
+      "date": "2026-09-03",
+      "orders": 12,
+      "closed": 12,
+      "timeout": 1
+    },
+    {
+      "date": "2026-09-04",
+      "orders": 18,
+      "closed": 18,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-05",
+      "orders": 16,
+      "closed": 16,
+      "timeout": 0
+    },
+    {
+      "date": "2026-09-06",
+      "orders": 17,
+      "closed": 17,
+      "timeout": 0
+    },
+    {
+      "date": "2026-09-07",
+      "orders": 13,
+      "closed": 9,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-08",
+      "orders": 12,
+      "closed": 10,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-09",
+      "orders": 14,
+      "closed": 13,
+      "timeout": 1
+    },
+    {
+      "date": "2026-09-10",
+      "orders": 19,
+      "closed": 18,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-11",
+      "orders": 16,
+      "closed": 16,
+      "timeout": 0
+    },
+    {
+      "date": "2026-09-12",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-13",
+      "orders": 17,
+      "closed": 14,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-14",
+      "orders": 13,
+      "closed": 13,
+      "timeout": 0
+    },
+    {
+      "date": "2026-09-15",
+      "orders": 14,
+      "closed": 13,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-16",
+      "orders": 23,
+      "closed": 21,
+      "timeout": 4
+    },
+    {
+      "date": "2026-09-17",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 1
+    },
+    {
+      "date": "2026-09-18",
+      "orders": 15,
+      "closed": 15,
+      "timeout": 1
+    },
+    {
+      "date": "2026-09-19",
+      "orders": 14,
+      "closed": 13,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-20",
+      "orders": 24,
+      "closed": 20,
+      "timeout": 6
+    },
+    {
+      "date": "2026-09-21",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-22",
+      "orders": 18,
+      "closed": 16,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-23",
+      "orders": 20,
+      "closed": 19,
+      "timeout": 0
+    },
+    {
+      "date": "2026-09-24",
+      "orders": 14,
+      "closed": 14,
+      "timeout": 1
+    },
+    {
+      "date": "2026-09-25",
+      "orders": 20,
+      "closed": 20,
+      "timeout": 1
+    },
+    {
+      "date": "2026-09-26",
+      "orders": 15,
+      "closed": 14,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-27",
+      "orders": 21,
+      "closed": 20,
+      "timeout": 3
+    },
+    {
+      "date": "2026-09-28",
+      "orders": 20,
+      "closed": 18,
+      "timeout": 2
+    },
+    {
+      "date": "2026-09-29",
+      "orders": 19,
+      "closed": 17,
+      "timeout": 4
+    },
+    {
+      "date": "2026-09-30",
+      "orders": 14,
+      "closed": 13,
+      "timeout": 1
+    },
+    {
+      "date": "2026-10-01",
+      "orders": 14,
+      "closed": 12,
+      "timeout": 4
+    },
+    {
+      "date": "2026-10-02",
+      "orders": 17,
+      "closed": 17,
+      "timeout": 4
+    },
+    {
+      "date": "2026-10-03",
+      "orders": 13,
+      "closed": 12,
+      "timeout": 1
+    },
+    {
+      "date": "2026-10-04",
+      "orders": 24,
+      "closed": 24,
+      "timeout": 0
+    },
+    {
+      "date": "2026-10-05",
+      "orders": 16,
+      "closed": 16,
+      "timeout": 0
+    },
+    {
+      "date": "2026-10-06",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 2
+    },
+    {
+      "date": "2026-10-07",
+      "orders": 21,
+      "closed": 20,
+      "timeout": 3
+    },
+    {
+      "date": "2026-10-08",
+      "orders": 12,
+      "closed": 12,
+      "timeout": 0
+    },
+    {
+      "date": "2026-10-09",
+      "orders": 17,
+      "closed": 16,
+      "timeout": 4
+    },
+    {
+      "date": "2026-10-10",
+      "orders": 19,
+      "closed": 18,
+      "timeout": 5
+    },
+    {
+      "date": "2026-10-11",
+      "orders": 13,
+      "closed": 13,
+      "timeout": 3
+    },
+    {
+      "date": "2026-10-12",
+      "orders": 18,
+      "closed": 17,
+      "timeout": 6
+    },
+    {
+      "date": "2026-10-13",
+      "orders": 15,
+      "closed": 14,
+      "timeout": 1
+    },
+    {
+      "date": "2026-10-14",
+      "orders": 16,
+      "closed": 15,
+      "timeout": 0
+    },
+    {
+      "date": "2026-10-15",
+      "orders": 16,
+      "closed": 15,
+      "timeout": 5
+    },
+    {
+      "date": "2026-10-16",
+      "orders": 21,
+      "closed": 19,
+      "timeout": 2
+    },
+    {
+      "date": "2026-10-17",
+      "orders": 31,
+      "closed": 27,
+      "timeout": 6
+    },
+    {
+      "date": "2026-10-18",
+      "orders": 17,
+      "closed": 17,
+      "timeout": 0
+    },
+    {
+      "date": "2026-10-19",
+      "orders": 15,
+      "closed": 14,
+      "timeout": 1
+    },
+    {
+      "date": "2026-10-20",
+      "orders": 15,
+      "closed": 15,
+      "timeout": 1
+    }
+  ]
+}
