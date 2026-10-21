@@ -34,6 +34,10 @@ class MultiRoomConfig:
     temp_outdoor_mean: float = 22.0
     temp_outdoor_swing: float = 3.0
     temp_clip_max: float = 45.0
+    # C3 安全区间（每房间，尽力保证；越界仍会记录到 metrics）
+    temp_safe_min: float = 16.0
+    temp_safe_max: float = 30.0
+    c3_enforce: bool = True
 
     # 空调（与冻结版一致）
     ac_coef: float = 1.83
@@ -68,6 +72,7 @@ class WeekSchedule:
 
     def __init__(self, start: datetime):
         self.start = start
+        self._cache = None       # (查询时刻, 下次变化时刻, 新状态)
 
     def _template(self, t: datetime):
         if t.weekday() < 5:
@@ -84,14 +89,24 @@ class WeekSchedule:
         return "out"
 
     def next_transition(self, t: datetime):
-        """返回 (下一次状态变化时刻, 新状态)；找不到返回 (None, 当前状态)。"""
+        """返回 (下一次状态变化时刻, 新状态)；找不到返回 (None, 当前状态)。
+
+        缓存：同一段状态内重复查询直接返回上次结果，避免每步扫 672 次。
+        """
+        c = self._cache
+        if c is not None:
+            q_t, n_t, n_s = c
+            if n_t is not None and q_t <= t < n_t:
+                return n_t, n_s
         cur = self.state_at(t)
         cur_t = t
         for _ in range(7 * 96):
             cur_t += timedelta(minutes=15)
             s = self.state_at(cur_t)
             if s != cur:
+                self._cache = (t, cur_t, s)
                 return cur_t, s
+        self._cache = (t, None, cur)
         return None, cur
 
 
@@ -171,6 +186,16 @@ class MultiRoomSim:
     def step(self, ac_a: int, ac_b: int, door_open: bool = False):
         cfg = self.cfg
         t = self.t
+        # C3：每房间安全区间（最高优先级；不受动作间隔约束）
+        if cfg.c3_enforce:
+            if self.temp_a > cfg.temp_safe_max:
+                ac_a = 1
+            elif self.temp_a < cfg.temp_safe_min:
+                ac_a = 0
+            if self.temp_b > cfg.temp_safe_max:
+                ac_b = 1
+            elif self.temp_b < cfg.temp_safe_min:
+                ac_b = 0
         state = self.schedule.state_at(t)
         temp_out = self._outdoor(t)
         solar = self._solar(t)
