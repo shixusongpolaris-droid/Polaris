@@ -56,7 +56,11 @@ def main():
     ap.add_argument("--seeds", default="42,66,2026,7,123")
     ap.add_argument("--energy-scales", default="10,30,60")
     ap.add_argument("--timesteps", type=int, default=300_000)
+    ap.add_argument("--suffix", default="",
+                    help="输出目录后缀，如 _1m；默认 models/ppo")
     args = ap.parse_args()
+    global OUT
+    OUT = ROOT / "multiroom" / "models" / f"ppo{args.suffix}"
     seeds = [int(s) for s in args.seeds.split(",") if s.strip()]
     scales = [float(s) for s in args.energy_scales.split(",") if s.strip()]
     OUT.mkdir(parents=True, exist_ok=True)

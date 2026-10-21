@@ -116,7 +116,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--models-root",
                     default=str(ROOT / "multiroom" / "models" / "ppo"))
+    ap.add_argument("--suffix", default="",
+                    help="输出文件后缀，如 _1m")
     args = ap.parse_args()
+    global OUT
+    OUT = ROOT / "multiroom" / "docs" / f"phase2_results{args.suffix}"
     models_root = Path(args.models_root)
 
     policies = {
